@@ -2,10 +2,10 @@ Since 2023.10.09
 
 ⭐⭐⭐⭐**团队**⭐⭐⭐⭐
 
-- 👨‍💻Xinhe-Li  📫shuxinwang662@gmail.com
+- 👨‍💻Xinhe-Li  📫lixinhe669@gmail.com
 - 👨‍💻Shuxin-Wang  📫shuxinwang662@gmail.com
-- 👨‍💻Yibin-Shen 📫haoyang.chen5@icloud.com
-- 👨‍💻Linjie-Xu    📫yunzesen@163.com
+- 👨‍💻Yibin-Shen 📫-@-
+- 👨‍💻Linjie-Xu    📫-@-
 - 👨‍💻Jincheng-Li  📫1635461341@qq.com
 
 ---
