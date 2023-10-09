@@ -12,6 +12,7 @@
         <module>seu-e-commerce-common</module>
         <module>seu-e-commerce-api</module>
         <module>seu-e-commerce-im</module>
+        <module>seu-e-commerce-im/seu-e-commerce-im-interface</module>
     </modules>
 
     <!-- 依赖管理 -->
