@@ -2,7 +2,7 @@ Since 2023.10.09
 
 ⭐⭐⭐⭐**团队**⭐⭐⭐⭐
 
-- 👨‍💻Xinhe-Li  📫-@-
+- 👨‍💻Xinhe-Li  📫lixinhe669@gmail.com
 - 👨‍💻Shuxin-Wang  📫shuxinwang662@gmail.com
 - 👨‍💻Yibin-Shen 📫-@-
 - 👨‍💻Linjie-Xu    📫-@-
