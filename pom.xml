@@ -13,6 +13,10 @@
         <module>seu-e-commerce-api</module>
         <module>seu-e-commerce-im</module>
         <module>seu-e-commerce-im/seu-e-commerce-im-interface</module>
+        <module>seu-e-commerce-account</module>
+        <module>seu-e-commerce-account/seu-e-commerce-account-interface</module>
+        <module>seu-e-commerce-service</module>
+        <module>seu-e-commerce-service/seu-e-commerce-service-interface</module>
     </modules>
 
     <!-- 依赖管理 -->
