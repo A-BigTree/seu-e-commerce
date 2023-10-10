@@ -34,5 +34,5 @@ IDEA➕JDK`17`➕Maven`3.9.1`➕Github Desktop➕MySQL图形化工具
 
 文件👉设置👉构建、执行、部署👉构建工具👉Maven👉把Maven主路径改成自己下载的Maven路径👉**应用**
 
-### 运行配置
+### 1.2.2 运行配置
 
