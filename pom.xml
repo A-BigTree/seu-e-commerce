@@ -38,6 +38,7 @@
         <module>seu-e-commerce-account/seu-e-commerce-account-interface</module>
         <module>seu-e-commerce-service</module>
         <module>seu-e-commerce-service/seu-e-commerce-service-interface</module>
+        <module>seu-e-commerce-task</module>
     </modules>
 
     <!-- 依赖管理 -->
