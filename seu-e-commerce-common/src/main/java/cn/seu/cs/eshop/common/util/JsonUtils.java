@@ -54,7 +54,7 @@ public class JsonUtils {
             list = INSTANCE.readValue(json, new TypeReference<List<T>>() {
             });
         } catch (JsonProcessingException e) {
-            log.error("Json String:{} convert list error", json);
+            log.error("Json String:{} convert list<{}> error", json, clazz.toString());
         }
         return list;
     }
@@ -68,7 +68,7 @@ public class JsonUtils {
             map = INSTANCE.readValue(json, new TypeReference<Map<K, V>>() {
             });
         } catch (JsonProcessingException e) {
-            log.error("Json String:{} convert list error", json);
+            log.error("Json String:{} convert map<{}, {}> error", json, key.toString(), value.toString());
         }
         return map;
     }
