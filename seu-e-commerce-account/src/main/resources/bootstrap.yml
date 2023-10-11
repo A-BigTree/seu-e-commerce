@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: seu-e-commerce-account
+
+  # Nacos配置
+  cloud:
+    nacos:
+      config:
+        # 添加相关运行参数
+        server-addr: ${nacos-addr}
+        username: ${username}
+        password: ${password}
+        group: ESHOP

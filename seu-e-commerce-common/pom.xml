@@ -12,8 +12,5 @@
     <groupId>cn.seu.cs.eshop.common</groupId>
     <artifactId>seu-e-commerce-common</artifactId>
 
-    <dependencies>
-
-    </dependencies>
 
 </project>

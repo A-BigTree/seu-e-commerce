@@ -4,6 +4,8 @@ import cn.seu.cs.eshop.common.util.JsonUtils;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -12,19 +14,29 @@ import java.util.Properties;
  */
 public interface ShopConf {
 
-    String getContext();
+    String getContext(String dataId);
 
     String getApplicationName();
-    
-    default <T> T getConfigObject(Class<T> clazz) {
-        String context = getContext();
+
+    default <T> T getConfigObject(String dataId, Class<T> clazz) {
+        String context = getContext(dataId);
         return JsonUtils.jsonToObject(context, clazz);
     }
 
-    default Properties getConfigProperties() throws IOException {
-        String context = getContext();
+    default Properties getConfigProperties(String dataId) throws IOException {
+        String context = getContext(dataId);
         Properties properties = new Properties();
         properties.load(new StringReader(context));
         return properties;
+    }
+
+    default <T> List<T> getConfigList(String dataId, Class<T> clazz) {
+        String context = getContext(dataId);
+        return JsonUtils.jsonToList(context, clazz);
+    }
+
+    default <K, V> Map<K, V> getConfigMap(String dataId, Class<K> key, Class<V> value) {
+        String context = getContext(dataId);
+        return JsonUtils.jsonToMap(context, key, value);
     }
 }

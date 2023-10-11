@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -49,7 +47,7 @@ public class JsonUtils {
      * Json字符串转列表
      */
     public static <T> List<T> jsonToList(String json, Class<T> clazz) {
-        List<T> list = Collections.emptyList();
+        List<T> list = new ArrayList<>();
         try {
             list = INSTANCE.readValue(json, new TypeReference<List<T>>() {
             });
@@ -63,7 +61,7 @@ public class JsonUtils {
      * Json字符串转Map
      */
     public static <K, V> Map<K, V> jsonToMap(String json, Class<K> key, Class<V> value) {
-        Map<K, V> map = Collections.emptyMap();
+        Map<K, V> map = new HashMap<>();
         try {
             map = INSTANCE.readValue(json, new TypeReference<Map<K, V>>() {
             });

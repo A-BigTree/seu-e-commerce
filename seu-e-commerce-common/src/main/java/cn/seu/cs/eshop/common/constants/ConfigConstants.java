@@ -13,6 +13,8 @@ public class ConfigConstants {
     public static String ES_CONFIG = DATASOURCE_PREFIX + "es";
     public static String COMMON_CONFIG = CONFIG_PREFIX + "config.";
 
+    public static long TIMEOUT_CONFIG = 3000L;
+
     public static String getDataId(String format, String application) {
         return String.format(format, application);
     }
