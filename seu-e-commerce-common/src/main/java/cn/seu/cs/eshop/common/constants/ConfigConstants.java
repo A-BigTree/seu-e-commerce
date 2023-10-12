@@ -15,6 +15,12 @@ public class ConfigConstants {
 
     public static long TIMEOUT_CONFIG = 3000L;
 
+    public static String SERVER_ADDR = "server-addr";
+
+    public static String USERNAME = "username";
+
+    public static String PASSWORD = "password";
+
     public static String getDataId(String format, String application) {
         return String.format(format, application);
     }

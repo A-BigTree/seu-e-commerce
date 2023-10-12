@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.common.conf;
 
+import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.util.JsonUtils;
 
 import java.io.IOException;
@@ -38,5 +39,13 @@ public interface ShopConf {
     default <K, V> Map<K, V> getConfigMap(String dataId, Class<K> key, Class<V> value) {
         String context = getContext(dataId);
         return JsonUtils.jsonToMap(context, key, value);
+    }
+
+    default Properties getNacosProperties(String serverAddr, String username, String password) {
+        Properties properties = new Properties();
+        properties.put(ConfigConstants.SERVER_ADDR, serverAddr);
+        properties.put(ConfigConstants.USERNAME, username);
+        properties.put(ConfigConstants.PASSWORD, password);
+        return properties;
     }
 }
