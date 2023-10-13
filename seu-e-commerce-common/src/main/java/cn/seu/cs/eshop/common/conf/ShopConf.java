@@ -48,4 +48,16 @@ public interface ShopConf {
         properties.put(ConfigConstants.PASSWORD, password);
         return properties;
     }
+
+    default <D, T extends D> T getConfigObject(ConfDataId<D> dataId, Class<T> clazz) {
+        return getConfigObject(dataId.getDataId(), clazz);
+    }
+
+    default <T> List<T> getConfigList(ConfDataId<T> dataId, Class<T> clazz) {
+        return getConfigList(dataId.getDataId(), clazz);
+    }
+
+    default <K, V, T> Map<K, V> getConfigMap(ConfDataId<T> dataId, Class<K> key, Class<V> value) {
+        return getConfigMap(dataId.getDataId(), key, value);
+    }
 }

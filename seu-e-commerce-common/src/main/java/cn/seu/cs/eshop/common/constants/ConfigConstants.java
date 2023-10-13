@@ -7,11 +7,12 @@ package cn.seu.cs.eshop.common.constants;
 public class ConfigConstants {
     public static String CONFIG_GROUP = "ESHOP";
     public static String CONFIG_PREFIX = "eshop.%s.";
-    public static String DATASOURCE_PREFIX = CONFIG_PREFIX + "datasource.";
-    public static String MYSQL_CONFIG = DATASOURCE_PREFIX + "mysql";
-    public static String REDIS_CONFIG = DATASOURCE_PREFIX + "redis";
-    public static String ES_CONFIG = DATASOURCE_PREFIX + "es";
     public static String COMMON_CONFIG = CONFIG_PREFIX + "config.";
+    public static String ACCOUNT_CONFIG = "account";
+    public static String API_CONFIG = "api";
+    public static String IM_CONFIG = "im";
+    public static String SERVICE_CONFIG = "service";
+    public static String TASK_CONFIG = "task";
 
     public static long TIMEOUT_CONFIG = 3000L;
 
