@@ -49,8 +49,20 @@ public interface ShopConf {
         return properties;
     }
 
+    default String getConfig(ConfDataId<Object> dataId) {
+        String res = getContext(dataId.getDataId());
+        if(res == null) {
+            return dataId.getDefaultData();
+        }
+        return res;
+    }
+
     default <D, T extends D> T getConfigObject(ConfDataId<D> dataId, Class<T> clazz) {
-        return getConfigObject(dataId.getDataId(), clazz);
+        T res = getConfigObject(dataId.getDataId(), clazz);
+        if (res == null) {
+            return dataId.getDefaultData();
+        }
+        return res;
     }
 
     default <T> List<T> getConfigList(ConfDataId<T> dataId, Class<T> clazz) {

@@ -19,6 +19,6 @@ class AccountConfServiceTest {
     @Test
     void getContext() {
         log.info(accountConfService.getContext("test"));
-        log.info((String)accountConfService.getConfigObject(accountTest, String.class));
+        log.info(accountConfService.getConfig(accountTest));
     }
 }

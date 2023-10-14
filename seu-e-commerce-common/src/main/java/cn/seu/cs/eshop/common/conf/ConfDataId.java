@@ -7,5 +7,5 @@ package cn.seu.cs.eshop.common.conf;
 public interface ConfDataId<T> {
     String getDataId();
 
-    T getDefaultData();
+    <D extends T> D getDefaultData();
 }

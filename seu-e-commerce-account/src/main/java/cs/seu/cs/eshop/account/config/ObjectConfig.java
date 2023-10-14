@@ -43,7 +43,7 @@ public enum ObjectConfig implements ConfDataId<Object> {
 
     @Override
     public Object getDefaultData() {
-        return null;
+        return this.defaultData;
     }
 
 }
