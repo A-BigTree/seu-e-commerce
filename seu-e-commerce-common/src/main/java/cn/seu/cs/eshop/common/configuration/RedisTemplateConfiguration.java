@@ -1,4 +1,4 @@
-package cs.seu.cs.eshop.account.config;
+package cn.seu.cs.eshop.common.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

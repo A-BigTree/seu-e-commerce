@@ -1,5 +1,6 @@
 package cs.seu.cs.eshop.account.redis;
 
+import cn.seu.cs.eshop.common.component.EshopRedisService;
 import cs.seu.cs.eshop.account.application.AccountApplication;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static cs.seu.cs.eshop.account.redis.AccountRedisConfEnum.accountRedisTest;
 
 
-@SpringBootTest(classes = {AccountApplication.class, AccountRedisService.class})
+@SpringBootTest(classes = {AccountApplication.class, EshopRedisService.class})
 @Slf4j
 class AccountRedisServiceTest {
     @Resource
-    AccountRedisService accountRedisService;
+    EshopRedisService accountRedisService;
 
     @Test
     public void testRedis() {

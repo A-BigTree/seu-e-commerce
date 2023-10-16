@@ -1,13 +1,14 @@
 package cs.seu.cs.eshop.account.nacos;
 
-import cn.seu.cs.eshop.common.conf.ConfDataId;
+import cn.seu.cs.eshop.common.nacos.ConfDataId;
+import cn.seu.cs.eshop.common.constants.ApplicationConstants;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/13
  */
-public enum ObjectConfig implements ConfDataId<Object> {
+public enum AccountNacosConfEnum implements ConfDataId<Object> {
     accountTest("default"),
 
 
@@ -17,17 +18,17 @@ public enum ObjectConfig implements ConfDataId<Object> {
 
     private final Object defaultData;
 
-    ObjectConfig(String dataId, Object defaultData) {
+    AccountNacosConfEnum(String dataId, Object defaultData) {
         this.dataId = dataId;
         this.defaultData = defaultData;
     }
 
-    ObjectConfig(Object defaultData) {
+    AccountNacosConfEnum(Object defaultData) {
         this.dataId = StringUtils.EMPTY;
         this.defaultData = defaultData;
     }
 
-    ObjectConfig() {
+    AccountNacosConfEnum() {
         this.dataId = StringUtils.EMPTY;
         this.defaultData = null;
     }
@@ -39,6 +40,11 @@ public enum ObjectConfig implements ConfDataId<Object> {
             return this.name();
         }
         return dataId;
+    }
+
+    @Override
+    public String getApplication() {
+        return ApplicationConstants.ACCOUNT_APPLICATION;
     }
 
     @SuppressWarnings("unchecked")

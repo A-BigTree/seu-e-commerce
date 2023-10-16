@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.conf;
+package cn.seu.cs.eshop.common.nacos;
 
 import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.util.JsonUtils;
@@ -15,29 +15,27 @@ import java.util.Properties;
  */
 public interface ShopConf {
 
-    String getContext(String dataId);
+    String getContext(String dataId, String application);
 
-    String getApplicationName();
-
-    default <T> T getConfigObject(String dataId, Class<T> clazz) {
-        String context = getContext(dataId);
+    default <T> T getConfigObject(String dataId, String application, Class<T> clazz) {
+        String context = getContext(dataId, application);
         return JsonUtils.jsonToObject(context, clazz);
     }
 
-    default Properties getConfigProperties(String dataId) throws IOException {
-        String context = getContext(dataId);
+    default Properties getConfigProperties(String dataId, String application) throws IOException {
+        String context = getContext(dataId, application);
         Properties properties = new Properties();
         properties.load(new StringReader(context));
         return properties;
     }
 
-    default <T> List<T> getConfigList(String dataId, Class<T> clazz) {
-        String context = getContext(dataId);
+    default <T> List<T> getConfigList(String dataId, String application, Class<T> clazz) {
+        String context = getContext(dataId, application);
         return JsonUtils.jsonToList(context, clazz);
     }
 
-    default <K, V> Map<K, V> getConfigMap(String dataId, Class<K> key, Class<V> value) {
-        String context = getContext(dataId);
+    default <K, V> Map<K, V> getConfigMap(String dataId, String application, Class<K> key, Class<V> value) {
+        String context = getContext(dataId, application);
         return JsonUtils.jsonToMap(context, key, value);
     }
 
@@ -50,15 +48,15 @@ public interface ShopConf {
     }
 
     default String getConfig(ConfDataId<Object> dataId) {
-        String res = getContext(dataId.getDataId());
-        if(res == null) {
+        String res = getContext(dataId.getDataId(), dataId.getApplication());
+        if (res == null) {
             return dataId.getDefaultData();
         }
         return res;
     }
 
     default <D, T extends D> T getConfigObject(ConfDataId<D> dataId, Class<T> clazz) {
-        T res = getConfigObject(dataId.getDataId(), clazz);
+        T res = getConfigObject(dataId.getDataId(), dataId.getApplication(), clazz);
         if (res == null) {
             return dataId.getDefaultData();
         }
@@ -66,10 +64,10 @@ public interface ShopConf {
     }
 
     default <T> List<T> getConfigList(ConfDataId<T> dataId, Class<T> clazz) {
-        return getConfigList(dataId.getDataId(), clazz);
+        return getConfigList(dataId.getDataId(), dataId.getApplication(), clazz);
     }
 
     default <K, V, T> Map<K, V> getConfigMap(ConfDataId<T> dataId, Class<K> key, Class<V> value) {
-        return getConfigMap(dataId.getDataId(), key, value);
+        return getConfigMap(dataId.getDataId(), dataId.getApplication(), key, value);
     }
 }

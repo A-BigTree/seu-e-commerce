@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * Created on 2023/10/16
  */
 public enum AccountRedisConfEnum implements RedisConf {
-    accountRedisTest("acc:test:", 60L)
+    accountRedisTest("acc:test:", 30L)
 
 
     ;

@@ -1,4 +1,4 @@
-package cs.seu.cs.eshop.account.redis;
+package cn.seu.cs.eshop.common.component;
 
 import cn.seu.cs.eshop.common.redis.RedisConf;
 import cn.seu.cs.eshop.common.redis.RedisService;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Created on 2023/10/16
  */
 @Service
-public class AccountRedisService implements RedisService {
+public class EshopRedisService implements RedisService {
     @Resource
     RedisTemplate<String, String> redisTemplate;
 
