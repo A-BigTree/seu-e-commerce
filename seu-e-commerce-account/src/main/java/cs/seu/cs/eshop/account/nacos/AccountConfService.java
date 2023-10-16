@@ -1,4 +1,4 @@
-package cs.seu.cs.eshop.account.config;
+package cs.seu.cs.eshop.account.nacos;
 
 import cn.seu.cs.eshop.common.conf.ShopConf;
 import cn.seu.cs.eshop.common.constants.ConfigConstants;

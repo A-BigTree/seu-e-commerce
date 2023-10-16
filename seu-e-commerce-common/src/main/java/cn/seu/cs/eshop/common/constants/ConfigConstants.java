@@ -7,7 +7,7 @@ package cn.seu.cs.eshop.common.constants;
 public class ConfigConstants {
     public static String CONFIG_GROUP = "ESHOP";
     public static String CONFIG_PREFIX = "eshop.%s.";
-    public static String COMMON_CONFIG = CONFIG_PREFIX + "config.";
+    public static String COMMON_CONFIG = CONFIG_PREFIX + "nacos.";
     public static String ACCOUNT_CONFIG = "account";
     public static String API_CONFIG = "api";
     public static String IM_CONFIG = "im";

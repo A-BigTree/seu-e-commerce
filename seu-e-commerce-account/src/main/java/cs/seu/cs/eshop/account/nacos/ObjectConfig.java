@@ -1,4 +1,4 @@
-package cs.seu.cs.eshop.account.config;
+package cs.seu.cs.eshop.account.nacos;
 
 import cn.seu.cs.eshop.common.conf.ConfDataId;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +41,7 @@ public enum ObjectConfig implements ConfDataId<Object> {
         return dataId;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object getDefaultData() {
         return this.defaultData;
