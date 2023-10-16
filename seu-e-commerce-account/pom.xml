@@ -19,8 +19,9 @@
             <version>${eshop.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>cn.seu.cs.eshop.account.sdk</groupId>
+            <artifactId>seu-e-commerce-account-interface</artifactId>
+            <version>${eshop.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
