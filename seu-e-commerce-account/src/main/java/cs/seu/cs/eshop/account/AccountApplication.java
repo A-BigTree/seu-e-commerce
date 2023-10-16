@@ -1,9 +1,10 @@
-package cs.seu.cs.eshop.account.application;
+package cs.seu.cs.eshop.account;
 
-import org.mybatis.spring.annotation.MapperScan;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  * Created on 2023/10/11
  */
 @SpringBootApplication
+@EnableDubbo
 @ComponentScan("cn.seu.cs.eshop.common.component")
 @ConfigurationPropertiesScan("cn.seu.cs.eshop.common.configuration")
 public class AccountApplication {

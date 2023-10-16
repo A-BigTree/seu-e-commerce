@@ -12,4 +12,41 @@
     <groupId>cn.seu.cs.eshop.api</groupId>
     <artifactId>seu-e-commerce-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.common</groupId>
+            <artifactId>seu-e-commerce-common</artifactId>
+            <version>${eshop.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-redis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.account.sdk</groupId>
+            <artifactId>seu-e-commerce-account-interface</artifactId>
+            <version>${eshop.version}</version>
+        </dependency>
+        <!-- dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- dubbo注册中心改为nacos的关键引用 -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

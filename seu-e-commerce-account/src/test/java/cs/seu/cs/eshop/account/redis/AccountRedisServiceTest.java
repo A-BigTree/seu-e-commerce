@@ -1,7 +1,7 @@
 package cs.seu.cs.eshop.account.redis;
 
 import cn.seu.cs.eshop.common.component.EshopRedisService;
-import cs.seu.cs.eshop.account.application.AccountApplication;
+import cs.seu.cs.eshop.account.AccountApplication;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

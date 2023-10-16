@@ -1,6 +1,7 @@
 package cs.seu.cs.eshop.account.pojo.db;
 
 import cn.seu.cs.eshop.common.entity.MysqlBaseDO;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,6 +11,9 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@TableName("login")
 public class UserBaseDO extends MysqlBaseDO {
-
+    private String account;
+    private String password;
+    private String nickname;
 }

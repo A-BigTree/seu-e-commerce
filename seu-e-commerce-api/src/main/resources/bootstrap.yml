@@ -1,6 +1,6 @@
 spring:
   application:
-    name: seu-e-commerce-account
+    name: seu-e-commerce-api
   # Nacos配置
   cloud:
     nacos:
