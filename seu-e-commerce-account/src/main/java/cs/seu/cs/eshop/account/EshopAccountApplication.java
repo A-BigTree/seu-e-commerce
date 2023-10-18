@@ -4,7 +4,6 @@ import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 
@@ -16,8 +15,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDubbo
 @ComponentScan("cn.seu.cs.eshop.common.component")
 @ConfigurationPropertiesScan("cn.seu.cs.eshop.common.configuration")
-public class AccountApplication {
+public class EshopAccountApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AccountApplication.class, args);
+        SpringApplication.run(EshopAccountApplication.class, args);
     }
 }
