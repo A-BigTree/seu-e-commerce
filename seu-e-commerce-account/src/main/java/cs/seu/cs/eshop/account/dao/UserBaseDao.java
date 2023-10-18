@@ -1,6 +1,6 @@
 package cs.seu.cs.eshop.account.dao;
 
-import cn.seu.cs.eshop.common.entity.MysqlBaseDao;
+import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
 import cs.seu.cs.eshop.account.pojo.db.UserBaseDO;
 import org.apache.ibatis.annotations.Mapper;
 

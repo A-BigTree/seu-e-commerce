@@ -1,9 +1,8 @@
-package cn.seu.cs.eshop.common.entity;
+package cn.seu.cs.eshop.common.entity.db;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;

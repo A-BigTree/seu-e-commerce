@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.entity;
+package cn.seu.cs.eshop.common.entity.db;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

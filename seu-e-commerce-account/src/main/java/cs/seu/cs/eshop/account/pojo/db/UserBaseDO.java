@@ -1,6 +1,6 @@
 package cs.seu.cs.eshop.account.pojo.db;
 
-import cn.seu.cs.eshop.common.entity.MysqlBaseDO;
+import cn.seu.cs.eshop.common.entity.db.MysqlBaseDO;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
