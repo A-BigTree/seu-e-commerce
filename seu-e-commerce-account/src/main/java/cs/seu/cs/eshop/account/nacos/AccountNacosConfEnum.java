@@ -10,8 +10,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum AccountNacosConfEnum implements ConfDataId<Object> {
     accountTest("default"),
-
-
+    fromEmail("xxx@xxx.xx"), //邮件发送配置
+    emailContext("默认内容"), //邮件内容配置
+    emailVerifyTime(5L), //验证码有效时间
+    emailVerifyLength(6), //验证码长度
+    emailVerifySymbols("0123456789")
     ;
 
     private final String dataId;

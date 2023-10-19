@@ -1,6 +1,7 @@
 package cn.seu.cs.eshop.common.entity.db;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,5 +17,6 @@ public class MysqlBaseDO implements Serializable {
 
     private Long createTime;
 
+    @TableLogic
     private Integer deleted;
 }

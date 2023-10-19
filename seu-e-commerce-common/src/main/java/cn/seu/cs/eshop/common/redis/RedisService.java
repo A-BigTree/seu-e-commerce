@@ -15,6 +15,8 @@ public interface RedisService {
 
     void setValue(String key, String value, RedisConf redisConf);
 
+    Boolean removeValue(String key, RedisConf redisConf);
+
 
     default <T> T getObjectValue(String key, RedisConf redisConf, Class<T> clazz) {
         String res = getValue(key, redisConf);

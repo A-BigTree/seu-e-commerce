@@ -9,16 +9,25 @@ import java.util.concurrent.TimeUnit;
  * Created on 2023/10/16
  */
 public enum AccountRedisConfEnum implements RedisConf {
-    accountRedisTest("acc:test:", 30L)
+    accountRedisTest("acc:test:", 30L),
+    accountEmailVerify("acc:email:verify:", 3L, TimeUnit.MINUTES), //邮箱验证缓存
 
 
     ;
     private final String prefix;
     private final long expirationTime;
+    private final TimeUnit timeUnit;
 
     AccountRedisConfEnum(String prefix, long expirationTime) {
         this.prefix = prefix;
         this.expirationTime = expirationTime;
+        this.timeUnit = TimeUnit.SECONDS;
+    }
+
+    AccountRedisConfEnum(String prefix, long expirationTime, TimeUnit timeUnit) {
+        this.prefix = prefix;
+        this.expirationTime = expirationTime;
+        this.timeUnit = timeUnit;
     }
 
     @Override
@@ -33,6 +42,6 @@ public enum AccountRedisConfEnum implements RedisConf {
 
     @Override
     public TimeUnit timeUnit() {
-        return TimeUnit.SECONDS;
+        return this.timeUnit;
     }
 }

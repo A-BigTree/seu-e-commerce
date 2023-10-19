@@ -25,4 +25,9 @@ public class EshopRedisService implements RedisService {
         redisTemplate.opsForValue().set(redisConf.buildKey(key), value,
                 redisConf.expirationTime(), redisConf.timeUnit());
     }
+
+    @Override
+    public Boolean removeValue(String key, RedisConf redisConf) {
+        return redisTemplate.delete(redisConf.buildKey(key));
+    }
 }

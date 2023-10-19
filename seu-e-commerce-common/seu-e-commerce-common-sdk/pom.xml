@@ -6,19 +6,17 @@
     <parent>
         <groupId>cn.seu.cs</groupId>
         <artifactId>seu-e-commerce</artifactId>
-        <version>${eshop.version}</version>
+        <version>1.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>cn.seu.cs.eshop.account.sdk</groupId>
-    <artifactId>seu-e-commerce-account-interface</artifactId>
+    <groupId>cn.seu.cs.eshop.common.sdk</groupId>
+    <artifactId>seu-e-commerce-common-sdk</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>cn.seu.cs.eshop.common.sdk</groupId>
-            <artifactId>seu-e-commerce-common-sdk</artifactId>
-            <version>${eshop.version}</version>
-        </dependency>
-    </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

@@ -1,10 +1,12 @@
 package cs.seu.cs.eshop.account.rpc;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
+import cs.seu.cs.eshop.account.service.EmailSendService;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.core.env.Environment;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -14,11 +16,15 @@ import org.springframework.core.env.Environment;
 @Slf4j
 public class EshopAccountServiceRpc implements EshopAccountService {
     @Resource
-    Environment environment;
+    EmailSendService emailSendService;
 
     @Override
     public String dubboTest() {
-        log.info("Service from port: {}", environment.getProperty("server.port"));
         return "Hello Word!";
+    }
+
+    @Override
+    public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
+        return emailSendService.sendVerifyEmail(request);
     }
 }

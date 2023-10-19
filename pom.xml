@@ -39,6 +39,7 @@
         <module>seu-e-commerce-service</module>
         <module>seu-e-commerce-service/seu-e-commerce-service-interface</module>
         <module>seu-e-commerce-task</module>
+        <module>seu-e-commerce-common/seu-e-commerce-common-sdk</module>
     </modules>
 
     <properties>
