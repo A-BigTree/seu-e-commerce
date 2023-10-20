@@ -3,7 +3,7 @@ package cn.seu.cs.eshop.account.sdk.entity.req;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Set;
+import java.io.Serializable;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Data
 @Builder
-public class SendVerifyEmailRequest {
+public class SendVerifyEmailRequest implements Serializable {
     private String fromEmail;
     private String toEmail;
     private String context;

@@ -1,5 +1,6 @@
 package cs.seu.cs.eshop.account.nacos;
 
+import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.nacos.ConfDataId;
 import cn.seu.cs.eshop.common.constants.ApplicationConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ public enum AccountNacosConfEnum implements ConfDataId<Object> {
 
     @Override
     public String getApplication() {
-        return ApplicationConstants.ACCOUNT_APPLICATION;
+        return ConfigConstants.ACCOUNT_CONFIG;
     }
 
     @SuppressWarnings("unchecked")

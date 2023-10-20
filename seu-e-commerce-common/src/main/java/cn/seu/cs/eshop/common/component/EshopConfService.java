@@ -36,11 +36,13 @@ public class EshopConfService implements ShopConf {
     public String getContext(String dataId, String application) {
         String res = StringUtils.EMPTY;
         try {
-            res = configService.getConfig(ConfigConstants.getDataId(ConfigConstants.COMMON_CONFIG,
-                    application, dataId), ConfigConstants.CONFIG_GROUP, ConfigConstants.TIMEOUT_CONFIG);
+            String key = ConfigConstants.getDataId(ConfigConstants.COMMON_CONFIG, application, dataId);
+            res = configService.getConfig(key, ConfigConstants.CONFIG_GROUP, ConfigConstants.TIMEOUT_CONFIG);
+            log.info("Get nacos config -> (key: {}, value: {})", key, res);
         } catch (NacosException e) {
             log.error("Config: {} request error, e:", dataId, e);
         }
+
         return res;
     }
 }

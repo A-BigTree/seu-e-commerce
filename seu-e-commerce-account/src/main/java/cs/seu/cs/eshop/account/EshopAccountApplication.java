@@ -1,10 +1,12 @@
 package cs.seu.cs.eshop.account;
 
+import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 
 
 /**
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDubbo
 @ComponentScan("cn.seu.cs.eshop.common.component")
+@ComponentScan("cn.seu.cs.eshop.account")
 @ConfigurationPropertiesScan("cn.seu.cs.eshop.common.configuration")
 public class EshopAccountApplication {
     public static void main(String[] args) {

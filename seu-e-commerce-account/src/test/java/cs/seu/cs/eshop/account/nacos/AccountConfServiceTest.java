@@ -19,7 +19,7 @@ class AccountConfServiceTest {
 
     @Test
     void getContext() {
-        log.info(accountConfService.getContext("test", accountTest.getApplication()));
+        log.info(accountConfService.getContext("emailVerifyLength", accountTest.getApplication()));
         log.info(accountConfService.getConfig(accountTest));
     }
 }

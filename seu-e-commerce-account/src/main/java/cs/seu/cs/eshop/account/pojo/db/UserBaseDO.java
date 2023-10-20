@@ -16,4 +16,5 @@ public class UserBaseDO extends MysqlBaseDO {
     private String account;
     private String password;
     private String nickname;
+    private Integer roleType;
 }

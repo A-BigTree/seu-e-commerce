@@ -1,19 +1,17 @@
 package cs.seu.cs.eshop.common.sdk.entity.req;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
- * Created on 2023/10/19
+ * Created on 2023/10/20
  */
 @SuperBuilder
 @Data
-@NoArgsConstructor
-public class BaseResponse implements Serializable {
-    Integer code;
-    String msg;
+public class BaseRequest implements Serializable {
+    Long requestId;
 }

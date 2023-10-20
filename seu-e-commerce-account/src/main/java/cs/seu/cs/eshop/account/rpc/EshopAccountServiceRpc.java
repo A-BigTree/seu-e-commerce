@@ -12,11 +12,11 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/16
  */
-@DubboService
+@DubboService(timeout = 3000, retries = 0)
 @Slf4j
 public class EshopAccountServiceRpc implements EshopAccountService {
     @Resource
-    EmailSendService emailSendService;
+    EmailSendService emailSendServiceImpl;
 
     @Override
     public String dubboTest() {
@@ -25,6 +25,6 @@ public class EshopAccountServiceRpc implements EshopAccountService {
 
     @Override
     public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
-        return emailSendService.sendVerifyEmail(request);
+        return emailSendServiceImpl.sendVerifyEmail(request);
     }
 }

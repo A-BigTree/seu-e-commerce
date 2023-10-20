@@ -24,7 +24,7 @@ public class JsonUtils {
         T res = null;
         try {
             res = INSTANCE.readValue(json, clazz);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             log.error("Json String:{} convert error", json);
         }
         return res;
