@@ -123,8 +123,10 @@
 				} else if (this.credentials.length === 0) {
 					this.setData({
 						errorTips: 2
-					})
-				}
+					});
+				} else {
+          // TODO 登录功能
+        }
 			},
 
 			/**

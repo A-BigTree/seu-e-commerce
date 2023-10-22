@@ -191,7 +191,7 @@ export default {
         this.setData({
           errorTips: 0
         })
-        console.log(this.principal, this.credentials, this.credentials2, this.verifyCode)
+        // TODO 注册逻辑
       }
     },
     /**
