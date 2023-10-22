@@ -1,5 +1,7 @@
 package cs.seu.cs.eshop.account.rpc;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
@@ -20,17 +22,17 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     EmailSendService emailSendServiceImpl;
 
     @Override
-    public String dubboTest() {
-        return "Hello Word!";
-    }
-
-    @Override
     public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
         return emailSendServiceImpl.sendVerifyEmail(request);
     }
 
     @Override
     public BaseResponse registerUser(RegisterUserRequest request) {
+        return null;
+    }
+
+    @Override
+    public LoginUserResponse loginUser(LoginUserRequest request) {
         return null;
     }
 }

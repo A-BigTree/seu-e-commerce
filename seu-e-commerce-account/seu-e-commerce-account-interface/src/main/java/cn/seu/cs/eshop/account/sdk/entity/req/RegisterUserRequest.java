@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 public class RegisterUserRequest implements Serializable {
     private String account;
+    private String nickname;
     private String verifyCode;
     private String password;
     private Integer roleType;

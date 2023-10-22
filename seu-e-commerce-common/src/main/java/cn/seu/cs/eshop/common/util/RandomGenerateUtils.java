@@ -25,4 +25,11 @@ public class RandomGenerateUtils {
         }
         return new String(numbers);
     }
+
+    /**
+     * 生成昵称
+     */
+    public static String generateNickname(String prefix, String symbols, int length) {
+        return prefix + generateVerCode(symbols, length);
+    }
 }

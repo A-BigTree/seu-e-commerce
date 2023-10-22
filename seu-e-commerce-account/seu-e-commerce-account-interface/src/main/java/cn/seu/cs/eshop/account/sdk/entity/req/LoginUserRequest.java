@@ -12,4 +12,5 @@ import java.io.Serializable;
 public class LoginUserRequest implements Serializable {
     private String account;
     private String password;
+    private Integer roleType;
 }

@@ -1,5 +1,7 @@
 package cn.seu.cs.eshop.account.sdk.rpc;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -9,7 +11,6 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
  * Created on 2023/10/16
  */
 public interface EshopAccountService {
-    String dubboTest();
 
     /**
      * 发送邮件
@@ -19,4 +20,6 @@ public interface EshopAccountService {
     BaseResponse sendVerifyEmail(SendVerifyEmailRequest request);
 
     BaseResponse registerUser(RegisterUserRequest request);
+
+    LoginUserResponse loginUser(LoginUserRequest request);
 }

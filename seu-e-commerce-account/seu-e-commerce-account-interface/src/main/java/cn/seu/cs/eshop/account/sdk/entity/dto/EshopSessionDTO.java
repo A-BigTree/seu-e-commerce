@@ -1,9 +1,12 @@
 package cn.seu.cs.eshop.account.sdk.entity.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -11,10 +14,12 @@ import java.util.Map;
  * Created on 2023/10/18
  */
 @Data
-public class EshopSessionDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EshopSessionDTO implements Serializable {
+    private Long id;
     private String token;
-
     private UserBaseDTO user;
-
     private Map<String, String> slots;
 }
