@@ -2,6 +2,7 @@ package cn.seu.cs.eshop.common.util;
 
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 @Slf4j
 public class ResponseBuilderUtils {
-    public static <T extends BaseResponse> T buildResponse(Class<T> clazz, ResponseStateEnum responseState) {
+    public static <D, T extends BaseResponseInterface<D>> T buildResponse(Class<T> clazz, ResponseStateEnum responseState, D data) {
         T response = null;
         try {
             response = clazz.getDeclaredConstructor().newInstance();
@@ -22,14 +23,15 @@ public class ResponseBuilderUtils {
         }
         response.setCode(responseState.getCode());
         response.setMsg(responseState.getMsg());
+        response.setData(data);
         return response;
     }
 
-    public static <T extends BaseResponse> T buildSuccessResponse(Class<T> clazz) {
-        return buildResponse(clazz, ResponseStateEnum.OK);
+    public static <D, T extends BaseResponseInterface<D>> T buildSuccessResponse(Class<T> clazz, D data) {
+        return buildResponse(clazz, ResponseStateEnum.OK, data);
     }
 
-    public static <T extends BaseResponse> T buildFailResponse(Class<T> clazz) {
-        return buildResponse(clazz, ResponseStateEnum.ERROR);
+    public static <D, T extends BaseResponseInterface<D>> T buildFailResponse(Class<T> clazz, D data) {
+        return buildResponse(clazz, ResponseStateEnum.ERROR, data);
     }
 }

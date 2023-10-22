@@ -1,8 +1,12 @@
-// 公众号appid
-const mpAppId = 'wx42bbe857570c5b40'
-// 临时
-const domain = "http://127.0.0.1:8086"; //统一接口域名，测试环境
+// 测试
+const domain = "http://localhost:8086"; //统一接口域名，测试环境
+// 生产环境
+// const domain = "https://www.abigtree.top/eshop/api"
+// MD5加密
+const salt = "eshop-app"
 
 
-exports.domain = domain;
-exports.mpAppId = mpAppId;
+module.exports = {
+    domain,
+    salt,
+}

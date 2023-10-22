@@ -10,10 +10,9 @@ import java.io.Serializable;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/19
  */
-@SuperBuilder
 @Data
-@NoArgsConstructor
-public class BaseResponse implements Serializable {
-    Integer code;
-    String msg;
+public class BaseResponse implements BaseResponseInterface<String> {
+    private Integer code;
+    private String msg;
+    private String data;
 }

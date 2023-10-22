@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.account.sdk.rpc;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
@@ -16,4 +17,6 @@ public interface EshopAccountService {
      * @return 响应结果
      */
     BaseResponse sendVerifyEmail(SendVerifyEmailRequest request);
+
+    BaseResponse registerUser(RegisterUserRequest request);
 }

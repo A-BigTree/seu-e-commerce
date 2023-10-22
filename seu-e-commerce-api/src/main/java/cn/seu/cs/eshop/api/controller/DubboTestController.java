@@ -27,7 +27,8 @@ public class DubboTestController {
 
     @GetMapping("/email/verify")
     public BaseResponse testEmail() {
-        return eshopAccountService.sendVerifyEmail(SendVerifyEmailRequest.builder()
-                .toEmail("shuxinwang@seu.edu.cn").build());
+        SendVerifyEmailRequest request = new SendVerifyEmailRequest();
+        request.setToEmail("shuxinwang@seu.edu.cn");
+        return eshopAccountService.sendVerifyEmail(request);
     }
 }

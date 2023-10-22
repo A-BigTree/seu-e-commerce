@@ -11,9 +11,8 @@ import java.util.Map;
  * Created on 2023/10/18
  */
 @Data
-@Builder
 public class EshopSessionDTO {
-    private Long sessionId;
+    private String token;
 
     private UserBaseDTO user;
 

@@ -1,5 +1,4 @@
 <template>
-	<!--pages/user/user.wxml-->
 	<view class="container">
 
     <!--
@@ -152,6 +151,9 @@
 		 */
 
 		onShow: function() {
+      uni.setNavigationBarTitle({
+        title: "个人中心"
+      });
 		},
 
 
@@ -218,7 +220,9 @@
 			 * 去登陆
 			 */
 			toLogin: function() {
-
+        uni.navigateTo({
+          url:"/pages/login/login"
+        })
 			},
 
 			/**

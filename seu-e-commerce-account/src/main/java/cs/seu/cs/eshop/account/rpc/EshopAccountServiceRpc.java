@@ -1,5 +1,6 @@
 package cs.seu.cs.eshop.account.rpc;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cs.seu.cs.eshop.account.service.EmailSendService;
@@ -26,5 +27,10 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     @Override
     public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
         return emailSendServiceImpl.sendVerifyEmail(request);
+    }
+
+    @Override
+    public BaseResponse registerUser(RegisterUserRequest request) {
+        return null;
     }
 }
