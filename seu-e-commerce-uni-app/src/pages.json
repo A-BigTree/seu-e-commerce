@@ -1,0 +1,26 @@
+{
+	"pages": [
+		{
+			"path": "pages/user/user"
+		}
+	],
+
+	"tabBar": {
+		"selectedColor": "#3a86b9",
+		"color": "#b8b8b8",
+		"list": [
+			{
+				"pagePath": "pages/user/user",
+				"text": "我的",
+				"iconPath": "/static/images/tabbar/user.png",
+				"selectedIconPath": "/static/images/tabbar/user-sel.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#fff",
+		"navigationBarTitleText": "WeChat",
+		"navigationBarTextStyle": "black"
+	}
+}
