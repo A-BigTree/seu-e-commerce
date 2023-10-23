@@ -6,6 +6,7 @@ import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.account.service.UserLoginService;
+import cn.seu.cs.eshop.common.aop.RpcMonitor;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     UserLoginService emailSendServiceImpl;
 
     @Override
+    @RpcMonitor
     public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
         return emailSendServiceImpl.sendVerifyEmail(request);
     }
 
     @Override
+    @RpcMonitor
     public BaseResponse registerUser(RegisterUserRequest request) {
         return emailSendServiceImpl.registerUser(request);
     }
 
     @Override
+    @RpcMonitor
     public LoginUserResponse loginUser(LoginUserRequest request) {
         return emailSendServiceImpl.loginUser(request);
     }

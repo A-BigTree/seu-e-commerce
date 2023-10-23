@@ -1,5 +1,7 @@
 package cn.seu.cs.eshop.api.cache;
 
+import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
+import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.redis.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -15,12 +17,12 @@ public class UserTokenCache {
     @Resource
     RedisService redisService;
 
-    public Long getUserTokenInfo(String token) {
-        return redisService.getObjectValue(token, apiTokenCache, Long.class);
+    public UserBaseDTO getUserTokenInfo(String token) {
+        return redisService.getObjectValue(token, apiTokenCache, UserBaseDTO.class);
     }
 
-    public void setUserTokenInfo(String token, Long id) {
-        redisService.setObjectValue(token, id, apiTokenCache);
+    public void setUserTokenInfo(String token, UserBaseDTO user) {
+        redisService.setObjectValue(token, user, apiTokenCache);
     }
 
     public void removeToken(String token) {

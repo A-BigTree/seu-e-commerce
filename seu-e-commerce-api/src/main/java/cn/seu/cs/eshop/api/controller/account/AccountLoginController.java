@@ -6,6 +6,7 @@ import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
+import cn.seu.cs.eshop.api.aop.AuthorizationMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
@@ -49,13 +50,14 @@ public class AccountLoginController {
         LoginUserResponse response = eshopAccountService.loginUser(request);
         EshopSessionDTO session = response.getData();
         if (Objects.equals(response.getCode(), ResponseStateEnum.OK.getCode()) && session != null) {
-            userTokenCache.setUserTokenInfo(session.getToken(), session.getId());
+            userTokenCache.setUserTokenInfo(session.getToken(), session.getUser());
         }
         return response;
     }
 
     @CrossOrigin
     @PostMapping("/user/logout")
+    @AuthorizationMonitor
     public BaseResponse logoutUser(@RequestHeader("Authorization") String token) {
         userTokenCache.removeToken(token);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");

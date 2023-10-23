@@ -5,8 +5,7 @@
     <view class="userinfo" v-if="isAuthInfo">
       <view class="userinfo-con">
         <view class="userinfo-avatar">
-          <image
-              :src="loginResult.image ? (loginResult.image.indexOf('http') === -1 ? picDomain + loginResult.image : loginResult.pic) : '../../static/images/icon/head04.png'"></image>
+          <image :src="loginResult.image ? (loginResult.image.indexOf('http') === -1 ? picDomain + loginResult.image : loginResult.pic) : '/static/images/icon/head04.png'"></image>
         </view>
         <view class="userinfo-name">
           <view>{{ loginResult.nickname ? loginResult.nickname : "用户昵称" }}</view>

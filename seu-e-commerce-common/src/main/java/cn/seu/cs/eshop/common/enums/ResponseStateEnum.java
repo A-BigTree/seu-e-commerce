@@ -18,8 +18,11 @@ public enum ResponseStateEnum {
     AUTHORIZATION_EXPIRATION(502, "Authorization Expiration"),
     // 用户操作错误
     OPERATION_ERROR(503, "Operation Error"),
+    // 权限错误
+    PRIVILEGES_ERROR(504, "No Privileges"),
+
     // 其他错误
-    OTHER_ERROR(504, "Other Error"),
+    OTHER_ERROR(600, "Other Error"),
     ;
     private final Integer code;
     private final String msg;

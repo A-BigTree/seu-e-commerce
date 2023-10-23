@@ -10,7 +10,11 @@ const request = function(params) {
 	} else if (paramType === "[object Number]") {
 		params.data = params.data + "";
 	}
-	console.log(config.domain);
+	uni.showLoading({
+		title: "Loading",
+		mask: true
+	}).then(r => {
+	});
 	uni.request({
 		url: (params.domain? params.domain : config.domain) + params.url,
 		data: params.data,
@@ -21,6 +25,7 @@ const request = function(params) {
 		method: params.method === undefined ? "POST" : params.method,
 		dataType: "json",
 		success: function (res) {
+			uni.hideLoading();
 			const response = res.data;
 			// 请求成功
 			if (response.code === 200) {
@@ -110,6 +115,7 @@ const request = function(params) {
 			}, 1);
 		}
 	});
+
 }
 
 module.exports = {
