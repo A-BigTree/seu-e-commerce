@@ -19,7 +19,7 @@ import cn.seu.cs.eshop.account.cache.EmailVerifyCache;
 import cn.seu.cs.eshop.account.cache.UserSessionCache;
 import cn.seu.cs.eshop.account.constants.AccountConstants;
 import cn.seu.cs.eshop.account.pojo.db.EmailVerifyDO;
-import cn.seu.cs.eshop.account.service.EmailSendService;
+import cn.seu.cs.eshop.account.service.UserLoginService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Slf4j
-public class EmailSendServiceImpl implements EmailSendService {
+public class UserLoginServiceImpl implements UserLoginService {
     @Resource
     ShopConf eshopConfService;
     @Resource
@@ -127,8 +127,8 @@ public class EmailSendServiceImpl implements EmailSendService {
         log.info(password);
         UserBaseDO userBaseDO = userBaseDao.selectByAccountAndRole(account, password, request.getRoleType());
         if (userBaseDO == null) {
-            return ResponseBuilderUtils.buildResponse(LoginUserResponse.class, ResponseStateEnum.OPERATION_ERROR,
-                    new EshopSessionDTO());
+            return ResponseBuilderUtils.buildResponse(LoginUserResponse.class,
+                    ResponseStateEnum.OPERATION_ERROR, new EshopSessionDTO());
         }
         EshopSessionDTO session = userSessionCache.getSession(userBaseDO.getId());
         return ResponseBuilderUtils.buildSuccessResponse(LoginUserResponse.class, session);

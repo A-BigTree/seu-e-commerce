@@ -12,7 +12,7 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
  * Created on 2023/10/19
  */
 
-public interface EmailSendService {
+public interface UserLoginService {
     BaseResponse sendVerifyEmail(SendVerifyEmailRequest request);
 
     BaseResponse registerUser(RegisterUserRequest request);
