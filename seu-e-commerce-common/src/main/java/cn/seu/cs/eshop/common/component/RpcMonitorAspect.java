@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 public class RpcMonitorAspect {
-
     @Around("@annotation(cn.seu.cs.eshop.common.aop.RpcMonitor)")
     public Object rpcMonitor(ProceedingJoinPoint joinPoint) throws Throwable {
         // TODO RPC监控
