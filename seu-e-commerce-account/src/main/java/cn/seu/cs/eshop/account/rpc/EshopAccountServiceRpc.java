@@ -20,23 +20,23 @@ import org.apache.dubbo.config.annotation.DubboService;
 @Slf4j
 public class EshopAccountServiceRpc implements EshopAccountService {
     @Resource
-    UserLoginService emailSendServiceImpl;
+    UserLoginService userLoginServiceImpl;
 
     @Override
     @RpcMonitor
     public BaseResponse sendVerifyEmail(SendVerifyEmailRequest request) {
-        return emailSendServiceImpl.sendVerifyEmail(request);
+        return userLoginServiceImpl.sendVerifyEmail(request);
     }
 
     @Override
     @RpcMonitor
     public BaseResponse registerUser(RegisterUserRequest request) {
-        return emailSendServiceImpl.registerUser(request);
+        return userLoginServiceImpl.registerUser(request);
     }
 
     @Override
     @RpcMonitor
     public LoginUserResponse loginUser(LoginUserRequest request) {
-        return emailSendServiceImpl.loginUser(request);
+        return userLoginServiceImpl.loginUser(request);
     }
 }
