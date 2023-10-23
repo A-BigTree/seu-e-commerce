@@ -79,7 +79,7 @@ const request = function(params) {
 				}
 				uni.showToast({
 					title: response.data || 'Error',
-					icon: "exception"
+					icon: "none"
 				}).then(r => {
 				});
 				return;

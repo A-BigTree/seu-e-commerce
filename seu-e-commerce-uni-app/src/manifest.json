@@ -55,7 +55,7 @@
 		"domain" : "",
 		"router" : {
 			"mode" : "history",
-			"base" : ""
+			"base" : "/eshop/app/"
 		}
 	},
 	"quickapp": {

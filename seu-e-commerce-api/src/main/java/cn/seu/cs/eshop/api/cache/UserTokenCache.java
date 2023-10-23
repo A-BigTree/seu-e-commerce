@@ -22,4 +22,8 @@ public class UserTokenCache {
     public void setUserTokenInfo(String token, Long id) {
         redisService.setObjectValue(token, id, apiTokenCache);
     }
+
+    public void removeToken(String token) {
+        redisService.removeValue(token, apiTokenCache);
+    }
 }

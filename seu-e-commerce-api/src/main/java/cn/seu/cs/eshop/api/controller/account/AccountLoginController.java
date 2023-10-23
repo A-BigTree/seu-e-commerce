@@ -8,6 +8,7 @@ import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
+import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,12 @@ public class AccountLoginController {
             userTokenCache.setUserTokenInfo(session.getToken(), session.getId());
         }
         return response;
+    }
+
+    @CrossOrigin
+    @PostMapping("/user/logout")
+    public BaseResponse logoutUser(@RequestHeader("Authorization") String token) {
+        userTokenCache.removeToken(token);
+        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
     }
 }

@@ -1,14 +1,14 @@
 <template>
 	<view class="con">
-		<image src="../../static/logo.png"></image>
+		<image src="/static/logo.png"></image>
 		<!-- 登录 -->
 		<view class="login-form">
 			<view :class="['item',errorTips===1? 'error':'']">
 				<view class="account">
-					<text class="input-item">账号</text>
+					<text class="input-item">邮箱</text>
 					<input type="text" @input="getInputVal" data-type="account" placeholder-class="inp-palcehoder" placeholder="请输入用户名"></input>
 				</view>
-				<view class="error-text" v-if="errorTips===1"><text class="warning-icon">!</text>请输入账号！</view>
+				<view class="error-text" v-if="errorTips===1"><text class="warning-icon">!</text>请输入正确的邮箱！</view>
 			</view>
 			<view :class="['item',errorTips===2? 'error':'']">
 				<view class="account">
@@ -31,6 +31,10 @@
 </template>
 
 <script>
+const config = require("@/utils/config")
+const http = require("@/utils/http")
+const util = require("@/utils/util")
+import {md5} from "js-md5"
   export default {
 		data() {
 			return {
@@ -125,7 +129,47 @@
 						errorTips: 2
 					});
 				} else {
-          // TODO 登录功能
+          this.setData({
+            errorTips: 0
+          });
+          const params = {
+            url: "/account/user/login",
+            data: {
+              account: this.principal,
+              password: md5(this.credentials + config.salt),
+              roleType: 1
+            },
+            callBack: function (res) {
+              const session = res.data;
+              uni.setStorageSync("userInfo", session.user);
+              uni.setStorageSync("token", session.token);
+              uni.showToast({
+                title: "登录成功",
+                icon: "success",
+                complete: () => {
+                  setTimeout(() => {
+                    uni.switchTab({
+                      url: "/pages/user/user"
+                    });
+                  }, 500)
+                }
+              });
+            },
+            errCallBack: (res) => {
+              if (res.code === 503) {
+                uni.showToast({
+                  title: "账号或密码不正确",
+                  icon: "none",
+                });
+              } else {
+                uni.showToast({
+                  title: "服务器出了点小差~",
+                  icon: "none"
+                });
+              }
+            }
+          };
+          http.request(params);
         }
 			},
 
@@ -142,7 +186,9 @@
 			 * 回到首页
 			 */
 			toIndex() {
-
+        uni.switchTab({
+          url: "/pages/user/user"
+        });
 			}
 
 		}

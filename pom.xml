@@ -33,13 +33,13 @@
         <module>seu-e-commerce-common</module>
         <module>seu-e-commerce-api</module>
         <module>seu-e-commerce-im</module>
-        <module>seu-e-commerce-im/seu-e-commerce-im-interface</module>
+        <module>seu-e-commerce-im-interface</module>
         <module>seu-e-commerce-account</module>
-        <module>seu-e-commerce-account/seu-e-commerce-account-interface</module>
+        <module>seu-e-commerce-account-interface</module>
         <module>seu-e-commerce-service</module>
-        <module>seu-e-commerce-service/seu-e-commerce-service-interface</module>
+        <module>seu-e-commerce-service-interface</module>
         <module>seu-e-commerce-task</module>
-        <module>seu-e-commerce-common/seu-e-commerce-common-sdk</module>
+        <module>seu-e-commerce-common-sdk</module>
     </modules>
 
     <properties>

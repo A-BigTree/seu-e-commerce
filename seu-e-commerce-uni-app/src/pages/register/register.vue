@@ -1,7 +1,7 @@
 <template>
   <view class="register">
     <view class="con">
-      <image src="../../static/logo.png"></image>
+      <image src="/static/logo.png"></image>
       <!-- 登录 -->
       <view class="login-form">
         <view :class="['item',errorTips===1? 'error':'']">
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-const salt = require("@/utils/config")
+const config = require("@/utils/config")
 const http = require("@/utils/http")
 const util = require("@/utils/util")
 import {md5} from "js-md5"
@@ -190,8 +190,31 @@ export default {
       } else {
         this.setData({
           errorTips: 0
-        })
-        // TODO 注册逻辑
+        });
+        const params = {
+          url: "/account/user/register",
+          data: {
+            account: this.principal,
+            nickname: "",
+            verifyCode: this.verifyCode,
+            password: md5(this.credentials + config.salt),
+            roleType: 1
+          },
+          callBack: function (data) {
+            uni.showToast({
+              title: "注册成功",
+              icon: "success",
+              complete: () => {
+                setTimeout(() => {
+                  uni.navigateTo({
+                    url: "/pages/login/login"
+                  });
+                }, 1000)
+              }
+            });
+          }
+        };
+        http.request(params);
       }
     },
     /**
@@ -208,7 +231,7 @@ export default {
      */
     toIndex: function () {
       uni.switchTab({
-        url: '/pages/index/index'
+        url: "/pages/user/user"
       });
     },
     // 发送验证码
@@ -240,7 +263,6 @@ export default {
           });
         }
       }
-      console.info(params);
       http.request(params);
       util.countDown(60, (value) => {
         this.setData({
