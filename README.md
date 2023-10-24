@@ -36,3 +36,11 @@ IDEA➕JDK`17`➕Maven`3.9.1`➕Github Desktop➕MySQL图形化工具
 
 ### 1.2.2 运行配置
 
+在IDEA的运行配置中添加VM参数如下：
+
+```shell
+-Dnacos-addr=Nacos主机IP -Dusername=账号 -Dpassword=密码 -Dport=SpringBoot运行端口 -Ddubbo-port=Dubbo服务端端口 -Dqos-port=Dubbo客户端端口
+```
+
+
+
