@@ -1,13 +1,12 @@
 package cn.seu.cs.eshop.api.controller.account;
 
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
-import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
-import cn.seu.cs.eshop.api.aop.AuthorizationMonitor;
+import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
+import cn.seu.cs.eshop.api.annotation.AuthorizationMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
+import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -58,8 +57,16 @@ public class AccountLoginController {
     @CrossOrigin
     @PostMapping("/user/logout")
     @AuthorizationMonitor
-    public BaseResponse logoutUser(@RequestHeader("Authorization") String token) {
+    public BaseResponse logoutUser(@RequestHeader(ApiConstants.AUTHORIZATION_HEADER) String token) {
         userTokenCache.removeToken(token);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
+    }
+
+    @CrossOrigin
+    @GetMapping("/user/info/get")
+    @AuthorizationMonitor
+    public GetUserInfoResponse getUserInfo(@AuthorUserInfo Long id) {
+        log.info(id.toString());
+        return null;
     }
 }

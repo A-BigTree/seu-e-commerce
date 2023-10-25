@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.api.aop;
+package cn.seu.cs.eshop.api.annotation;
 
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 
@@ -13,6 +13,4 @@ import java.lang.annotation.*;
 @Documented
 public @interface AuthorizationMonitor {
     UserRoleEnum roleType() default UserRoleEnum.CUSTOMER;
-
-    boolean needId() default false;
 }

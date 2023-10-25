@@ -5,7 +5,7 @@ package cn.seu.cs.eshop.api.constants;
  * Created on 2023/10/23
  */
 public class ApiConstants {
-    public static String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     public static String AUTHORIZATION_ERROR = "登录状态鉴权失败";
     public static String NO_AUTHORIZATION_ERROR = "未登录，请先登录";
     public static String AUTHORIZATION_EXPIRATION_ERROR = "登录已过期，请重新登录";

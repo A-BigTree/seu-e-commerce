@@ -1,10 +1,12 @@
 package cn.seu.cs.eshop.api.aop;
 
 import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
+import cn.seu.cs.eshop.api.annotation.AuthorizationMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -34,42 +36,40 @@ public class AuthorizationMonitorAspect {
     @Resource
     UserTokenCache userTokenCache;
 
-    @Around("@annotation(cn.seu.cs.eshop.api.aop.AuthorizationMonitor)")
+    @Around("@annotation(cn.seu.cs.eshop.api.annotation.AuthorizationMonitor)")
+    @SuppressWarnings("unchecked")
     public Object authorizationFilter(ProceedingJoinPoint joinPoint) {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
             return ResponseBuilderUtils.buildFailResponse(BaseResponse.class,
                     AUTHORIZATION_ERROR);
         }
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Class<? extends BaseResponseInterface<Object>> clazz =
+                (Class<? extends BaseResponseInterface<Object>>)method.getGenericReturnType();
         HttpServletRequest request = ((ServletRequestAttributes)attributes).getRequest();
         String token = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.isEmpty(token)) {
-            return ResponseBuilderUtils.buildResponse(BaseResponse.class,
-                    ResponseStateEnum.AUTHORIZATION, NO_AUTHORIZATION_ERROR);
+            return ResponseBuilderUtils.buildResponse(clazz,
+                    ResponseStateEnum.AUTHORIZATION, null);
         }
         UserBaseDTO user = userTokenCache.getUserTokenInfo(token);
         if (user == null) {
-            return ResponseBuilderUtils.buildResponse(BaseResponse.class,
-                    ResponseStateEnum.AUTHORIZATION_EXPIRATION, AUTHORIZATION_EXPIRATION_ERROR);
+            return ResponseBuilderUtils.buildResponse(clazz,
+                    ResponseStateEnum.AUTHORIZATION_EXPIRATION, null);
         }
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
+
         AuthorizationMonitor authorization = method.getAnnotation(AuthorizationMonitor.class);
         if (!Objects.equals(user.getRoleType(), authorization.roleType().getValue())) {
-            return ResponseBuilderUtils.buildResponse(BaseResponse.class,
-                    ResponseStateEnum.PRIVILEGES_ERROR, PRIVILEGES_ERROR);
-        }
-        if (authorization.needId()) {
-            // TODO 转换ID
-        }
-        Object res = null;
-        try {
-            res = joinPoint.proceed();
-        } catch (Throwable e) {
-            log.error("Method: {} exec error, e: ", method.toString(), e);
-            return ResponseBuilderUtils.buildFailResponse(BaseResponse.class, API_SERVER_ERROR);
+            return ResponseBuilderUtils.buildResponse(clazz, ResponseStateEnum.PRIVILEGES_ERROR, null);
         }
         userTokenCache.setUserTokenInfo(token, user);
-        return res;
+        try {
+            return joinPoint.proceed();
+        } catch (Throwable e) {
+            log.error("Method: {} exec error, e: ", method, e);
+            return ResponseBuilderUtils.buildFailResponse(clazz, null);
+        }
     }
 }

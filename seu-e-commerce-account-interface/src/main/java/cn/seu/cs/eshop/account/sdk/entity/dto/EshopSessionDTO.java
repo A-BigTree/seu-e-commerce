@@ -1,6 +1,5 @@
 package cn.seu.cs.eshop.account.sdk.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
