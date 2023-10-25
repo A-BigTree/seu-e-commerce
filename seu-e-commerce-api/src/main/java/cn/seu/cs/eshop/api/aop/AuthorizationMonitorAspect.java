@@ -36,8 +36,8 @@ public class AuthorizationMonitorAspect {
     @Resource
     UserTokenCache userTokenCache;
 
-    @Around("@annotation(cn.seu.cs.eshop.api.annotation.AuthorizationMonitor)")
     @SuppressWarnings("unchecked")
+    @Around("@annotation(cn.seu.cs.eshop.api.annotation.AuthorizationMonitor)")
     public Object authorizationFilter(ProceedingJoinPoint joinPoint) {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
