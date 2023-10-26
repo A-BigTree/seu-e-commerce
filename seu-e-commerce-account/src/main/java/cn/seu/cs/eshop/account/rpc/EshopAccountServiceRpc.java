@@ -1,9 +1,6 @@
 package cn.seu.cs.eshop.account.rpc;
 
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
-import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.account.service.UserLoginService;
 import cn.seu.cs.eshop.common.aop.RpcMonitor;
@@ -38,5 +35,11 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     @RpcMonitor
     public LoginUserResponse loginUser(LoginUserRequest request) {
         return userLoginServiceImpl.loginUser(request);
+    }
+
+    @Override
+    @RpcMonitor
+    public GetUserInfoResponse getUserInfo(Long id) {
+        return userLoginServiceImpl.getUserInfo(id);
     }
 }

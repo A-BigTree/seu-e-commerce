@@ -23,7 +23,7 @@ public class AuthorUserHandlerMethodArgumentResolver implements HandlerMethodArg
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasMethodAnnotation(AuthorUserInfo.class) &&
+        return parameter.hasParameterAnnotation(AuthorUserInfo.class) &&
                 (parameter.getParameterType().isAssignableFrom(Long.class) ||
                         parameter.getParameterType().isAssignableFrom(UserBaseDTO.class));
     }

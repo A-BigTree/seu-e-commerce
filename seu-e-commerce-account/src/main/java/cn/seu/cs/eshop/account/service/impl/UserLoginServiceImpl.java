@@ -5,10 +5,7 @@ import cn.seu.cs.eshop.account.dao.UserBaseDao;
 import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
 import cn.seu.cs.eshop.account.pojo.db.UserBaseDO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
-import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 import cn.seu.cs.eshop.common.nacos.ShopConf;
@@ -132,6 +129,12 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         EshopSessionDTO session = userSessionCache.getSession(userBaseDO.getId());
         return ResponseBuilderUtils.buildSuccessResponse(LoginUserResponse.class, session);
+    }
+
+    @Override
+    public GetUserInfoResponse getUserInfo(Long id) {
+        EshopSessionDTO session = userSessionCache.getSession(id);
+        return ResponseBuilderUtils.buildSuccessResponse(GetUserInfoResponse.class, session);
     }
 
 

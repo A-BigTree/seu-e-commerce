@@ -1,9 +1,6 @@
 package cn.seu.cs.eshop.account.sdk.rpc;
 
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.LoginUserResponse;
-import cn.seu.cs.eshop.account.sdk.entity.req.RegisterUserRequest;
-import cn.seu.cs.eshop.account.sdk.entity.req.SendVerifyEmailRequest;
+import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**
@@ -22,4 +19,6 @@ public interface EshopAccountService {
     BaseResponse registerUser(RegisterUserRequest request);
 
     LoginUserResponse loginUser(LoginUserRequest request);
+
+    GetUserInfoResponse getUserInfo(Long id);
 }

@@ -1,6 +1,7 @@
 package cn.seu.cs.eshop.api.controller.account;
 
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
+import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
@@ -69,7 +70,6 @@ public class AccountLoginController {
     @CrossOrigin
     @GetMapping("/user/info/get")
     public GetUserInfoResponse getUserInfo(@AuthorUserInfo Long id) {
-        log.info(id.toString());
-        return null;
+        return eshopAccountService.getUserInfo(id);
     }
 }

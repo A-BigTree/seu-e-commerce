@@ -15,7 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDubbo
 @ComponentScan("cn.seu.cs.eshop.common.component")
 @ComponentScan("cn.seu.cs.eshop.api")
-@ConfigurationPropertiesScan({"cn.seu.cs.eshop.common.configuration", "cn.seu.cs.eshop.api"})
+@ConfigurationPropertiesScan(
+        {"cn.seu.cs.eshop.common.configuration",
+        "cn.seu.cs.eshop.api.configuration"})
 public class EshopApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(EshopApiApplication.class, args);
