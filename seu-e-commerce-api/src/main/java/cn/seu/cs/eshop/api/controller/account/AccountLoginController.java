@@ -3,8 +3,8 @@ package cn.seu.cs.eshop.api.controller.account;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
+import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
-import cn.seu.cs.eshop.api.annotation.AuthorizationMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
@@ -31,18 +31,21 @@ public class AccountLoginController {
     @Resource
     UserTokenCache userTokenCache;
 
+    @ApiMonitor(isAuthor = false)
     @CrossOrigin
     @PostMapping("/send/email/verify")
     public BaseResponse sendEmail(@RequestBody SendVerifyEmailRequest request) {
         return eshopAccountService.sendVerifyEmail(request);
     }
 
+    @ApiMonitor(isAuthor = false)
     @CrossOrigin
     @PostMapping("/user/register")
     public BaseResponse registerUser(@RequestBody RegisterUserRequest request) {
         return eshopAccountService.registerUser(request);
     }
 
+    @ApiMonitor(isAuthor = false)
     @CrossOrigin
     @PostMapping("/user/login")
     public LoginUserResponse loginUser(@RequestBody LoginUserRequest request) {
@@ -54,17 +57,17 @@ public class AccountLoginController {
         return response;
     }
 
+    @ApiMonitor
     @CrossOrigin
     @PostMapping("/user/logout")
-    @AuthorizationMonitor
     public BaseResponse logoutUser(@RequestHeader(ApiConstants.AUTHORIZATION_HEADER) String token) {
         userTokenCache.removeToken(token);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
     }
 
+    @ApiMonitor
     @CrossOrigin
     @GetMapping("/user/info/get")
-    @AuthorizationMonitor
     public GetUserInfoResponse getUserInfo(@AuthorUserInfo Long id) {
         log.info(id.toString());
         return null;
