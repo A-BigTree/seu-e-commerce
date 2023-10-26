@@ -45,7 +45,7 @@ public class ApiMonitorAspect {
 
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
-            return ResponseBuilderUtils.buildFailResponse(clazz, null);
+            return ResponseBuilderUtils.buildErrorResponse(clazz, null);
         }
         ApiMonitor apiMonitor = method.getAnnotation(ApiMonitor.class);
         HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
@@ -75,7 +75,7 @@ public class ApiMonitorAspect {
             return joinPoint.proceed();
         } catch (Throwable e) {
             log.error("Method: {} exec error, e: ", method, e);
-            return ResponseBuilderUtils.buildFailResponse(clazz, null);
+            return ResponseBuilderUtils.buildErrorResponse(clazz, null);
         }
     }
 }

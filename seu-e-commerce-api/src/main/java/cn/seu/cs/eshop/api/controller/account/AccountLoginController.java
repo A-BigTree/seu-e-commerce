@@ -8,6 +8,7 @@ import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
+import cn.seu.cs.eshop.common.configuration.sftp.SftpUtil;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -15,6 +16,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
@@ -31,6 +33,9 @@ public class AccountLoginController {
 
     @Resource
     UserTokenCache userTokenCache;
+
+    @Resource
+    SftpUtil sftp;
 
     @ApiMonitor(isAuthor = false)
     @CrossOrigin
@@ -71,5 +76,14 @@ public class AccountLoginController {
     @GetMapping("/user/info/get")
     public GetUserInfoResponse getUserInfo(@AuthorUserInfo Long id) {
         return eshopAccountService.getUserInfo(id);
+    }
+
+    @ApiMonitor
+    @CrossOrigin
+    @PostMapping("/user/head/load")
+    public BaseResponse loadUserHead(MultipartFile photo, @AuthorUserInfo Long id) {
+        
+
+        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
     }
 }

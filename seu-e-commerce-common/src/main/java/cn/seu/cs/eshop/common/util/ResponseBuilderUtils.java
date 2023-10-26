@@ -1,11 +1,8 @@
 package cn.seu.cs.eshop.common.util;
 
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
-import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import lombok.extern.slf4j.Slf4j;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -31,7 +28,13 @@ public class ResponseBuilderUtils {
         return buildResponse(clazz, ResponseStateEnum.OK, data);
     }
 
-    public static <D, T extends BaseResponseInterface<D>> T buildFailResponse(Class<T> clazz, D data) {
+    public static <D, T extends BaseResponseInterface<D>> T buildErrorResponse(Class<T> clazz, D data) {
         return buildResponse(clazz, ResponseStateEnum.ERROR, data);
+    }
+
+    public static <D, T extends BaseResponseInterface<D>> T buildFailResponse(Class<T> clazz, String msg, D data) {
+        T response = buildResponse(clazz, ResponseStateEnum.OPERATION_ERROR, data);
+        response.setMsg(msg);
+        return response;
     }
 }
