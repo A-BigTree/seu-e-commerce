@@ -13,7 +13,7 @@ import java.util.List;
  * Created on 2023/10/24
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebArgumentResolverConfiguration implements WebMvcConfigurer {
     @Resource
     AuthorUserHandlerMethodArgumentResolver resolver;
 
