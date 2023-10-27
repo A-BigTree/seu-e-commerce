@@ -8,16 +8,22 @@ import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
+import cn.seu.cs.eshop.common.component.SftpUtil;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
+import cn.seu.cs.eshop.common.util.TimeUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.Objects;
+
+import static cn.seu.cs.eshop.api.constants.ApiConstants.*;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -29,9 +35,10 @@ import java.util.Objects;
 public class AccountLoginController {
     @DubboReference(timeout = 4000, retries = 0)
     EshopAccountService eshopAccountService;
-
     @Resource
     UserTokenCache userTokenCache;
+    @Resource
+    SftpUtil sftp;
 
     @ApiMonitor(isAuthor = false)
     @CrossOrigin
@@ -83,10 +90,22 @@ public class AccountLoginController {
     @CrossOrigin
     @PostMapping("/user/head/load")
     public BaseResponse loadUserHead(MultipartFile photo, @AuthorUserInfo Long id) {
-        log.info(photo.getContentType());
-        log.info(photo.getOriginalFilename());
-        log.info(photo.toString());
-
-        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
+        try {
+            InputStream image = photo.getInputStream();
+            String fileName = photo.getOriginalFilename();
+            String suffix = DEFAULT_SUFFIX;
+            if (fileName != null && !StringUtils.isEmpty(fileName.substring(fileName.lastIndexOf(".")))) {
+                suffix = fileName.substring(fileName.lastIndexOf("."));
+            }
+            String prefix = buildString(IMAGE_HEADER_PREFIX, Long.toString(id % 10));
+            String file = "" + id + TimeUtils.getCurrentTime() + suffix;
+            sftp.upload(prefix, file, image);
+            UpdateUserInfoRequest request = new UpdateUserInfoRequest();
+            request.setImage("/head" + id % 10 + "/" + file);
+            return eshopAccountService.updateUserInfo(id, request);
+        } catch (Exception e) {
+            log.error("Id: {}, Image update error. e: ", id, e);
+            return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
+        }
     }
 }

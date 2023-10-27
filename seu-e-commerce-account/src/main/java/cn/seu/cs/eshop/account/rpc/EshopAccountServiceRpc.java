@@ -42,4 +42,9 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     public GetUserInfoResponse getUserInfo(Long id) {
         return userLoginServiceImpl.getUserInfo(id);
     }
+
+    @Override
+    public BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request) {
+        return userLoginServiceImpl.updateUserInfo(id, request);
+    }
 }

@@ -138,7 +138,20 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Override
     public GetUserInfoResponse getUserInfo(Long id) {
         EshopSessionDTO session = buildNewSession(userInfoCache.getUserInfo(id));
-        return ResponseBuilderUtils.buildSuccessResponse(GetUserInfoResponse.class, session);
+        return ResponseBuilderUtils.buildSuccessResponse(GetUserInfoResponse.class, session.getUser());
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request) {
+        userInfoCache.remove(id);
+        UserInfoDO userInfoDO = new UserInfoDO();
+        userInfoDO.setId(id);
+        userInfoDO.setNickname(StringUtils.isEmpty(request.getNickname()) ? null : request.getNickname());
+        userInfoDO.setImage(StringUtils.isEmpty(request.getImage()) ? null : request.getImage());
+        userInfoDO.setPhoneNumber(StringUtils.isEmpty(request.getPhoneNumber()) ? null : request.getPhoneNumber());
+        int res = userInfoDao.updateById(userInfoDO);
+        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, Integer.toString(res));
     }
 
     public EshopSessionDTO buildNewSession(UserInfoDO userInfoDO) {

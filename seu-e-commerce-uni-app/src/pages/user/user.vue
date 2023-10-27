@@ -5,9 +5,9 @@
     <view class="userinfo" v-if="isAuthInfo">
       <view class="userinfo-con">
         <view class="userinfo-avatar" @click="selectImage">
-          <image :src="loginResult.image ? (loginResult.image.indexOf('http') === -1 ? picDomain + loginResult.image : loginResult.pic) : '/static/images/icon/head04.png'"></image>
+          <image :src="loginResult.image ? picDomain + loginResult.image: '/static/images/icon/head04.png'"></image>
         </view>
-        <view class="userinfo-name">
+        <view class="userinfo-name" @click="toUpdatePage">
           <view>{{ loginResult.nickname ? loginResult.nickname : "用户昵称" }}</view>
         </view>
       </view>
@@ -157,12 +157,22 @@ export default {
     uni.setNavigationBarTitle({
       title: "个人中心"
     });
+    const params = {
+      url: "/account/user/info/get",
+      method: "GET",
+      callBack: (response) => {
+        const user = response.data;
+        uni.setStorageSync("userInfo", user);
+      }
+    };
+    http.request(params);
     this.setData({
-      loginResult: uni.getStorageSync("userInfo")
+      loginResult: uni.getStorageSync("userInfo"),
     });
     if (this.loginResult) {
       this.setData({
-        isAuthInfo: true
+        isAuthInfo: true,
+        picDomain: config.picDomain
       });
     } else {
       this.setData({
@@ -210,7 +220,11 @@ export default {
       uni.chooseImage({
         count: 1,
         success: function (result) {
-          console.log(result);
+          uni.showLoading({
+            title: "Loading",
+            mask: true
+          }).then(r => {
+          });
           const paths = result.tempFilePaths;
           uni.uploadFile({
             url: config.domain + "/account/user/head/load",
@@ -221,11 +235,33 @@ export default {
               "Authorization": uni.getStorageSync("token"),
             },
             success: (res) => {
+              uni.hideLoading();
               console.log(res);
+              const data = JSON.parse(res.data);
+              console.log(data);
+              if (data.code === 200) {
+                uni.showToast({
+                  title: "头像修改成功~",
+                  icon: "success"
+                });
+                uni.reLaunch({
+                  url: "/pages/user/user"
+                });
+              } else {
+                uni.showToast({
+                  title: "头像修改失败",
+                  icon: "none"
+                });
+              }
             }
-          })
+          });
+          uni.hideLoading();
         }
-      })
+      });
+
+    },
+    toUpdatePage: function () {
+      console.log("点击")
     },
     toDistCenter: function () {
 

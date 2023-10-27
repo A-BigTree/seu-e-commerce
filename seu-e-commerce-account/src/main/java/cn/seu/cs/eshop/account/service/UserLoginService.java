@@ -17,4 +17,6 @@ public interface UserLoginService {
     LoginUserResponse loginUser(LoginUserRequest request);
 
     GetUserInfoResponse getUserInfo(Long id);
+
+    BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request);
 }

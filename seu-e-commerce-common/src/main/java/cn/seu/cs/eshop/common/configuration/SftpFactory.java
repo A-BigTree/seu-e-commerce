@@ -24,7 +24,7 @@ public class SftpFactory extends BasePooledObjectFactory<ChannelSftp> {
     @Value("${sftp.port}")
     private int port;
 
-    @Value("${sftp.port}")
+    @Value("${sftp.username}")
     private String username;
 
     @Value("${sftp.password}")

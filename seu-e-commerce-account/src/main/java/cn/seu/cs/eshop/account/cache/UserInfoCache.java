@@ -39,4 +39,8 @@ public class UserInfoCache {
     public void setSession(UserInfoDO userInfoDO) {
         eshopRedisService.setObjectValue(userInfoDO.getId().toString(), userInfoDO, accountUserSession);
     }
+
+    public void remove(long id) {
+        eshopRedisService.removeValue(Long.toString(id), accountUserSession);
+    }
 }
