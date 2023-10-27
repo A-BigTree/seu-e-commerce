@@ -12,9 +12,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("login")
-public class UserBaseDO extends MysqlBaseDO {
+public class UserInfoDO extends MysqlBaseDO {
     private String account;
     private String password;
     private String nickname;
+    private String image;
+    private String phoneNumber;
     private Integer roleType;
 }

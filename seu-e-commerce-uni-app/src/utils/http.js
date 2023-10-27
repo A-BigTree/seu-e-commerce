@@ -40,18 +40,18 @@ const request = function(params) {
 				uni.removeStorageSync("token");
 				uni.showModal({
 					title: "提示",
-					content: response.data,
+					content: response.msg,
 					cancelText: "取消",
 					confirmText: "确定",
 					success: res => {
 						if (res.confirm) {
 							uni.navigateTo({
-								url: "pages/login/login"
+								url: "/pages/login/login"
 							}).then(r=>{
 							});
 						} else {
 							uni.navigateTo({
-								url: "pages/index/index"
+								url: "/pages/index/index"
 							}).then(r=>{
 							});
 						}
@@ -59,6 +59,7 @@ const request = function(params) {
 				});
 				return;
 			}
+
 			// 服务器问题
 			 if (response.code === 500) {
 				 console.error('============== 请求异常 ==============')
@@ -83,14 +84,27 @@ const request = function(params) {
 					return;
 				}
 				uni.showToast({
-					title: response.data || 'Error',
+					title: response.data || response.msg || 'Error',
+					icon: "none"
+				}).then(r => {
+				});
+				return;
+			}
+			// 权限错误
+			if (response.code === 504) {
+				if (params.errCallBack) {
+					params.errCallBack(response);
+					return;
+				}
+				uni.showToast({
+					title: response.msg,
 					icon: "none"
 				}).then(r => {
 				});
 				return;
 			}
 			// 其他错误
-			if (response.code === 504) {
+			if (response.code === 600) {
 				if (params.errCallBack) {
 					params.errCallBack(response)
 				} else {

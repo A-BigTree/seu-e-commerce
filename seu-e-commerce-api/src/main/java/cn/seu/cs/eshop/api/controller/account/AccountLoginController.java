@@ -1,14 +1,13 @@
 package cn.seu.cs.eshop.api.controller.account;
 
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
-import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
-import cn.seu.cs.eshop.common.configuration.sftp.SftpUtil;
+import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -28,14 +27,11 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/account")
 public class AccountLoginController {
-    @DubboReference(timeout = 3000, retries = 0)
+    @DubboReference(timeout = 4000, retries = 0)
     EshopAccountService eshopAccountService;
 
     @Resource
     UserTokenCache userTokenCache;
-
-    @Resource
-    SftpUtil sftp;
 
     @ApiMonitor(isAuthor = false)
     @CrossOrigin
@@ -58,7 +54,12 @@ public class AccountLoginController {
         LoginUserResponse response = eshopAccountService.loginUser(request);
         EshopSessionDTO session = response.getData();
         if (Objects.equals(response.getCode(), ResponseStateEnum.OK.getCode()) && session != null) {
-            userTokenCache.setUserTokenInfo(session.getToken(), session.getUser());
+            userTokenCache.setUserTokenInfo(session.getToken(),
+                    UserBaseDTO.builder()
+                    .id(session.getId())
+                    .account(session.getUser().getAccount())
+                    .roleType(session.getUser().getRoleType())
+                    .build());
         }
         return response;
     }
@@ -82,7 +83,9 @@ public class AccountLoginController {
     @CrossOrigin
     @PostMapping("/user/head/load")
     public BaseResponse loadUserHead(MultipartFile photo, @AuthorUserInfo Long id) {
-        
+        log.info(photo.getContentType());
+        log.info(photo.getOriginalFilename());
+        log.info(photo.toString());
 
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, "OK");
     }

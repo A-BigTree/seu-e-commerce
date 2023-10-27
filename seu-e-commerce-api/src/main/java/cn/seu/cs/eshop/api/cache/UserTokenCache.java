@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.api.cache;
 
-import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
-import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
+import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
+import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.redis.RedisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;

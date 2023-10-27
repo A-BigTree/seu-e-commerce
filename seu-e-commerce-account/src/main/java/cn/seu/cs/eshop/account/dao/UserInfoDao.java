@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.account.dao;
 
-import cn.seu.cs.eshop.account.pojo.db.UserBaseDO;
+import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,13 +10,13 @@ import org.apache.ibatis.annotations.Mapper;
  * Created on 2023/10/16
  */
 @Mapper
-public interface UserBaseDao extends MysqlBaseDao<UserBaseDO> {
-    default UserBaseDO selectByAccountAndRole(String account, String password, Integer roleType) {
-        UserBaseDO entity = new UserBaseDO();
+public interface UserInfoDao extends MysqlBaseDao<UserInfoDO> {
+    default UserInfoDO selectByAccountAndRole(String account, String password, Integer roleType) {
+        UserInfoDO entity = new UserInfoDO();
         entity.setAccount(account);
         entity.setPassword(password);
         entity.setRoleType(roleType);
-        QueryWrapper<UserBaseDO> wrapper = new QueryWrapper<>(entity);
+        QueryWrapper<UserInfoDO> wrapper = new QueryWrapper<>(entity);
         return selectOne(wrapper);
     }
 }

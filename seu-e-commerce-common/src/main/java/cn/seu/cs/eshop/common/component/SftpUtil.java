@@ -1,5 +1,6 @@
-package cn.seu.cs.eshop.common.configuration.sftp;
+package cn.seu.cs.eshop.common.component;
 
+import cn.seu.cs.eshop.common.configuration.SftpGenericObjectPool;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
 import jakarta.annotation.Resource;
@@ -11,12 +12,11 @@ import java.io.InputStream;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/26
  */
+@Component
 public class SftpUtil {
+    @Resource
     private SftpGenericObjectPool pool;
 
-    public SftpUtil(SftpGenericObjectPool pool) {
-        this.pool = pool;
-    }
 
     /**
      * 文件是否存在

@@ -1,10 +1,11 @@
 package cn.seu.cs.eshop.account.service.impl;
 
 import cn.seu.cs.eshop.account.dao.EmailVerifyDao;
-import cn.seu.cs.eshop.account.dao.UserBaseDao;
+import cn.seu.cs.eshop.account.dao.UserInfoDao;
 import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
-import cn.seu.cs.eshop.account.pojo.db.UserBaseDO;
+import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
+import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
@@ -13,7 +14,7 @@ import cn.seu.cs.eshop.common.util.MysqlUtils;
 import cn.seu.cs.eshop.common.util.RandomGenerateUtils;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cn.seu.cs.eshop.account.cache.EmailVerifyCache;
-import cn.seu.cs.eshop.account.cache.UserSessionCache;
+import cn.seu.cs.eshop.account.cache.UserInfoCache;
 import cn.seu.cs.eshop.account.constants.AccountConstants;
 import cn.seu.cs.eshop.account.pojo.db.EmailVerifyDO;
 import cn.seu.cs.eshop.account.service.UserLoginService;
@@ -26,6 +27,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -43,9 +47,9 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Resource
     JavaMailSender javaMailSender;
     @Resource
-    UserBaseDao userBaseDao;
+    UserInfoDao userInfoDao;
     @Resource
-    UserSessionCache userSessionCache;
+    UserInfoCache userInfoCache;
 
 
     @Override
@@ -95,7 +99,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         String password = DigestUtils.md5Hex(request.getPassword() +
                 AccountConstants.PASSWORD_SLAT_MD5);
-        UserBaseDO entity = MysqlUtils.buildEffectEntity(new UserBaseDO());
+        UserInfoDO entity = MysqlUtils.buildEffectEntity(new UserInfoDO());
         entity.setAccount(account);
         entity.setPassword(password);
         entity.setNickname(RandomGenerateUtils.generateNickname(AccountConstants.NICKNAME_PREFIX,
@@ -107,12 +111,12 @@ public class UserLoginServiceImpl implements UserLoginService {
         if (request.getRoleType() >= 0) {
             entity.setRoleType(request.getRoleType());
         }
-        UserBaseDO userBaseDO = userBaseDao.selectByAccountAndRole(account, null, entity.getRoleType());
-        if (userBaseDO != null) {
+        UserInfoDO userInfoDO = userInfoDao.selectByAccountAndRole(account, null, entity.getRoleType());
+        if (userInfoDO != null) {
             return ResponseBuilderUtils.buildResponse(BaseResponse.class,
                     ResponseStateEnum.OPERATION_ERROR, AccountConstants.ACCOUNT_DUPLICATION_ERROR);
         }
-        int id = userBaseDao.insert(entity);
+        int id = userInfoDao.insert(entity);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, Integer.toString(id));
     }
 
@@ -122,19 +126,38 @@ public class UserLoginServiceImpl implements UserLoginService {
         String password = DigestUtils.md5Hex(request.getPassword() +
                 AccountConstants.PASSWORD_SLAT_MD5);
         log.info(password);
-        UserBaseDO userBaseDO = userBaseDao.selectByAccountAndRole(account, password, request.getRoleType());
-        if (userBaseDO == null) {
+        UserInfoDO userInfoDO = userInfoDao.selectByAccountAndRole(account, password, request.getRoleType());
+        if (userInfoDO == null) {
             return ResponseBuilderUtils.buildResponse(LoginUserResponse.class,
                     ResponseStateEnum.OPERATION_ERROR, new EshopSessionDTO());
         }
-        EshopSessionDTO session = userSessionCache.getSession(userBaseDO.getId());
+        EshopSessionDTO session = buildNewSession(userInfoCache.getUserInfo(userInfoDO.getId()));
         return ResponseBuilderUtils.buildSuccessResponse(LoginUserResponse.class, session);
     }
 
     @Override
     public GetUserInfoResponse getUserInfo(Long id) {
-        EshopSessionDTO session = userSessionCache.getSession(id);
+        EshopSessionDTO session = buildNewSession(userInfoCache.getUserInfo(id));
         return ResponseBuilderUtils.buildSuccessResponse(GetUserInfoResponse.class, session);
+    }
+
+    public EshopSessionDTO buildNewSession(UserInfoDO userInfoDO) {
+        UserInfoDTO userInfoDTO = UserInfoDTO.builder()
+                .id(userInfoDO.getId())
+                .nickname(userInfoDO.getNickname())
+                .image(StringUtils.isEmpty(userInfoDO.getImage()) ?
+                        StringUtils.EMPTY : userInfoDO.getImage())
+                .account(userInfoDO.getAccount())
+                .roleType(userInfoDO.getRoleType())
+                .phoneNumber(userInfoDO.getPhoneNumber())
+                .build();
+        String token = UUID.randomUUID().toString() + userInfoDO.getId();
+        return EshopSessionDTO.builder()
+                .id(userInfoDO.getId())
+                .token(token)
+                .user(userInfoDTO)
+                .slots(new HashMap<>())
+                .build();
     }
 
 

@@ -16,12 +16,6 @@ public class RedisTemplateConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public LettuceConnectionFactory lettuceConnectionFactory() {
-        return new LettuceConnectionFactory();
-    }
-
-    @ConditionalOnMissingBean
-    @Bean
     public RedisTemplate<String, String> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory);

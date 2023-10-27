@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.configuration.sftp;
+package cn.seu.cs.eshop.common.configuration;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -7,6 +7,8 @@ import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
@@ -14,6 +16,7 @@ import java.util.Properties;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/26
  */
+@Configuration
 public class SftpFactory extends BasePooledObjectFactory<ChannelSftp> {
     @Value("${sftp.host}")
     private String host;

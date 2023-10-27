@@ -1,8 +1,8 @@
 package cn.seu.cs.eshop.api.aop;
 
-import cn.seu.cs.eshop.account.sdk.entity.dto.UserBaseDTO;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
+import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;

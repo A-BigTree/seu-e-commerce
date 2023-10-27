@@ -6,19 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
- * Created on 2023/10/18
+ * Created on 2023/10/16
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EshopSessionDTO implements Serializable {
+public class UserInfoDTO implements Serializable {
     private Long id;
-    private String token;
-    private UserInfoDTO user;
-    private Map<String, String> slots;
+    private String account;
+    private String image;
+    private String nickname;
+    private Integer roleType;
+    private String phoneNumber;
 }

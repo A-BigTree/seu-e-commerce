@@ -1,5 +1,6 @@
-package cn.seu.cs.eshop.common.configuration.sftp;
+package cn.seu.cs.eshop.common.configuration;
 
+import cn.seu.cs.eshop.common.configuration.SftpFactory;
 import com.jcraft.jsch.ChannelSftp;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -11,7 +12,8 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 public class SftpGenericObjectPool {
     private final GenericObjectPool<ChannelSftp> genericObjectPool;
 
-    public SftpGenericObjectPool(SftpFactory sftpFactory, GenericObjectPoolConfig<ChannelSftp> sftpPoolConfig) {
+    public SftpGenericObjectPool(SftpFactory sftpFactory,
+                                 GenericObjectPoolConfig<ChannelSftp> sftpPoolConfig) {
         this.genericObjectPool = new GenericObjectPool<>(sftpFactory, sftpPoolConfig);
     }
 

@@ -4,7 +4,7 @@
 
     <view class="userinfo" v-if="isAuthInfo">
       <view class="userinfo-con">
-        <view class="userinfo-avatar">
+        <view class="userinfo-avatar" @click="selectImage">
           <image :src="loginResult.image ? (loginResult.image.indexOf('http') === -1 ? picDomain + loginResult.image : loginResult.pic) : '/static/images/icon/head04.png'"></image>
         </view>
         <view class="userinfo-name">
@@ -122,6 +122,7 @@
 
 <script>
 const http = require("@/utils/http")
+const config = require("@/utils/config")
 export default {
   data() {
     return {
@@ -205,6 +206,27 @@ export default {
   },
 
   methods: {
+    selectImage: function () {
+      uni.chooseImage({
+        count: 1,
+        success: function (result) {
+          console.log(result);
+          const paths = result.tempFilePaths;
+          uni.uploadFile({
+            url: config.domain + "/account/user/head/load",
+            filePath: paths[0],
+            name: "photo",
+            header: {
+              "Access-Control-Allow-Origin": "*",
+              "Authorization": uni.getStorageSync("token"),
+            },
+            success: (res) => {
+              console.log(res);
+            }
+          })
+        }
+      })
+    },
     toDistCenter: function () {
 
     },

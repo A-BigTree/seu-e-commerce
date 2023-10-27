@@ -13,13 +13,13 @@ public enum ResponseStateEnum {
     // 服务器内部错误
     ERROR(500, "Server error"),
     // 需要登录认证
-    AUTHORIZATION(501, "No Authorization"),
+    AUTHORIZATION(501, "未登录，请先登录"),
     // 登录过期
-    AUTHORIZATION_EXPIRATION(502, "Authorization Expiration"),
+    AUTHORIZATION_EXPIRATION(502, "登录已过期，请重新登录"),
     // 用户操作错误
     OPERATION_ERROR(503, "Operation Error"),
     // 权限错误
-    PRIVILEGES_ERROR(504, "No Privileges"),
+    PRIVILEGES_ERROR(504, "无权限进行操作"),
 
     // 其他错误
     OTHER_ERROR(600, "Other Error"),
