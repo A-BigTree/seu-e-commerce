@@ -4,7 +4,6 @@ import {ref} from "vue";
 
 const active = ref(0);
 function next() {
-  console.log(active);
   if (active.value++ > 2) active.value = 0;
 }
 </script>
