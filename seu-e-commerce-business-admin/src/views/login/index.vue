@@ -28,15 +28,26 @@
                       type="password"
                       placeholder="密码"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="type">
+            <el-radio-group v-model="dataForm.roleType">
+              <el-radio :label="2">商家管理员</el-radio>
+              <el-radio :label="3">平台管理员</el-radio>
+            </el-radio-group>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <el-link type="primary" href="/register">
               现在去开店？
             </el-link>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="dataFormSubmit()">
+            <el-button
+                type="primary"
+                size="large"
+                @click="dataFormSubmit()">
               登录
             </el-button>
+          </el-form-item>
+          <el-form-item>
+
           </el-form-item>
         </el-form>
       </div>
@@ -51,8 +62,8 @@ export default {
       dataForm: {
         userName: '',
         password: '',
+        roleType: 2,
         uuid: '',
-        captcha: ''
       },
       dataRule: {
         userName: [
@@ -60,12 +71,8 @@ export default {
         ],
         password: [
           {required: true, message: '密码不能为空', trigger: 'blur'}
-        ],
-        captcha: [
-          {required: true, message: '验证码不能为空', trigger: 'blur'}
         ]
       },
-      captchaPath: ''
     }
   },
   methods: {
@@ -117,7 +124,7 @@ export default {
 }
 
 .login .login-box .mid .item-btn {
-  margin-top: 20px;
+  margin-left: auto;
 }
 
 .login .login-box .mid .item-btn input {
