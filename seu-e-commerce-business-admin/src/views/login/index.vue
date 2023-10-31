@@ -1,14 +1,9 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="login">
     <div class="login-box">
       <div class="top">
         <div class="logo">
-          <img src="@/assets/img/logo.png"
-                               alt="">
+          <img src="@/assets/img/logo.png" alt="">
         </div>
       </div>
       <div class="mid">
@@ -34,6 +29,8 @@
               <el-radio :label="3">平台管理员</el-radio>
             </el-radio-group>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <el-link type="primary" href="/register">
               现在去开店？
             </el-link>
@@ -63,7 +60,6 @@ export default {
         userName: '',
         password: '',
         roleType: 2,
-        uuid: '',
       },
       dataRule: {
         userName: [

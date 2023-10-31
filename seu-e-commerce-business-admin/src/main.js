@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import VueCookies from 'vue-cookies';
+import VueCookies from 'vue3-cookies';
 import App from './App.vue';
 import router from './router';
 
@@ -11,12 +11,10 @@ const app = createApp(App);
 
 app.use(router);
 app.use(ElementPlus);
+app.use(VueCookies)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
-
-app.config.globalProperties.$cookies = VueCookies.VueCookies;
-
 
 app.mount('#app');

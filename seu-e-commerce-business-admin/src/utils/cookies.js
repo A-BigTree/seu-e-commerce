@@ -1,21 +1,17 @@
-import {getCurrentInstance} from "vue";
-
-const internalInstance = getCurrentInstance();
-const internalData = internalInstance.appContext.config.globalProperties;
-
-internalData.$cookies.config('1m');
+import {useCookies} from "vue3-cookies";
+const {cookies} = useCookies();
 
 const getCookies = function (key) {
-    return internalData.$cookies.get(key);
+    return cookies.get(key);
 }
 
 const setCookies = function (key, value) {
-    return internalData.$cookies.set(key, value);
+    return cookies.set(key, value, '1m');
 }
 
 const removeCookies = function (key) {
-    if (internalData.$cookies.isKey(key)) {
-        internalData.$cookies.remove(key);
+    if (cookies.isKey(key)) {
+        cookies.remove(key);
     }
 }
 

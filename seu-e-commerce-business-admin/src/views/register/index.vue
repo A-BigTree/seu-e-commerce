@@ -22,6 +22,7 @@
               <template #append>
                 <el-button
                     type="primary"
+                    :disabled="isSend"
                     @click="sendEmail(formRef)">
                   {{ sendButtonText }}
                 </el-button>
@@ -30,6 +31,12 @@
           </el-form-item>
           <el-form-item label="验证码" prop="verifyCode">
             <el-input v-model="registerForm.verifyCode"/>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="phoneNumber">
+            <el-input
+                v-model.number="registerForm.phoneNumber"
+                type="text"
+                autocomplete="off"/>
           </el-form-item>
           <el-form-item label="店铺介绍" prop="desc">
             <el-input
@@ -40,7 +47,7 @@
                 show-word-limit
                 type="textarea"/>
           </el-form-item>
-          <el-form-item label="营业许可证" prop="shopImage">
+          <el-form-item label="店铺商标" prop="shopImage">
             <el-upload
                 v-model="registerForm.shopImage"
                 ref="uploadRef"
@@ -72,6 +79,9 @@
 <script lang="ts">
 import type {FormInstance} from "element-plus";
 import {ref} from "vue";
+import {ElMessage} from "element-plus";
+import {http} from '@/utils/http';
+import {countDown} from '@/utils'
 
 export default {
   data() {
@@ -82,6 +92,7 @@ export default {
         shopName: '',
         desc: '',
         shopImage: '',
+        phoneNumber: '',
       },
       formRules: {
         shopName: [
@@ -98,10 +109,16 @@ export default {
           {required: true, message: '店铺介绍不能为空', trigger: 'blur'}
         ],
         shopImage: [
-          {required: true, message: '营业许可证不能为空', trigger: 'blur'}
+          {required: true, message: '店铺商标不能为空', trigger: 'blur'}
+        ],
+        phoneNumber: [
+          {required: true, message: '联系电话不能为空', trigger: 'blur'},
+          {type: 'number', message: '请输入正确电话格式', trigger: ['blur', 'change']}
+
         ]
       },
       sendButtonText: '发送验证码',
+      isSend: false,
     }
   },
   setup() {
@@ -117,14 +134,35 @@ export default {
       if(!formR)return;
       formR.validateField(['email'], (valid) => {
         if (valid) {
-          // TODO 发送验证码
+          this.isSend = true;
+          const params = {
+            url: 'account/send/email/verify',
+            data: {
+              toEmail: this.registerForm.email,
+              fromEmail: "",
+              context: ""
+            },
+            callBack: function (data) {
+              ElMessage({
+                message: '验证码发送成功',
+                type: 'success'
+              });
+            }
+          };
+          http(params);
+          countDown(60, (value) => {
+            this.sendButtonText = value + 's后重试';
+            if (value === 0) {
+              this.sendButtonText = '发送验证码';
+              this.isSend = false;
+            }
+          });
         }
       })
 
     },
     changeImage: function (uploadFile) {
       this.registerForm.shopImage = uploadFile.raw;
-      console.log(this.shopImage);
     },
     submit : function (formR){
       if (!formR) {
@@ -161,12 +199,12 @@ export default {
 
 .login .login-box .top {
   margin-bottom: -180px;
-  margin-top: -250px;
+  margin-top: -350px;
   text-align: center;
 }
 
 .login .login-box .top .logo {
-  transform: scale(0.3);
+  transform: scale(0.2);
   font-size: 0;
   max-width: 50%;
   margin: 0;

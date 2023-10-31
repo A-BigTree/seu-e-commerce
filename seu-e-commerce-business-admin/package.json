@@ -11,10 +11,13 @@
     "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.6.0",
     "element-plus": "^2.4.1",
+    "js-md5": "^0.8.3",
+    "qs": "^6.11.2",
     "sass": "^1.69.5",
     "vue": "^3.3.4",
     "vue-cookies": "^1.8.3",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
