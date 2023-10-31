@@ -7,6 +7,7 @@ import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
+import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 import cn.seu.cs.eshop.common.nacos.ShopConf;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -116,7 +118,13 @@ public class UserLoginServiceImpl implements UserLoginService {
             return ResponseBuilderUtils.buildResponse(BaseResponse.class,
                     ResponseStateEnum.OPERATION_ERROR, AccountConstants.ACCOUNT_DUPLICATION_ERROR);
         }
+        if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
+            entity.setState(RegisterStateEnum.UNDER_REVIEW.getState());
+        }
         int id = userInfoDao.insert(entity);
+        if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
+            // TODO 加入审核表
+        }
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, Integer.toString(id));
     }
 

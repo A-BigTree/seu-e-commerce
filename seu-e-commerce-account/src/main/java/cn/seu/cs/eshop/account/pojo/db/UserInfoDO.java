@@ -19,4 +19,5 @@ public class UserInfoDO extends MysqlBaseDO {
     private String image;
     private String phoneNumber;
     private Integer roleType;
+    private Integer state;
 }

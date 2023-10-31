@@ -2,6 +2,7 @@ package cn.seu.cs.eshop.account.dao;
 
 import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
+import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,6 +17,7 @@ public interface UserInfoDao extends MysqlBaseDao<UserInfoDO> {
         entity.setAccount(account);
         entity.setPassword(password);
         entity.setRoleType(roleType);
+        entity.setState(RegisterStateEnum.REGISTER_SUCCESS.getState());
         QueryWrapper<UserInfoDO> wrapper = new QueryWrapper<>(entity);
         return selectOne(wrapper);
     }
