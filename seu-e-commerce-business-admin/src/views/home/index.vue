@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import {ref} from "vue";
 import AccountManage from "@/components/AccountManage/AccountManage.vue";
 import ProductManage from "@/components/ProductManage/ProductManage.vue";
