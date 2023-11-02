@@ -9,7 +9,8 @@ import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.component.SftpUtil;
-import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
+import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cn.seu.cs.eshop.common.util.TimeUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import static cn.seu.cs.eshop.api.constants.ApiConstants.*;
+import static cn.seu.cs.eshop.common.enums.ResponseStateEnum.OK;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -60,7 +62,7 @@ public class AccountLoginController {
     public LoginUserResponse loginUser(@RequestBody LoginUserRequest request) {
         LoginUserResponse response = eshopAccountService.loginUser(request);
         EshopSessionDTO session = response.getData();
-        if (Objects.equals(response.getCode(), ResponseStateEnum.OK.getCode()) && session != null) {
+        if (Objects.equals(response.getCode(), OK.getCode()) && session != null) {
             userTokenCache.setUserTokenInfo(session.getToken(),
                     UserBaseDTO.builder()
                     .id(session.getId())
@@ -107,5 +109,44 @@ public class AccountLoginController {
             log.error("Id: {}, Image update error. e: ", id, e);
             return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
         }
+    }
+
+    @ApiMonitor(isAuthor = false)
+    @CrossOrigin
+    @PostMapping("/user/shop/register")
+    public BaseResponse registerAdminUser(@RequestParam("photo") MultipartFile photo,
+                                          @RequestParam("userInfo") String shopInfo) {
+        try {
+            InputStream image = photo.getInputStream();
+            String fileName = photo.getOriginalFilename();
+            log.info(fileName);
+            String suffix = DEFAULT_SUFFIX;
+            if (fileName != null && !StringUtils.isEmpty(fileName.substring(fileName.lastIndexOf(".")))) {
+                suffix = fileName.substring(fileName.lastIndexOf("."));
+            }
+            String file = TimeUtils.getCurrentTime() + suffix;
+            RegisterUserRequest request = JsonUtils.jsonToObject(shopInfo, RegisterUserRequest.class);
+            request.setImage(file);
+            BaseResponse response = eshopAccountService.registerUser(request);
+            if (!Objects.equals(response.getCode(), OK.getCode())) {
+                return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
+            }
+            long id = Long.parseLong(response.getData());
+            String prefix = buildString(IMAGE_SHOP_HEADER_PREFIX, String.valueOf(id % 10));
+            file = id + file;
+            sftp.upload(prefix, file, image);
+            return response;
+        } catch (Exception e) {
+            log.error("Image update error. e: ", e);
+            return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
+        }
+    }
+
+    @ApiMonitor(roleType = UserRoleEnum.PLATFORM)
+    @CrossOrigin
+    @PostMapping("/user/register/list")
+    public ListRegisterInfoResponse listRegisterUserInfo(@RequestBody ListRegisterInfoRequest request) {
+        log.info(request.toString());
+        return eshopAccountService.listRegisterUserInfo(request);
     }
 }

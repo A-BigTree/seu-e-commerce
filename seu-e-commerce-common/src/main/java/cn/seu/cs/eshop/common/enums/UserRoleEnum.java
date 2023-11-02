@@ -13,6 +13,8 @@ import java.util.Map;
  */
 @Getter
 public enum UserRoleEnum {
+    // 默认情况 用于查询
+    DEFAULT(-1),
     // 终极管理员
     ADMIN(0),
     // 消费者

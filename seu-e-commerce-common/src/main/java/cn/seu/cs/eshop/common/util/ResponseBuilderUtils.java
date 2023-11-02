@@ -16,7 +16,7 @@ public class ResponseBuilderUtils {
             response = clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             log.error("build fail. e:", e);
-            return response;
+            return null;
         }
         response.setCode(responseState.getCode());
         response.setMsg(responseState.getMsg());

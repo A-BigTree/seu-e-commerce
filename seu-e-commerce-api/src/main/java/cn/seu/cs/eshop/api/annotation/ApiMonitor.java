@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface ApiMonitor {
     boolean isAuthor() default true;
-    UserRoleEnum roleType() default UserRoleEnum.CUSTOMER;
+    UserRoleEnum[] roleType() default UserRoleEnum.CUSTOMER;
     boolean printLog() default true;
     boolean persist() default false;
 }

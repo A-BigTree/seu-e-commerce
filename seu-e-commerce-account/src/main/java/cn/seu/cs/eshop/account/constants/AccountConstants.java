@@ -13,4 +13,5 @@ public class AccountConstants {
     public static String NICKNAME_PREFIX = "CS-SEUer";
     public static String NICKNAME_SYMBOLS = "0123456789";
     public static int NICKNAME_CODE_LENGTH = 6;
+    public static String SHOP_HEAD_IMAGE_PREFIX = "/head/head%s/";
 }

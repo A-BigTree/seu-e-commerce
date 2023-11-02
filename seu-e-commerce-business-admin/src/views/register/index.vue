@@ -81,7 +81,8 @@ import type {FormInstance} from "element-plus";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {http} from '@/utils/http';
-import {countDown} from '@/utils'
+import {countDown} from '@/utils';
+import router from '@/router/index'
 
 export default {
   data() {
@@ -122,7 +123,6 @@ export default {
     }
   },
   setup() {
-    console.log("SetUp");
     const formRef = ref<FormInstance>();
     return {
       formRef
@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     sendEmail: function (formR) {
-      console.log("Click Send email");
       if(!formR)return;
       formR.validateField(['email'], (valid) => {
         if (valid) {
@@ -165,16 +164,39 @@ export default {
       this.registerForm.shopImage = uploadFile.raw;
     },
     submit : function (formR){
-      if (!formR) {
-        console.log('error');
-        return;
-      }
+      if (!formR) return;
       formR.validate((valid) => {
         if (valid) {
-          console.log('submit');
-          // TODO 注册逻辑
+          const formData = new FormData();
+          formData.append('photo', this.registerForm.shopImage);
+          formData.append('userInfo', JSON.stringify({
+            account: this.registerForm.email,
+            nickname: this.registerForm.shopName,
+            verifyCode: this.registerForm.verifyCode,
+            password: "",
+            image: "",
+            roleType: 2,
+            ext: this.registerForm.desc
+          }));
+          const params = {
+            url: "/account/user/shop/register",
+            isFile: true,
+            data: formData,
+            callBack: (res) => {
+              ElMessage({
+                message: '注册成功',
+                type: 'success'
+              });
+              setTimeout(() => {
+                router.push({
+                  name: "login"
+                });
+              }, 1000);
+            }
+          }
+          http(params);
         }
-      })
+      });
     }
   }
 }

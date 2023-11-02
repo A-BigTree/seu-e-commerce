@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
+import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import jakarta.annotation.Resource;
@@ -63,11 +64,20 @@ public class ApiMonitorAspect {
                 return ResponseBuilderUtils.buildResponse(clazz,
                         ResponseStateEnum.AUTHORIZATION_EXPIRATION, null);
             }
+            // 权限鉴别
+            boolean flag = false;
+            for (UserRoleEnum role : apiMonitor.roleType()) {
+                if (Objects.equals(user.getRoleType(), role.getValue())) {
+                    flag = true;
+                    break;
+                }
+            }
             // 权限错误
-            if (!Objects.equals(user.getRoleType(), apiMonitor.roleType().getValue())) {
+            if (!flag) {
                 return ResponseBuilderUtils.buildResponse(clazz,
                         ResponseStateEnum.PRIVILEGES_ERROR, null);
             }
+            // 刷新状态
             userTokenCache.setUserTokenInfo(token, user);
         }
         // 请求统计

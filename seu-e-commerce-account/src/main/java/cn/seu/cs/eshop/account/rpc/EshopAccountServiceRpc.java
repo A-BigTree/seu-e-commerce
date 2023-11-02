@@ -2,6 +2,7 @@ package cn.seu.cs.eshop.account.rpc;
 
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
+import cn.seu.cs.eshop.account.service.UserInfoService;
 import cn.seu.cs.eshop.account.service.UserLoginService;
 import cn.seu.cs.eshop.common.aop.RpcMonitor;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -18,6 +19,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 public class EshopAccountServiceRpc implements EshopAccountService {
     @Resource
     UserLoginService userLoginServiceImpl;
+    @Resource
+    UserInfoService userInfoService;
 
     @Override
     @RpcMonitor
@@ -46,5 +49,10 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     @Override
     public BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request) {
         return userLoginServiceImpl.updateUserInfo(id, request);
+    }
+
+    @Override
+    public ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request) {
+        return userInfoService.listRegisterInfo(request);
     }
 }

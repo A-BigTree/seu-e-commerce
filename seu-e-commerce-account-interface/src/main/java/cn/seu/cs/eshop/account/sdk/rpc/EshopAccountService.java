@@ -23,4 +23,6 @@ public interface EshopAccountService {
     GetUserInfoResponse getUserInfo(Long id);
 
     BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request);
+
+    ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request);
 }

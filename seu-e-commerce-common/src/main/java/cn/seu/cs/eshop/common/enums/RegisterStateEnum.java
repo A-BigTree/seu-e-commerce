@@ -8,6 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public enum RegisterStateEnum {
+    DEFAULT(-1),
     UNDER_REVIEW(0),
     REGISTER_SUCCESS(1),
     REGISTER_ERROR(2),

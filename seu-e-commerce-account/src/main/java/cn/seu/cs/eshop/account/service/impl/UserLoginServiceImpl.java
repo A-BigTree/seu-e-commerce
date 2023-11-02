@@ -1,8 +1,10 @@
 package cn.seu.cs.eshop.account.service.impl;
 
 import cn.seu.cs.eshop.account.dao.EmailVerifyDao;
+import cn.seu.cs.eshop.account.dao.EshopInfoDao;
 import cn.seu.cs.eshop.account.dao.UserInfoDao;
 import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
+import cn.seu.cs.eshop.account.pojo.db.EshopInfoDO;
 import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
@@ -33,6 +35,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import static cn.seu.cs.eshop.account.constants.AccountConstants.SHOP_HEAD_IMAGE_PREFIX;
+
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/19
@@ -50,6 +54,8 @@ public class UserLoginServiceImpl implements UserLoginService {
     JavaMailSender javaMailSender;
     @Resource
     UserInfoDao userInfoDao;
+    @Resource
+    EshopInfoDao eshopInfoDao;
     @Resource
     UserInfoCache userInfoCache;
 
@@ -121,11 +127,23 @@ public class UserLoginServiceImpl implements UserLoginService {
         if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
             entity.setState(RegisterStateEnum.UNDER_REVIEW.getState());
         }
-        int id = userInfoDao.insert(entity);
+        userInfoDao.insert(entity);
+        long id = entity.getId();
+        // 店铺注册
         if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
-            // TODO 加入审核表
+            String image = String.format(SHOP_HEAD_IMAGE_PREFIX, id % 10) + id + request.getImage();
+            EshopInfoDO eshopInfoDO = MysqlUtils.buildEffectEntity(new EshopInfoDO());
+            eshopInfoDO.setId((long) id);
+            eshopInfoDO.setShopDesc(request.getExt());
+            eshopInfoDO.setShopName(entity.getNickname());
+            eshopInfoDO.setShopImage(image);
+            eshopInfoDao.insert(eshopInfoDO);
+            UserInfoDO userInfo = new UserInfoDO();
+            userInfo.setId((long) id);
+            userInfo.setImage(image);
+            userInfoDao.updateById(userInfo);
         }
-        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, Integer.toString(id));
+        return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, Long.toString(id));
     }
 
     @Override

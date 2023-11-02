@@ -9,8 +9,8 @@
       <div class="mid">
         <el-form :model="dataForm"
                  :rules="dataRule"
-                 ref="dataForm"
-                 @keyup.enter.native="dataFormSubmit()"
+                 ref="formRef"
+                 @keyup.enter.native="dataFormSubmit(formRef)"
                  status-icon>
           <el-form-item prop="userName">
             <el-input class="info"
@@ -39,12 +39,9 @@
             <el-button
                 type="primary"
                 size="large"
-                @click="dataFormSubmit()">
+                @click="dataFormSubmit(formRef)">
               登录
             </el-button>
-          </el-form-item>
-          <el-form-item>
-
           </el-form-item>
         </el-form>
       </div>
@@ -52,7 +49,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import type {FormInstance} from "element-plus";
+import {ref} from 'vue';
+
 export default {
   data() {
     return {
@@ -63,7 +63,8 @@ export default {
       },
       dataRule: {
         userName: [
-          {required: true, message: '帐号不能为空', trigger: 'blur'}
+          {required: true, message: '帐号不能为空', trigger: 'blur'},
+          {type: 'email', message: '邮箱格式不正确', trigger: ['blur', 'change']}
         ],
         password: [
           {required: true, message: '密码不能为空', trigger: 'blur'}
@@ -71,8 +72,22 @@ export default {
       },
     }
   },
+  setup(){
+    const formRef = ref<FormInstance>();
+    return {
+      formRef
+    }
+  },
   methods: {
-    dataFormSubmit() {
+    dataFormSubmit(ref) {
+      if (!ref) return;
+      ref.validate((valid) => {
+        if (valid) {
+          const params = {
+            url: "/account/user/login"
+          }
+        }
+      })
 
     },
 
