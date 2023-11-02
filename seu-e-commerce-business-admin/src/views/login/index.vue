@@ -52,6 +52,11 @@
 <script lang="ts">
 import type {FormInstance} from "element-plus";
 import {ref} from 'vue';
+import {md5} from "js-md5";
+import {MD5_SALT} from '@/utils/config';
+import {setToken, getToken} from '@/utils/cookies';
+import {http} from '@/utils/http'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -84,8 +89,39 @@ export default {
       ref.validate((valid) => {
         if (valid) {
           const params = {
-            url: "/account/user/login"
-          }
+            url: "/account/user/login",
+            data: {
+              account: this.dataForm.userName,
+              password: md5(this.dataForm.password + MD5_SALT),
+              roleType: this.dataForm.roleType
+            },
+            callBack: (res) => {
+              const session = res.data;
+              console.log(session);
+              setToken(session.token);
+              ElMessage({
+                message: "登录成功",
+                type: "success"
+              });
+              setTimeout(() => {
+                this.$router.back();
+              }, 1000);
+            },
+            errCallBack: (res) => {
+              if (res.code === 503) {
+                ElMessage({
+                  message: "账号或者密码不正确",
+                  type: "error"
+                });
+              } else {
+                ElMessage({
+                  message: res.msg || '服务器出了点小差~',
+                  type: 'error'
+                });
+              }
+            }
+          };
+          http(params)
         }
       })
 

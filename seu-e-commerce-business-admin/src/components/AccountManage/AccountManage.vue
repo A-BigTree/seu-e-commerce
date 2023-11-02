@@ -1,10 +1,13 @@
 <script setup>
-import {RouterView} from 'vue-router'
+
 </script>
 
 <template>
-  <RouterView />
+<div>
+  组件1-1
+</div>
 </template>
 
 <style scoped>
+
 </style>

@@ -34,6 +34,9 @@ public class AuthorUserHandlerMethodArgumentResolver implements HandlerMethodArg
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = webRequest.getHeader(ApiConstants.AUTHORIZATION_HEADER);
         UserBaseDTO user = userTokenCache.getUserTokenInfo(token);
+        if (user == null) {
+            return null;
+        }
         if (parameter.getParameterType().isAssignableFrom(Long.class)) {
             return user.getId();
         }
