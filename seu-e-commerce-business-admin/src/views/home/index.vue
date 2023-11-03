@@ -36,7 +36,7 @@ const select = (in_) => {
       <el-aside>
         <el-menu
             @select="select"
-            default-active="1-1">
+            :default-active="index">
           <el-menu-item index="0" v-if="roleType===2">
             商家首页
           </el-menu-item>
