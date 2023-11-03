@@ -21,7 +21,31 @@ const countDown = (second, callBack) => {
     }, 1000);
 }
 
+const getRoleName = (roleEnum) => {
+    switch (roleEnum) {
+        case 1:
+            return '消费者';
+        case 2:
+            return '商家';
+        default:
+            return '平台管理';
+    }
+}
+
+const getRegisterStateName = (registerState) => {
+    switch (registerState) {
+        case 0:
+            return '待审核';
+        case 1:
+            return '注册成功';
+        default:
+            return '已注销';
+    }
+}
+
 export {
     loadingConfig,
     countDown,
+    getRoleName,
+    getRegisterStateName
 }

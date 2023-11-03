@@ -146,7 +146,6 @@ public class AccountLoginController {
     @CrossOrigin
     @PostMapping("/user/register/list")
     public ListRegisterInfoResponse listRegisterUserInfo(@RequestBody ListRegisterInfoRequest request) {
-        log.info(request.toString());
         return eshopAccountService.listRegisterUserInfo(request);
     }
 }

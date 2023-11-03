@@ -4,7 +4,7 @@ const API_URL = "http://localhost:8086/eshop/api";
 
 const TIMEOUT = 5000;
 
-const IMAGE_URL = "https://www.abugtree.top/eshop/static/admin/image";
+const IMAGE_URL = "https://www.abigtree.top/eshop/static/admin/image";
 
 const MD5_SALT = "eshop-admin";
 

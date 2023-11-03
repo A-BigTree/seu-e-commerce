@@ -31,7 +31,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-link type="primary" href="/register">
+            <el-link type="primary" @click="toRegister()">
               现在去开店？
             </el-link>
           </el-form-item>
@@ -54,9 +54,10 @@ import type {FormInstance} from "element-plus";
 import {ref} from 'vue';
 import {md5} from "js-md5";
 import {MD5_SALT} from '@/utils/config';
-import {setToken, getToken} from '@/utils/cookies';
+import {setToken} from '@/utils/cookies';
 import {http} from '@/utils/http'
 import {ElMessage} from "element-plus";
+import router from "@/router/index";
 
 export default {
   data() {
@@ -77,7 +78,7 @@ export default {
       },
     }
   },
-  setup(){
+  setup() {
     const formRef = ref<FormInstance>();
     return {
       formRef
@@ -104,7 +105,9 @@ export default {
                 type: "success"
               });
               setTimeout(() => {
-                this.$router.back();
+                router.push({
+                  name: "home"
+                });
               }, 1000);
             },
             errCallBack: (res) => {
@@ -123,9 +126,13 @@ export default {
           };
           http(params)
         }
-      })
-
+      });
     },
+    toRegister: () => {
+      router.push({
+        name: "register"
+      })
+    }
 
   }
 }

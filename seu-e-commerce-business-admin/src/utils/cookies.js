@@ -23,10 +23,15 @@ const setToken = function (value) {
     return setCookies('token', value);
 }
 
+const removeToken = function () {
+    removeCookies('token');
+}
+
 export {
     getCookies,
     setCookies,
     removeCookies,
     getToken,
     setToken,
+    removeToken
 }
