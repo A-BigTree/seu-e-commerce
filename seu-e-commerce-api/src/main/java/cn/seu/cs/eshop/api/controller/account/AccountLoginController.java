@@ -148,4 +148,8 @@ public class AccountLoginController {
     public ListRegisterInfoResponse listRegisterUserInfo(@RequestBody ListRegisterInfoRequest request) {
         return eshopAccountService.listRegisterUserInfo(request);
     }
+
+    // TODO 账号审核
+
+    // TODO 封号操作
 }

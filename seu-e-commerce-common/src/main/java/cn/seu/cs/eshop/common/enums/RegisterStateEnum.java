@@ -12,6 +12,7 @@ public enum RegisterStateEnum {
     UNDER_REVIEW(0),
     REGISTER_SUCCESS(1),
     REGISTER_ERROR(2),
+    BE_DELETED(3)
     ;
     private final Integer state;
 

@@ -38,6 +38,8 @@ const getRegisterStateName = (registerState) => {
             return '待审核';
         case 1:
             return '注册成功';
+        case 2:
+            return '注册失败';
         default:
             return '已注销';
     }

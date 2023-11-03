@@ -20,7 +20,7 @@ public class AccountConvert {
                 .image(userInfoDO.getImage())
                 .roleType(userInfoDO.getRoleType())
                 .registerState(userInfoDO.getState())
-                .createTime(TimeUtils.convertString(TimeUtils.getCurrentTime(), DATE_TIME_FORMAT))
+                .createTime(TimeUtils.convertString(userInfoDO.getCreateTime(), DATE_TIME_FORMAT))
                 .build();
     }
 }

@@ -6,6 +6,7 @@ import {http} from '@/utils/http';
 import {IMAGE_URL} from '@/utils/config'
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import OperationHistory from "@/components/AccountManage/OperationHistory.vue";
 
 const roleType = ref(-1);
 
@@ -115,6 +116,7 @@ const logout = () => {
       </el-aside>
       <el-main>
         <AccountManage v-if="index === '1-1'"/>
+        <OperationHistory v-if="index === '1-2'"/>
         <ProductManage v-if="index === '2-1'"/>
       </el-main>
     </el-container>
