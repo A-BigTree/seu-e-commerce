@@ -45,9 +45,33 @@ const getRegisterStateName = (registerState) => {
     }
 }
 
+const getRoleTag = (type) => {
+    switch (type) {
+        case 1:
+            return 'success';
+        case 2:
+            return '';
+        default:
+            return 'warning';
+    }
+}
+
+const getRegisterStateTag = (type) => {
+    switch (type) {
+        case 0:
+            return 'warning'
+        case 1:
+            return 'success'
+        default:
+            return 'danger'
+    }
+}
+
 export {
     loadingConfig,
     countDown,
     getRoleName,
-    getRegisterStateName
+    getRegisterStateName,
+    getRoleTag,
+    getRegisterStateTag
 }

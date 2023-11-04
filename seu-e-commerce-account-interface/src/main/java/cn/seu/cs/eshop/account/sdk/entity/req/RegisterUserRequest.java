@@ -15,6 +15,7 @@ public class RegisterUserRequest implements Serializable {
     private String verifyCode;
     private String password;
     private String image;
+    private String phoneNumber;
     private Integer roleType;
     private String ext;
 }

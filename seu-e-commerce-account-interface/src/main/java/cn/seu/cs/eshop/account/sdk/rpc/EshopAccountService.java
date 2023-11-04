@@ -11,8 +11,6 @@ public interface EshopAccountService {
 
     /**
      * 发送邮件
-     * @param request 请求体
-     * @return 响应结果
      */
     BaseResponse sendVerifyEmail(SendVerifyEmailRequest request);
 
@@ -25,4 +23,6 @@ public interface EshopAccountService {
     BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request);
 
     ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request);
+
+    GetAccountInfoResponse getAccountInfo(Long id);
 }

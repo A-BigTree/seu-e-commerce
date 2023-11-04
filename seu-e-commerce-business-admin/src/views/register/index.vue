@@ -173,6 +173,7 @@ export default {
             account: this.registerForm.email,
             nickname: this.registerForm.shopName,
             verifyCode: this.registerForm.verifyCode,
+            phoneNumber: this.registerForm.phoneNumber,
             password: "",
             image: "",
             roleType: 2,

@@ -6,7 +6,8 @@ import {API_URL, TIMEOUT} from "@/utils/config";
 import {loadingConfig} from "@/utils/index";
 
 const http = function (params) {
-    const loading = ElLoading.service(loadingConfig('loading'));
+    let loading = params.closeLoading ? null : ElLoading.service(loadingConfig(params.loadingText ? params.loadingText : 'loading'));
+
     axios.request({
         baseURL: params.domain ? params.domain : API_URL,
         url: params.url,
@@ -71,7 +72,7 @@ const http = function (params) {
                 return;
             }
             // 服务器错误
-            if (data.code===500) {
+            if (data.code === 500) {
                 console.error('============== 请求异常 ==============')
                 console.log('接口: ', params.url)
                 console.log('异常信息: ', response)
@@ -107,7 +108,9 @@ const http = function (params) {
             type: 'error'
         });
     });
-    loading.close();
+    if (loading !== null) {
+        loading.close();
+    }
 }
 
 export {

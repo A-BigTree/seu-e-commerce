@@ -1,5 +1,7 @@
 package cn.seu.cs.eshop.account.service;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.GetAccountInfoResponse;
+import cn.seu.cs.eshop.account.sdk.entity.req.GetUserInfoResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoResponse;
 import org.springframework.stereotype.Service;
@@ -10,4 +12,6 @@ import org.springframework.stereotype.Service;
  */
 public interface UserInfoService {
     ListRegisterInfoResponse listRegisterInfo(ListRegisterInfoRequest request);
+
+    GetAccountInfoResponse getAccountInfo(Long id);
 }

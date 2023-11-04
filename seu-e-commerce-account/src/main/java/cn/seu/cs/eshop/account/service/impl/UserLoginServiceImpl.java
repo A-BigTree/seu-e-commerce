@@ -1,14 +1,20 @@
 package cn.seu.cs.eshop.account.service.impl;
 
+import cn.seu.cs.eshop.account.cache.EmailVerifyCache;
+import cn.seu.cs.eshop.account.cache.UserInfoCache;
+import cn.seu.cs.eshop.account.constants.AccountConstants;
 import cn.seu.cs.eshop.account.dao.EmailVerifyDao;
 import cn.seu.cs.eshop.account.dao.EshopInfoDao;
 import cn.seu.cs.eshop.account.dao.UserInfoDao;
+import cn.seu.cs.eshop.account.manager.EmailSendManager;
 import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
+import cn.seu.cs.eshop.account.pojo.db.EmailVerifyDO;
 import cn.seu.cs.eshop.account.pojo.db.EshopInfoDO;
 import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.EshopSessionDTO;
 import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.*;
+import cn.seu.cs.eshop.account.service.UserLoginService;
 import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
 import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
@@ -16,18 +22,11 @@ import cn.seu.cs.eshop.common.nacos.ShopConf;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
 import cn.seu.cs.eshop.common.util.RandomGenerateUtils;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
-import cn.seu.cs.eshop.account.cache.EmailVerifyCache;
-import cn.seu.cs.eshop.account.cache.UserInfoCache;
-import cn.seu.cs.eshop.account.constants.AccountConstants;
-import cn.seu.cs.eshop.account.pojo.db.EmailVerifyDO;
-import cn.seu.cs.eshop.account.service.UserLoginService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Resource
     EmailVerifyCache emailVerifyCache;
     @Resource
-    JavaMailSender javaMailSender;
+    EmailSendManager emailSendManager;
     @Resource
     UserInfoDao userInfoDao;
     @Resource
@@ -68,13 +67,10 @@ public class UserLoginServiceImpl implements UserLoginService {
             return ResponseBuilderUtils.buildResponse(BaseResponse.class,
                     ResponseStateEnum.OPERATION_ERROR, AccountConstants.VERIFY_CODE_RETRY_ERROR);
         }
-        SimpleMailMessage message = new SimpleMailMessage();
         String from = request.getFromEmail();
         if (StringUtils.isEmpty(from)) {
             from = eshopConfService.getConfig(AccountNacosConfEnum.fromEmail);
         }
-        message.setFrom(from);
-        message.setTo(request.getToEmail());
         int length = eshopConfService.getConfigObject(AccountNacosConfEnum.emailVerifyLength, Integer.class);
         String symbols = eshopConfService.getConfig(AccountNacosConfEnum.emailVerifySymbols);
         String verifyCode = RandomGenerateUtils.generateVerCode(symbols, length);
@@ -84,14 +80,12 @@ public class UserLoginServiceImpl implements UserLoginService {
             context = String.format(format, request.getToEmail(), verifyCode,
                     eshopConfService.getConfigObject(AccountNacosConfEnum.emailVerifyTime, Long.class).toString());
         }
-        message.setText(context);
-        message.setSubject("注册验证码");
         EmailVerifyDO entity = MysqlUtils.buildEffectEntity(new EmailVerifyDO());
         entity.setAccount(request.getToEmail());
         entity.setVerifyCode(verifyCode);
         emailVerifyDao.insert(entity);
         emailVerifyCache.setEmailVerifyDO(entity);
-        javaMailSender.send(message);
+        emailSendManager.sendEmail(from, request.getToEmail(), "注册验证码", context);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, AccountConstants.VERIFY_CODE_SEND_SUCCESS);
     }
 
@@ -126,6 +120,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
             entity.setState(RegisterStateEnum.UNDER_REVIEW.getState());
+            entity.setPhoneNumber(request.getPhoneNumber());
         }
         userInfoDao.insert(entity);
         long id = entity.getId();
@@ -133,13 +128,13 @@ public class UserLoginServiceImpl implements UserLoginService {
         if (Objects.equals(entity.getRoleType(), UserRoleEnum.BUSINESS.getValue())) {
             String image = String.format(SHOP_HEAD_IMAGE_PREFIX, id % 10) + id + request.getImage();
             EshopInfoDO eshopInfoDO = MysqlUtils.buildEffectEntity(new EshopInfoDO());
-            eshopInfoDO.setId((long) id);
+            eshopInfoDO.setId(id);
             eshopInfoDO.setShopDesc(request.getExt());
             eshopInfoDO.setShopName(entity.getNickname());
             eshopInfoDO.setShopImage(image);
             eshopInfoDao.insert(eshopInfoDO);
             UserInfoDO userInfo = new UserInfoDO();
-            userInfo.setId((long) id);
+            userInfo.setId(id);
             userInfo.setImage(image);
             userInfoDao.updateById(userInfo);
         }
@@ -198,6 +193,4 @@ public class UserLoginServiceImpl implements UserLoginService {
                 .slots(new HashMap<>())
                 .build();
     }
-
-
 }

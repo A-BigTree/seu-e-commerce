@@ -6,6 +6,8 @@ const TIMEOUT = 5000;
 
 const IMAGE_URL = "https://www.abigtree.top/eshop/static/admin/image";
 
+const DEFAULT_HEAD_IMAGE = "https://www.abigtree.top/eshop/static/admin/image/head/0.png"
+
 const MD5_SALT = "eshop-admin";
 
 
@@ -13,5 +15,6 @@ export {
     API_URL,
     TIMEOUT,
     IMAGE_URL,
-    MD5_SALT
+    MD5_SALT,
+    DEFAULT_HEAD_IMAGE
 }

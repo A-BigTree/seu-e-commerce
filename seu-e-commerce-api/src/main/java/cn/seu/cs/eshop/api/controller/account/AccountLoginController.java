@@ -9,7 +9,6 @@ import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.component.SftpUtil;
-import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cn.seu.cs.eshop.common.util.TimeUtils;
@@ -103,7 +102,7 @@ public class AccountLoginController {
             String file = "" + id + TimeUtils.getCurrentTime() + suffix;
             sftp.upload(prefix, file, image);
             UpdateUserInfoRequest request = new UpdateUserInfoRequest();
-            request.setImage("/head" + id % 10 + "/" + file);
+            request.setImage("/head/head" + id % 10 + "/" + file);
             return eshopAccountService.updateUserInfo(id, request);
         } catch (Exception e) {
             log.error("Id: {}, Image update error. e: ", id, e);
@@ -141,15 +140,4 @@ public class AccountLoginController {
             return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
         }
     }
-
-    @ApiMonitor(roleType = UserRoleEnum.PLATFORM)
-    @CrossOrigin
-    @PostMapping("/user/register/list")
-    public ListRegisterInfoResponse listRegisterUserInfo(@RequestBody ListRegisterInfoRequest request) {
-        return eshopAccountService.listRegisterUserInfo(request);
-    }
-
-    // TODO 账号审核
-
-    // TODO 封号操作
 }

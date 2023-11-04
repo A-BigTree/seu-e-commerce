@@ -55,4 +55,9 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     public ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request) {
         return userInfoService.listRegisterInfo(request);
     }
+
+    @Override
+    public GetAccountInfoResponse getAccountInfo(Long id) {
+        return userInfoService.getAccountInfo(id);
+    }
 }
