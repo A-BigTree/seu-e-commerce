@@ -98,7 +98,6 @@ export default {
             },
             callBack: (res) => {
               const session = res.data;
-              console.log(session);
               setToken(session.token);
               ElMessage({
                 message: "登录成功",

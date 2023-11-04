@@ -3,9 +3,13 @@ package cn.seu.cs.eshop.api.controller.account;
 import cn.seu.cs.eshop.account.sdk.entity.req.GetAccountInfoResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoResponse;
+import cn.seu.cs.eshop.account.sdk.entity.req.UpdateRegisterStateRequest;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
+import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
+import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +44,17 @@ public class AccountInfoController {
     }
 
 
-    // TODO 账号审核
+    /**
+     * 修改账户注册状态
+     */
+    @ApiMonitor(roleType = UserRoleEnum.PLATFORM)
+    @CrossOrigin
+    @PostMapping("/register/state/update")
+    public BaseResponse updateRegisterState(@RequestBody UpdateRegisterStateRequest request,
+                                            @AuthorUserInfo UserBaseDTO user) {
+        System.out.println(user);
+        request.setModifier(user.getNickname());
+        return eshopAccountService.updateRegisterState(request);
+    }
 
-    // TODO 封号操作
 }

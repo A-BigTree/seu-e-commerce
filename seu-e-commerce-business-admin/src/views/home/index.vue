@@ -13,6 +13,7 @@ const roleType = ref(-1);
 const headUrl = ref("");
 
 const nickname = ref("");
+const index = ref("0");
 
 const params = {
   url: "/account/user/info/get",
@@ -22,11 +23,10 @@ const params = {
     roleType.value = userInfo.roleType;
     headUrl.value = userInfo.image ? IMAGE_URL + userInfo.image : IMAGE_URL + '/head/0.png';
     nickname.value = userInfo.nickname;
+    index.value = roleType.value === 2 ? '0' : '1-1';
   }
 }
 http(params);
-
-const index = roleType.value === 2 ? ref("0") : ref("1-1");
 
 const select = (in_) => {
   index.value = in_;
@@ -115,6 +115,9 @@ const logout = () => {
         </el-menu>
       </el-aside>
       <el-main>
+        <div v-if="index === '0'">
+          商家首页
+        </div>
         <AccountManage v-if="index === '1-1'"/>
         <OperationHistory v-if="index === '1-2'"/>
         <ProductManage v-if="index === '2-1'"/>

@@ -15,4 +15,5 @@ import lombok.EqualsAndHashCode;
 public class AccountReviewDO extends MysqlBaseDO {
     private Long accountId;
     private String remark;
+    private String modifier;
 }

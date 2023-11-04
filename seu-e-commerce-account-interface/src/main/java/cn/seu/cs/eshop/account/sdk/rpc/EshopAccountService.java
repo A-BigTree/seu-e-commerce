@@ -25,4 +25,6 @@ public interface EshopAccountService {
     ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request);
 
     GetAccountInfoResponse getAccountInfo(Long id);
+
+    BaseResponse updateRegisterState(UpdateRegisterStateRequest request);
 }

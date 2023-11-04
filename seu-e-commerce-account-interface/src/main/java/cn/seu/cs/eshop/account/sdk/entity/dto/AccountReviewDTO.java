@@ -19,5 +19,6 @@ public class AccountReviewDTO implements Serializable {
     private Long id;
     private Long accountId;
     private String remark;
+    private String modifier;
     private String createTime;
 }

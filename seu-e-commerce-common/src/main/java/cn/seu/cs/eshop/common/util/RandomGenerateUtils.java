@@ -18,7 +18,7 @@ public class RandomGenerateUtils {
      * @param length 验证码长度
      * @return 返回结果
      */
-    public static String generateVerCode(String symbols, int length) {
+    public static String generateCode(String symbols, int length) {
         char[] numbers = new char[length];
         for (int i = 0; i < numbers.length; i++) {
             numbers[i] = symbols.charAt(RANDOM.nextInt(symbols.length()));
@@ -30,6 +30,6 @@ public class RandomGenerateUtils {
      * 生成昵称
      */
     public static String generateNickname(String prefix, String symbols, int length) {
-        return prefix + generateVerCode(symbols, length);
+        return prefix + generateCode(symbols, length);
     }
 }

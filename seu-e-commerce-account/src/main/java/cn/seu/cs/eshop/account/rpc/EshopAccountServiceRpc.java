@@ -47,17 +47,26 @@ public class EshopAccountServiceRpc implements EshopAccountService {
     }
 
     @Override
+    @RpcMonitor
     public BaseResponse updateUserInfo(Long id, UpdateUserInfoRequest request) {
         return userLoginServiceImpl.updateUserInfo(id, request);
     }
 
     @Override
+    @RpcMonitor
     public ListRegisterInfoResponse listRegisterUserInfo(ListRegisterInfoRequest request) {
         return userInfoService.listRegisterInfo(request);
     }
 
     @Override
+    @RpcMonitor
     public GetAccountInfoResponse getAccountInfo(Long id) {
         return userInfoService.getAccountInfo(id);
+    }
+
+    @Override
+    @RpcMonitor
+    public BaseResponse updateRegisterState(UpdateRegisterStateRequest request) {
+        return userInfoService.updateRegisterState(request);
     }
 }

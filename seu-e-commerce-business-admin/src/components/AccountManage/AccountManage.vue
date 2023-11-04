@@ -6,6 +6,7 @@ import {http} from '@/utils/http';
 import {IMAGE_URL, DEFAULT_HEAD_IMAGE} from '@/utils/config'
 import {Cellphone, Document, Message, Position, Stopwatch, Timer, User} from "@element-plus/icons-vue";
 import type {FormInstance} from "element-plus";
+import ReviewDialog from "@/components/common/ReviewDialog.vue";
 
 interface UserInfo {
   id: number,
@@ -151,11 +152,12 @@ const submitReview = (formRef: FormInstance) => {
 
 // 审核过程
 const clickReview = (user: UserInfo) => {
-  getAccountInfo(user.id);
+  // getAccountInfo(user.id);
   dialogForm.value.reviewState = 1;
   dialogForm.value.remark = "";
-  openReviewDialog.value = true;
   dialogForm.value.accountId = user.id;
+  openReviewDialog.value = true;
+
 }
 
 // 封号过程
@@ -272,7 +274,7 @@ const clickDelete = (user: UserInfo) => {
         :total="page.total"/>
   </el-row>
 
-  <!-- 详情页对话框 -->
+  <!--
   <el-dialog v-model="openReviewDialog" title="账号详情" v-if="dialogData.id" :close-on-click-modal="false">
     <img style="width: 80px" :src="dialogData.image? IMAGE_URL + dialogData.image : DEFAULT_HEAD_IMAGE" alt="">
     <el-card shadow="always">
@@ -403,6 +405,8 @@ const clickDelete = (user: UserInfo) => {
     </el-card>
 
   </el-dialog>
+  -->
+  <ReviewDialog :open-review-dialog="openReviewDialog" :account-id="dialogForm.accountId"/>
 
 </template>
 

@@ -73,7 +73,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         int length = eshopConfService.getConfigObject(AccountNacosConfEnum.emailVerifyLength, Integer.class);
         String symbols = eshopConfService.getConfig(AccountNacosConfEnum.emailVerifySymbols);
-        String verifyCode = RandomGenerateUtils.generateVerCode(symbols, length);
+        String verifyCode = RandomGenerateUtils.generateCode(symbols, length);
         String context = request.getContext();
         if (StringUtils.isEmpty(context)) {
             String format = eshopConfService.getConfig(AccountNacosConfEnum.emailContext);

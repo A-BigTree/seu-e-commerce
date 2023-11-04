@@ -1,5 +1,7 @@
 package cn.seu.cs.eshop.account.nacos;
 
+import cn.seu.cs.eshop.account.pojo.bo.PwdGenerationConfigBO;
+import cn.seu.cs.eshop.account.pojo.bo.ReviewEmailContextBO;
 import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.nacos.ConfDataId;
 import cn.seu.cs.eshop.common.constants.ApplicationConstants;
@@ -15,7 +17,9 @@ public enum AccountNacosConfEnum implements ConfDataId<Object> {
     emailContext("默认内容"), //邮件内容配置
     emailVerifyTime(5L), //验证码有效时间
     emailVerifyLength(6), //验证码长度
-    emailVerifySymbols("0123456789")
+    emailVerifySymbols("0123456789"),
+    emailReviewContext(new ReviewEmailContextBO()),
+    pwdGenerateConfig(new PwdGenerationConfigBO()),
     ;
 
     private final String dataId;

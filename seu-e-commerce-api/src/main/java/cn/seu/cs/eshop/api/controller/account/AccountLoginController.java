@@ -64,10 +64,11 @@ public class AccountLoginController {
         if (Objects.equals(response.getCode(), OK.getCode()) && session != null) {
             userTokenCache.setUserTokenInfo(session.getToken(),
                     UserBaseDTO.builder()
-                    .id(session.getId())
-                    .account(session.getUser().getAccount())
-                    .roleType(session.getUser().getRoleType())
-                    .build());
+                            .id(session.getId())
+                            .account(session.getUser().getAccount())
+                            .nickname(session.getUser().getNickname())
+                            .roleType(session.getUser().getRoleType())
+                            .build());
         }
         return response;
     }

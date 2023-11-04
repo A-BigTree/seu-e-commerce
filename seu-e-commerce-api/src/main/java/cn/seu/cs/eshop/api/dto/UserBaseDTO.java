@@ -18,5 +18,6 @@ import java.io.Serializable;
 public class UserBaseDTO implements Serializable {
     private Long id;
     private String account;
+    private String nickname;
     private Integer roleType;
 }

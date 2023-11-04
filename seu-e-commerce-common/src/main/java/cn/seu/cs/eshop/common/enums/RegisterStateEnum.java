@@ -14,7 +14,7 @@ public enum RegisterStateEnum {
     REGISTER_ERROR(2),
     BE_DELETED(3)
     ;
-    private final Integer state;
+    private final int state;
 
     RegisterStateEnum(Integer state) {
         this.state = state;

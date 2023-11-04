@@ -1,6 +1,5 @@
 package cn.seu.cs.eshop.api.component;
 
-import cn.seu.cs.eshop.account.sdk.entity.dto.UserInfoDTO;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
@@ -26,7 +25,7 @@ public class AuthorUserHandlerMethodArgumentResolver implements HandlerMethodArg
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthorUserInfo.class) &&
                 (parameter.getParameterType().isAssignableFrom(Long.class) ||
-                        parameter.getParameterType().isAssignableFrom(UserInfoDTO.class));
+                        parameter.getParameterType().isAssignableFrom(UserBaseDTO.class));
     }
 
     @Override
@@ -40,7 +39,7 @@ public class AuthorUserHandlerMethodArgumentResolver implements HandlerMethodArg
         if (parameter.getParameterType().isAssignableFrom(Long.class)) {
             return user.getId();
         }
-        if (parameter.getParameterType().isAssignableFrom(UserInfoDTO.class)) {
+        if (parameter.getParameterType().isAssignableFrom(UserBaseDTO.class)) {
             return user;
         }
         throw new Exception("This annotation only can be injected in class 'Long' or 'UserBaseDTO'");

@@ -4,6 +4,10 @@ import cn.seu.cs.eshop.account.convert.AccountConvert;
 import cn.seu.cs.eshop.account.dao.AccountReviewDao;
 import cn.seu.cs.eshop.account.dao.EshopInfoDao;
 import cn.seu.cs.eshop.account.dao.UserInfoDao;
+import cn.seu.cs.eshop.account.manager.EmailSendManager;
+import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
+import cn.seu.cs.eshop.account.pojo.bo.PwdGenerationConfigBO;
+import cn.seu.cs.eshop.account.pojo.bo.ReviewEmailContextBO;
 import cn.seu.cs.eshop.account.pojo.db.AccountReviewDO;
 import cn.seu.cs.eshop.account.pojo.db.EshopInfoDO;
 import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
@@ -13,15 +17,26 @@ import cn.seu.cs.eshop.account.sdk.entity.dto.RegisterUserListDTO;
 import cn.seu.cs.eshop.account.sdk.entity.req.GetAccountInfoResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoResponse;
+import cn.seu.cs.eshop.account.sdk.entity.req.UpdateRegisterStateRequest;
 import cn.seu.cs.eshop.account.service.UserInfoService;
 import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
 import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cn.seu.cs.eshop.common.nacos.ShopConf;
+import cn.seu.cs.eshop.common.util.MysqlUtils;
+import cn.seu.cs.eshop.common.util.RandomGenerateUtils;
 import cn.seu.cs.eshop.common.util.TimeUtils;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import static cn.seu.cs.eshop.account.constants.AccountConstants.*;
+import static cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum.emailReviewContext;
+import static cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum.pwdGenerateConfig;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildFailResponse;
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
@@ -38,6 +53,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     EshopInfoDao eshopInfoDao;
     @Resource
     AccountReviewDao accountReviewDao;
+    @Resource
+    EmailSendManager emailSendManager;
+    @Resource
+    ShopConf eshopConfService;
 
     @Override
     public ListRegisterInfoResponse listRegisterInfo(ListRegisterInfoRequest request) {
@@ -60,19 +79,21 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    @Transactional
     public GetAccountInfoResponse getAccountInfo(Long id) {
         UserInfoDO userInfoDO = userInfoDao.selectById(id);
         if (userInfoDO == null) {
-            return buildFailResponse(GetAccountInfoResponse.class, "用户不存在", null);
+            return buildFailResponse(GetAccountInfoResponse.class, ACCOUNT_NOT_EXIST_ERROR, null);
         }
         EshopInfoDO eshopInfoDO = eshopInfoDao.selectById(id);
-        AccountReviewDO accountReviewDO = accountReviewDao.selectById(id);
+        AccountReviewDO accountReviewDO = accountReviewDao.selectByAccountId(id);
         AccountReviewDTO review = null;
         if (accountReviewDO!=null) {
             review = AccountReviewDTO.builder()
                     .id(accountReviewDO.getId())
                     .accountId(accountReviewDO.getAccountId())
                     .remark(accountReviewDO.getRemark())
+                    .modifier(accountReviewDO.getModifier())
                     .createTime(TimeUtils.convertString(accountReviewDO.getCreateTime(),
                             TimeUtils.DATE_TIME_FORMAT))
                     .build();
@@ -90,5 +111,66 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .desc(eshopInfoDO != null ? eshopInfoDO.getShopDesc() : null)
                 .build();
         return buildSuccessResponse(GetAccountInfoResponse.class, data);
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse updateRegisterState(UpdateRegisterStateRequest request) {
+        UserInfoDO user = userInfoDao.selectById(request.getAccountId());
+        if (user == null) {
+            return buildFailResponse(BaseResponse.class, ACCOUNT_NOT_EXIST_ERROR, null);
+        }
+        int oldState = user.getState();
+        if (!checkStateUpdate(request.getReviewState(), oldState)) {
+            return buildFailResponse(BaseResponse.class, REGISTER_STATE_CHANGE_ERROR, null);
+        }
+        UserInfoDO userNew = new UserInfoDO();
+        userNew.setId(request.getAccountId());
+        userNew.setState(request.getReviewState());
+        userInfoDao.updateById(userNew);
+        AccountReviewDO entity = MysqlUtils.buildEffectEntity(new AccountReviewDO());
+        entity.setAccountId(request.getAccountId());
+        entity.setRemark(request.getRemark());
+        entity.setModifier(request.getModifier());
+        accountReviewDao.insert(entity);
+        sendReviewEmail(user, request);
+        return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
+    }
+
+    private boolean checkStateUpdate(int newState, int oldState) {
+        if (oldState == 0 && (newState == 1 || newState == 2)) {
+            return true;
+        }
+        return oldState == 1 && newState == 3;
+    }
+
+    private void sendReviewEmail(UserInfoDO user, UpdateRegisterStateRequest request) {
+        String from = eshopConfService.getConfig(AccountNacosConfEnum.fromEmail);
+        ReviewEmailContextBO contextConf = eshopConfService.getConfigObject(emailReviewContext,
+                ReviewEmailContextBO.class);
+        EmailSendDTO emailSend = new EmailSendDTO();
+        emailSend.setFrom(from);
+        emailSend.setTo(user.getAccount());
+        emailSend.setSubject(contextConf.getSubject());
+        String text = contextConf.getPrefix().formatted(user.getNickname(), user.getAccount());
+        int state = request.getReviewState();
+        String format =contextConf.getText().get(state);
+        if (state == RegisterStateEnum.REGISTER_SUCCESS.getState()) {
+            PwdGenerationConfigBO pwdConf = eshopConfService.getConfigObject(pwdGenerateConfig,
+                    PwdGenerationConfigBO.class);
+            String pwd = RandomGenerateUtils.generateCode(pwdConf.getSymbols(), pwdConf.getLength());
+            String password = DigestUtils.md5Hex(pwd + PASSWORD_ADMIN_SLAT_MD5);
+            password = DigestUtils.md5Hex(password + PASSWORD_SLAT_MD5);
+            UserInfoDO userNew = new UserInfoDO();
+            userNew.setId(user.getId());
+            userNew.setPassword(password);
+            userInfoDao.updateById(userNew);
+            text += format.formatted(pwd);
+        } else {
+            text += format.formatted(request.getRemark());
+        }
+        text += contextConf.getSuffix().formatted(request.getModifier());
+        emailSend.setContext(text);
+        emailSendManager.sendEmail(emailSend);
     }
 }
