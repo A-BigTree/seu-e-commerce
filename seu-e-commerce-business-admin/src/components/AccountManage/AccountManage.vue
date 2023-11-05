@@ -3,9 +3,6 @@ import {ref} from 'vue';
 import {ElTable} from 'element-plus';
 import {getRoleName, getRegisterStateName, getRoleTag, getRegisterStateTag} from '@/utils'
 import {http} from '@/utils/http';
-import {IMAGE_URL, DEFAULT_HEAD_IMAGE} from '@/utils/config'
-import {Cellphone, Document, Message, Position, Stopwatch, Timer, User} from "@element-plus/icons-vue";
-import type {FormInstance} from "element-plus";
 import ReviewDialog from "@/components/common/ReviewDialog.vue";
 
 interface UserInfo {
@@ -87,75 +84,20 @@ const pageSizeChange = (pageSize: number) => {
   listData();
 }
 //审核
-const dialogData = ref({
-  id: null,
-  image: null,
-  nickname: null,
-  account: null,
-  phoneNumber: null,
-  roleType: null,
-  state: null,
-  desc: null,
-  createTime: null,
-  review: {
-    remark: null,
-    createTime: null
-  }
-})
 const openReviewDialog = ref(false);
-const dialogForm = ref({
-  accountId: 0,
-  remark: "",
-  reviewState: 1
-});
+const accountId = ref(0);
 
-const dialogFormRule = ref({
-  reviewState: [
-    {required: true, message: '审议结果不能为空', trigger: 'blur'}
-  ],
-  remark: [
-    {required: true, message: '审核意见不能为空', trigger: 'blur'}
-  ]
-})
-const dialogFormRef = ref<FormInstance>();
-const getAccountInfo = (id: number) => {
-  dialogData.value.id = null;
-  const params = {
-    url: "/account/account/info/get?id=" + id,
-    method: "get",
-    closeLoading: true,
-    callBack: (res) => {
-      dialogData.value = res.data;
-    }
-  }
-  http(params);
+const handleClose = () => {
+  openReviewDialog.value = false;
+  accountId.value = 0;
+  listData();
 }
-
-const updateReview = () => {
-
-}
-
-const submitReview = (formRef: FormInstance) => {
-  if (dialogForm.value.reviewState === 1) {
-    dialogForm.value.remark = '审核通过';
-  }
-  if (!formRef) return;
-  formRef.validate((valid) => {
-    if (valid) {
-      console.log(dialogForm.value);
-    }
-  })
-}
-
 // TODO 封号
 
 
 // 审核过程
 const clickReview = (user: UserInfo) => {
-  // getAccountInfo(user.id);
-  dialogForm.value.reviewState = 1;
-  dialogForm.value.remark = "";
-  dialogForm.value.accountId = user.id;
+  accountId.value = user.id;
   openReviewDialog.value = true;
 
 }
@@ -406,7 +348,10 @@ const clickDelete = (user: UserInfo) => {
 
   </el-dialog>
   -->
-  <ReviewDialog :open-review-dialog="openReviewDialog" :account-id="dialogForm.accountId"/>
+  <ReviewDialog :open-review-dialog="openReviewDialog"
+                :account-id="accountId"
+                :handle-close="handleClose"
+                v-if="openReviewDialog"/>
 
 </template>
 

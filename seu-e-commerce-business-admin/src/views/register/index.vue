@@ -185,7 +185,7 @@ export default {
             data: formData,
             callBack: (res) => {
               ElMessage({
-                message: '注册成功',
+                message: '注册成功，审核结果将在两个工作日内以邮件形式通知',
                 type: 'success'
               });
               setTimeout(() => {

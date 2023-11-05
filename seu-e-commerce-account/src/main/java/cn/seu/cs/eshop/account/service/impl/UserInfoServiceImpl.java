@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.account.service.impl;
 
+import cn.seu.cs.eshop.account.cache.UserInfoCache;
 import cn.seu.cs.eshop.account.convert.AccountConvert;
 import cn.seu.cs.eshop.account.dao.AccountReviewDao;
 import cn.seu.cs.eshop.account.dao.EshopInfoDao;
@@ -57,6 +58,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     EmailSendManager emailSendManager;
     @Resource
     ShopConf eshopConfService;
+    @Resource
+    UserInfoCache userInfoCache;
 
     @Override
     public ListRegisterInfoResponse listRegisterInfo(ListRegisterInfoRequest request) {
@@ -168,6 +171,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             text += format.formatted(pwd);
         } else {
             text += format.formatted(request.getRemark());
+            if (state == RegisterStateEnum.BE_DELETED.getState()) {
+                userInfoCache.remove(request.getAccountId());
+            }
         }
         text += contextConf.getSuffix().formatted(request.getModifier());
         emailSend.setContext(text);

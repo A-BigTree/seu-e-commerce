@@ -5,8 +5,9 @@ import {ref} from "vue";
 import type {FormInstance} from "element-plus";
 import {Cellphone, Document, Message, Position, Stopwatch, Timer, User} from "@element-plus/icons-vue";
 import {http} from "@/utils/http";
+import {ElMessage} from "element-plus";
 
-const props = defineProps(['openReviewDialog', 'accountId']);
+const props = defineProps(['openReviewDialog', 'accountId', 'handleClose']);
 
 //审核
 const dialogData = ref({
@@ -21,11 +22,12 @@ const dialogData = ref({
   createTime: null,
   review: {
     remark: null,
-    createTime: null
+    createTime: null,
+    modifier: null
   }
 })
 const dialogForm = ref({
-  accountId: 0,
+  accountId: props.accountId,
   remark: "",
   reviewState: 1
 });
@@ -55,7 +57,23 @@ const getAccountInfo = () => {
 getAccountInfo()
 
 const updateReview = () => {
-
+  const params = {
+    url: "/account/register/state/update",
+    data: {
+      accountId: dialogForm.value.accountId,
+      remark: dialogForm.value.remark,
+      reviewState: dialogForm.value.reviewState,
+      modifier: ""
+    },
+    callBack: (res) => {
+      ElMessage({
+        message: "提交成功",
+        type: "success"
+      });
+      getAccountInfo();
+    }
+  };
+  http(params);
 }
 
 const submitReview = (formRef: FormInstance) => {
@@ -66,14 +84,14 @@ const submitReview = (formRef: FormInstance) => {
   formRef.validate((valid) => {
     if (valid) {
       console.log(dialogForm.value);
+      updateReview();
     }
   })
 }
-
 </script>
 
 <template>
-  <el-dialog v-model="openReviewDialog" title="账号详情" v-if="dialogData.id" :close-on-click-modal="false">
+  <el-dialog v-model="props.openReviewDialog" title="账号详情" v-if="dialogData.id" :close-on-click-modal="false" :before-close="props.handleClose">
     <img style="width: 80px" :src="dialogData.image? IMAGE_URL + dialogData.image : DEFAULT_HEAD_IMAGE" alt="">
     <el-card shadow="always">
       <el-descriptions title="基本信息" :column="2" border>
@@ -165,6 +183,15 @@ const submitReview = (formRef: FormInstance) => {
             &nbsp;审核意见
           </template>
           {{ dialogData.review.remark }}
+        </el-descriptions-item>
+        <el-descriptions-item v-if="dialogData.review">
+          <template #label>
+            <el-icon>
+              <User/>
+            </el-icon>
+            审核人
+          </template>
+          {{dialogData.review.modifier}}
         </el-descriptions-item>
         <el-descriptions-item v-if="dialogData.review">
           <template #label>

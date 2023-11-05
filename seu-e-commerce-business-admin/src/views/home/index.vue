@@ -6,12 +6,9 @@ import {http} from '@/utils/http';
 import {IMAGE_URL} from '@/utils/config'
 import {ElMessage} from "element-plus";
 import router from "@/router";
-import OperationHistory from "@/components/AccountManage/OperationHistory.vue";
 
 const roleType = ref(-1);
-
 const headUrl = ref("");
-
 const nickname = ref("");
 const index = ref("0");
 
@@ -94,9 +91,6 @@ const logout = () => {
             <el-menu-item index="1-1">
               账号列表
             </el-menu-item>
-            <el-menu-item index="1-2">
-              审核历史
-            </el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
@@ -119,7 +113,6 @@ const logout = () => {
           商家首页
         </div>
         <AccountManage v-if="index === '1-1'"/>
-        <OperationHistory v-if="index === '1-2'"/>
         <ProductManage v-if="index === '2-1'"/>
       </el-main>
     </el-container>
