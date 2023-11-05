@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import {ElTable} from 'element-plus';
+import {ElMessage, ElMessageBox, ElTable} from 'element-plus';
 import {getRoleName, getRegisterStateName, getRoleTag, getRegisterStateTag} from '@/utils'
 import {http} from '@/utils/http';
 import ReviewDialog from "@/components/common/ReviewDialog.vue";
@@ -86,25 +86,46 @@ const pageSizeChange = (pageSize: number) => {
 //审核
 const openReviewDialog = ref(false);
 const accountId = ref(0);
-
 const handleClose = () => {
   openReviewDialog.value = false;
   accountId.value = 0;
   listData();
 }
-// TODO 封号
 
 
 // 审核过程
 const clickReview = (user: UserInfo) => {
   accountId.value = user.id;
   openReviewDialog.value = true;
-
 }
 
 // 封号过程
 const clickDelete = (user: UserInfo) => {
-
+  ElMessageBox.prompt("请输入注销原因", "确认消息", {
+    confirmButtonText: "提交",
+    cancelButtonText: "取消",
+    inputPattern: /^.+$/,
+    inputErrorMessage: "注销原因不能为空"
+  }).then((value) => {
+    if (value.action !== 'confirm') return;
+    const params = {
+      url: "/account/register/state/update",
+      data: {
+        accountId: user.id,
+        remark: value.value,
+        reviewState: 3,
+        modifier: ""
+      },
+      callBack: (res) => {
+        ElMessage({
+          message: "提交成功",
+          type: "success"
+        });
+      }
+    }
+    http(params);
+    listData();
+  })
 }
 </script>
 

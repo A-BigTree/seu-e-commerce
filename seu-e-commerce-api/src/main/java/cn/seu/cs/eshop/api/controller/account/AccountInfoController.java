@@ -52,7 +52,6 @@ public class AccountInfoController {
     @PostMapping("/register/state/update")
     public BaseResponse updateRegisterState(@RequestBody UpdateRegisterStateRequest request,
                                             @AuthorUserInfo UserBaseDTO user) {
-        System.out.println(user);
         request.setModifier(user.getNickname());
         return eshopAccountService.updateRegisterState(request);
     }

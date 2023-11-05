@@ -14,6 +14,9 @@ public interface AccountReviewDao extends MysqlBaseDao<AccountReviewDO> {
     default AccountReviewDO selectByAccountId(Long accountId) {
         AccountReviewDO entity = new AccountReviewDO();
         entity.setAccountId(accountId);
-        return selectOne(new QueryWrapper<>(entity));
+        QueryWrapper<AccountReviewDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.orderByDesc("create_time");
+        wrapper.last("LIMIT 1");
+        return selectOne(wrapper);
     }
 }
