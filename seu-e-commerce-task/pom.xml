@@ -11,6 +11,13 @@
 
     <groupId>cn.seu.cs.eshop.task</groupId>
     <artifactId>seu-e-commerce-task</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.common</groupId>
+            <artifactId>seu-e-commerce-common</artifactId>
+            <version>${eshop.version}</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

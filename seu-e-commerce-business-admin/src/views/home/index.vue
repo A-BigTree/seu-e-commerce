@@ -102,8 +102,8 @@ const logout = () => {
             <el-menu-item index="2-2" v-if="roleType===2">
               添加商品
             </el-menu-item>
-            <el-menu-item index="2-3" v-if="roleType===3">
-              审核历史
+            <el-menu-item index="2-3">
+              商品类别
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
