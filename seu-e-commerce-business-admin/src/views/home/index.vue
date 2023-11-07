@@ -105,6 +105,9 @@ const logout = () => {
             <el-menu-item index="2-3">
               商品类别
             </el-menu-item>
+            <el-menu-item index="2-4">
+              类别属性
+            </el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>

@@ -34,7 +34,9 @@ public class ResponseBuilderUtils {
 
     public static <D, T extends BaseResponseInterface<D>> T buildFailResponse(Class<T> clazz, String msg, D data) {
         T response = buildResponse(clazz, ResponseStateEnum.OPERATION_ERROR, data);
-        response.setMsg(msg);
+        if (response != null) {
+            response.setMsg(msg);
+        }
         return response;
     }
 }
