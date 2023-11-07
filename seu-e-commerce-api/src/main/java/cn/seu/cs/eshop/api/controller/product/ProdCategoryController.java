@@ -3,7 +3,6 @@ package cn.seu.cs.eshop.api.controller.product;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
-import cn.seu.cs.eshop.common.enums.UserRoleEnum;
 import cn.seu.cs.eshop.service.sdk.product.req.GetAllProdCategoryResponse;
 import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryRequest;
 import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryResponse;
