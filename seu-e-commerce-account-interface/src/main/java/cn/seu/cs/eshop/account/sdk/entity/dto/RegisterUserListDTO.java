@@ -14,9 +14,6 @@ import java.util.List;
  * Created on 2023/11/2
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class RegisterUserListDTO implements PageInterface<RegisterUserInfoDTO> {
     List<RegisterUserInfoDTO> records;
     PageDTO page;

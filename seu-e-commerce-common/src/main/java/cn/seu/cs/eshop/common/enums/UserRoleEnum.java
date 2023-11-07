@@ -26,7 +26,7 @@ public enum UserRoleEnum {
 
     ;
 
-    private final Integer value;
+    private final int value;
 
     private final static Map<Integer, UserRoleEnum> map = new HashMap<>();
 

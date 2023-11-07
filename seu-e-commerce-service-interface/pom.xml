@@ -12,4 +12,12 @@
     <groupId>cn.seu.cs.eshop.service.sdk</groupId>
     <artifactId>seu-e-commerce-service-interface</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.common.sdk</groupId>
+            <artifactId>seu-e-commerce-common-sdk</artifactId>
+            <version>${eshop.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

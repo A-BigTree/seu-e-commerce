@@ -16,6 +16,6 @@ public class ProductCategoryDO extends MysqlBaseDO {
     private Long shopId;
     private Long parentId;
     private String categoryName;
-    private String image;
     private Integer status;
+    private Integer categoryLevel;
 }
