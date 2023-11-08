@@ -7,10 +7,7 @@ import cn.seu.cs.eshop.service.dao.ProductCategoryDao;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;
 import cn.seu.cs.eshop.service.sdk.product.dto.ProdCategoryDTO;
 import cn.seu.cs.eshop.service.sdk.product.dto.ProdCategoryListDTO;
-import cn.seu.cs.eshop.service.sdk.product.req.GetAllProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryRequest;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.UpdateProdCategoryRequest;
+import cn.seu.cs.eshop.service.sdk.product.req.*;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,8 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
+import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildFailResponse;
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDO;
+import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 import static java.util.stream.Collectors.groupingBy;
 
 /**
@@ -83,6 +82,15 @@ public class ProdCategoryServiceImpl extends AbstractCrudService<ProdCategoryDTO
         ProdCategoryListDTO data = MysqlUtils.buildPageData(ProdCategoryListDTO.class,
                 pageDate, ProductCategoryConvert::convertDTO);
         return buildSuccessResponse(ListPageProdCategoryResponse.class, data);
+    }
+
+    @Override
+    public GetProdCategoryResponse getProdCategory(Long id) {
+        ProductCategoryDO entity = productCategoryDao.selectById(id);
+        if (entity==null) {
+            return buildFailResponse(GetProdCategoryResponse.class, "商品类别不存在", null);
+        }
+        return buildSuccessResponse(GetProdCategoryResponse.class, convertDTO(entity));
     }
 
     @Override

@@ -1,10 +1,7 @@
 package cn.seu.cs.eshop.service.rpc.product;
 
 import cn.seu.cs.eshop.common.aop.RpcMonitor;
-import cn.seu.cs.eshop.service.sdk.product.req.GetAllProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryRequest;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.UpdateProdCategoryRequest;
+import cn.seu.cs.eshop.service.sdk.product.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdCategoryService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -30,6 +27,12 @@ public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     @RpcMonitor
     public ListPageProdCategoryResponse listPageProdCategory(ListPageProdCategoryRequest request) {
         return prodCategoryService.listPageProdCategory(request);
+    }
+
+    @Override
+    @RpcMonitor
+    public GetProdCategoryResponse getProdCategory(Long id) {
+        return prodCategoryService.getProdCategory(id);
     }
 
     @Override

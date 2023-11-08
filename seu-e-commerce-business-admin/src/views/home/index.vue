@@ -1,7 +1,5 @@
 <script setup>
-import {ref} from "vue";
-import AccountManage from "@/components/AccountManage/AccountManage.vue";
-import ProductManage from "@/components/ProductManage/ProductManage.vue";
+import {ref, watch} from "vue";
 import {http} from '@/utils/http';
 import {IMAGE_URL} from '@/utils/config'
 import {ElMessage} from "element-plus";
@@ -28,6 +26,31 @@ http(params);
 const select = (in_) => {
   index.value = in_;
 }
+
+watch(index, (newIndex) => {
+  switch (newIndex) {
+    case '0':
+      router.push();
+      return;
+    case '1-1':
+      router.push('/account/manage');
+      return;
+    case '2-1':
+      router.push('/product/manage');
+      return;
+    case '2-2':
+      router.push();
+      return;
+    case '2-3':
+      router.push({
+        name: 'prod-category-manage',
+        params: {
+          parentId: 0,
+          roleType: roleType.value
+        }
+      })
+  }
+})
 
 const logout = () => {
   const request = {
@@ -112,11 +135,7 @@ const logout = () => {
         </el-menu>
       </el-aside>
       <el-main>
-        <div v-if="index === '0'">
-          商家首页
-        </div>
-        <AccountManage v-if="index === '1-1'"/>
-        <ProductManage v-if="index === '2-1'"/>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>

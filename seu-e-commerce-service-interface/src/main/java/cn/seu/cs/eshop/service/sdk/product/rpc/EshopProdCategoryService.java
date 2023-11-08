@@ -1,9 +1,6 @@
 package cn.seu.cs.eshop.service.sdk.product.rpc;
 
-import cn.seu.cs.eshop.service.sdk.product.req.GetAllProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryRequest;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdCategoryResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.UpdateProdCategoryRequest;
+import cn.seu.cs.eshop.service.sdk.product.req.*;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**
@@ -13,5 +10,6 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 public interface EshopProdCategoryService {
     BaseResponse updateProdCategory(UpdateProdCategoryRequest request);
     ListPageProdCategoryResponse listPageProdCategory(ListPageProdCategoryRequest request);
+    GetProdCategoryResponse getProdCategory(Long id);
     GetAllProdCategoryResponse getAllProdCategory(Long shopId);
 }

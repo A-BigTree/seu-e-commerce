@@ -130,42 +130,43 @@ const clickDelete = (user: UserInfo) => {
 </script>
 
 <template>
-  <el-row>
-    <el-form :inline="true" :model="formData">
-      <el-form-item label="ID">
-        <el-input type="number" v-model="formData.id"/>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="formData.email"/>
-      </el-form-item>
-      <el-form-item label="昵称">
-        <el-input v-model="formData.nickname"/>
-      </el-form-item>
-      <el-form-item label="角色">
-        <el-select v-model="formData.roleType">
-          <el-option label="全部" :value="-1"/>
-          <el-option label="消费者" :value="1"/>
-          <el-option label="商家" :value="2"/>
-          <el-option label="平台管理" :value="3"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="状态">
-        <el-select v-model="formData.registerState">
-          <el-option label="全部" :value="-1"/>
-          <el-option label="待审核" :value="0"/>
-          <el-option label="注册成功" :value="1"/>
-          <el-option label="注册失败" :value="2"/>
-          <el-option label="已注销" :value="3"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="filterData">
-          筛选
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </el-row>
-  <el-row>
+  <el-card shadow="always">
+    <template #header>
+      <el-form :inline="true" :model="formData">
+        <el-form-item label="ID">
+          <el-input type="number" v-model="formData.id"/>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="formData.email"/>
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input v-model="formData.nickname"/>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="formData.roleType">
+            <el-option label="全部" :value="-1"/>
+            <el-option label="消费者" :value="1"/>
+            <el-option label="商家" :value="2"/>
+            <el-option label="平台管理" :value="3"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="formData.registerState">
+            <el-option label="全部" :value="-1"/>
+            <el-option label="待审核" :value="0"/>
+            <el-option label="注册成功" :value="1"/>
+            <el-option label="注册失败" :value="2"/>
+            <el-option label="已注销" :value="3"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="filterData">
+            筛选
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+
     <el-table
         ref="tableRef"
         stripe
@@ -222,9 +223,7 @@ const clickDelete = (user: UserInfo) => {
         </template>
       </el-table-column>
     </el-table>
-  </el-row>
-  <el-row>
-    <el-pagination
+    <el-pagination class="page"
         v-model:current-page="page.pageNum"
         v-model:page-size="page.pageSize"
         @current-change="pageChange"
@@ -233,142 +232,9 @@ const clickDelete = (user: UserInfo) => {
         :small="false"
         :disabled="false"
         :background="false"
-        layout="sizes, prev, pager, next, total"
+        layout="sizes, prev, pager, next, total, jumper"
         :total="page.total"/>
-  </el-row>
-
-  <!--
-  <el-dialog v-model="openReviewDialog" title="账号详情" v-if="dialogData.id" :close-on-click-modal="false">
-    <img style="width: 80px" :src="dialogData.image? IMAGE_URL + dialogData.image : DEFAULT_HEAD_IMAGE" alt="">
-    <el-card shadow="always">
-      <el-descriptions title="基本信息" :column="2" border>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              <el-icon>
-                <User/>
-              </el-icon>
-              &nbsp;
-              用户名
-            </div>
-          </template>
-          {{ dialogData.nickname }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              <el-icon>
-                <Message/>
-              </el-icon>
-              &nbsp;账户
-            </div>
-          </template>
-          {{ dialogData.account }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              <el-icon>
-                <Position/>
-              </el-icon>
-              &nbsp;角色
-            </div>
-          </template>
-          <el-tag :type="getRoleTag(dialogData.roleType)">
-            {{ getRoleName(dialogData.roleType) }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              <el-icon>
-                <Cellphone/>
-              </el-icon>
-              &nbsp;电话
-            </div>
-          </template>
-          {{ dialogData.phoneNumber ? dialogData.phoneNumber : '无' }}
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-card>
-
-    <el-card shadow="always" v-if="dialogData.desc">
-      <el-descriptions title="账号介绍">
-        <el-descriptions-item>
-          {{ dialogData.desc }}
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-card>
-
-    <el-card shadow="always">
-      <el-descriptions title="账号状态" :column="1">
-        <el-descriptions-item>
-          <template #label>
-            <el-icon>
-              <Stopwatch/>
-            </el-icon>
-            &nbsp;注册状态
-          </template>
-          <el-tag :type="getRegisterStateTag(dialogData.state)">
-            {{ getRegisterStateName(dialogData.state) }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <el-icon>
-              <Timer/>
-            </el-icon>
-            注册时间
-          </template>
-          {{ dialogData.createTime }}
-        </el-descriptions-item>
-        <el-descriptions-item v-if="dialogData.review">
-          <template #label>
-            <el-icon>
-              <Document/>
-            </el-icon>
-            &nbsp;审核意见
-          </template>
-          {{ dialogData.review.remark }}
-        </el-descriptions-item>
-        <el-descriptions-item v-if="dialogData.review">
-          <template #label>
-            <el-icon>
-              <Timer/>
-            </el-icon>
-            审核时间
-          </template>
-          {{ dialogData.review.createTime }}
-        </el-descriptions-item>
-      </el-descriptions>
-      <el-form :model="dialogForm"
-               ref="dialogFormRef"
-               :rules="dialogFormRule"
-               v-if="dialogData.state === 0"
-               status-icon>
-        <el-form-item label="是否通过" prop="reviewState">
-          <el-radio-group v-model="dialogForm.reviewState">
-            <el-radio :label="1">审核通过</el-radio>
-            <el-radio :label="2">审核不通过</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="审核意见" prop="remark" v-if="dialogForm.reviewState != 1">
-          <el-input
-              v-model="dialogForm.remark"
-              placeholder="请输入审核意见"
-              :autosize="{ minRows: 3, maxRows: 3 }"
-              maxlength="200"
-              show-word-limit
-              type="textarea"/>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitReview(dialogFormRef)">提交</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-
-  </el-dialog>
-  -->
+  </el-card>
   <ReviewDialog :open-review-dialog="openReviewDialog"
                 :account-id="accountId"
                 :handle-close="handleClose"
@@ -377,8 +243,7 @@ const clickDelete = (user: UserInfo) => {
 </template>
 
 <style scoped>
-.cell-item {
-  display: flex;
-  align-items: center;
+.page {
+  margin-top: 10px;
 }
 </style>

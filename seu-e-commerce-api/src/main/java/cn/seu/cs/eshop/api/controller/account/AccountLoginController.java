@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import static cn.seu.cs.eshop.api.constants.ApiConstants.*;
 import static cn.seu.cs.eshop.common.enums.ResponseStateEnum.OK;
+import static cn.seu.cs.eshop.common.enums.ResponseStateEnum.OTHER_ERROR;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -58,7 +59,14 @@ public class AccountLoginController {
     @ApiMonitor(isAuthor = false)
     @CrossOrigin
     @PostMapping("/user/login")
-    public LoginUserResponse loginUser(@RequestBody LoginUserRequest request) {
+    public LoginUserResponse loginUser(@RequestBody LoginUserRequest request,
+                                       @RequestHeader(value = AUTHORIZATION_HEADER, required = false) String token) {
+        if (!StringUtils.isEmpty(token)) {
+            UserBaseDTO user = userTokenCache.getUserTokenInfo(token);
+            if (user != null) {
+                return ResponseBuilderUtils.buildResponse(LoginUserResponse.class, OTHER_ERROR, null);
+            }
+        }
         LoginUserResponse response = eshopAccountService.loginUser(request);
         EshopSessionDTO session = response.getData();
         if (Objects.equals(response.getCode(), OK.getCode()) && session != null) {

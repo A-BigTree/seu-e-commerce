@@ -107,7 +107,7 @@ export default {
                 router.push({
                   name: "home"
                 });
-              }, 1000);
+              }, 500);
             },
             errCallBack: (res) => {
               if (res.code === 503) {
@@ -115,6 +115,16 @@ export default {
                   message: "账号或者密码不正确",
                   type: "error"
                 });
+              } else if (res.code === 600) {
+                ElMessage({
+                  message: "用户已登录",
+                  type: "warning"
+                });
+                setTimeout(() => {
+                  router.push({
+                    name: "home"
+                  });
+                }, 500);
               } else {
                 ElMessage({
                   message: res.msg || '服务器出了点小差~',
