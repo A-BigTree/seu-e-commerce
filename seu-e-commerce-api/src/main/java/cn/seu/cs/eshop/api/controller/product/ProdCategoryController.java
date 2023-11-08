@@ -33,14 +33,16 @@ public class ProdCategoryController {
         return OFFICIAL_ID;
     }
 
-    @ApiMonitor(roleType = {BUSINESS, PLATFORM})
+    // @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin
     @PostMapping("/update")
-    public BaseResponse updateProdCategory(@RequestBody UpdateProdCategoryRequest request) {
+    public BaseResponse updateProdCategory(@RequestBody UpdateProdCategoryRequest request,
+                                           @AuthorUserInfo UserBaseDTO user) {
+        request.getData().setShopId(getShopId(user));
         return eshopProdCategoryService.updateProdCategory(request);
     }
 
-    @ApiMonitor(roleType = {BUSINESS, PLATFORM})
+    // @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin
     @PostMapping("/page/list")
     public ListPageProdCategoryResponse listPageProdCategory(@RequestBody ListPageProdCategoryRequest request,
@@ -49,7 +51,7 @@ public class ProdCategoryController {
         return eshopProdCategoryService.listPageProdCategory(request);
     }
 
-    @ApiMonitor
+    // @ApiMonitor
     @CrossOrigin
     @GetMapping("/all/get")
     public GetAllProdCategoryResponse getAllProdCategory(@AuthorUserInfo UserBaseDTO user) {

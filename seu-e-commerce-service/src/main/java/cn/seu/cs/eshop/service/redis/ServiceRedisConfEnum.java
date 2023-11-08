@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
  * Created on 2023/11/6
  */
 public enum ServiceRedisConfEnum implements RedisConf {
+    prodCategory("prod:category:", 5L, TimeUnit.MINUTES),
 
 
     ;

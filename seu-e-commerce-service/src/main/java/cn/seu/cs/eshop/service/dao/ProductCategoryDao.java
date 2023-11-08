@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
+import static cn.seu.cs.eshop.common.enums.ProdStatusEnum.VALID;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -40,6 +41,7 @@ public interface ProductCategoryDao extends MysqlBaseDao<ProductCategoryDO> {
 
     default List<ProductCategoryDO> selectPageByShopId(Long shopId) {
         ProductCategoryDO entity = new ProductCategoryDO();
+        entity.setStatus(VALID.getStatus());
         QueryWrapper<ProductCategoryDO> wrapper = new QueryWrapper<>(entity);
         List<Long> ids = new ArrayList<>(Collections.singletonList(shopId));
         if (shopId != OFFICIAL_ID) {
