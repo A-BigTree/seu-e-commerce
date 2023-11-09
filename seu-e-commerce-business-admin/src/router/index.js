@@ -25,7 +25,7 @@ const router = createRouter({
                 {
                     path: 'product/category/edit/:categoryId/:parentId',
                     name: 'prod-category-edit',
-                    component: () => import('@/components/ProductManage/ProductEdit.vue'),
+                    component: () => import('@/components/ProductManage/CategoryEdit.vue'),
                     props: true
                 }
             ]

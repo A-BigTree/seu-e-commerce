@@ -3,6 +3,7 @@ import {ref, watch} from 'vue';
 import {ElTable} from 'element-plus';
 import {http} from '@/utils/http';
 import router from '@/router/index'
+import CategoryEdit from "@/components/ProductManage/CategoryEdit.vue";
 
 const props = defineProps(['parentId', 'roleType']);
 
@@ -14,8 +15,6 @@ interface ProdCategory {
   status: number,
   level: number,
   createTime: string,
-  propertyNum: number,
-  parameterNum: number,
   children: null
 }
 
@@ -79,6 +78,19 @@ const listData = () => {
 
 listData();
 
+const drawParams = ref({
+  categoryId: 0,
+  parentId: 0
+})
+
+const openEdit = ref(false);
+
+const addCategory = () => {
+  drawParams.value.categoryId = 0;
+  drawParams.value.parentId = parentId.value;
+  openEdit.value = true;
+}
+
 const canEdit = (shopId) => {
   return (shopId === 0 && props.roleType === '2');
 }
@@ -111,6 +123,16 @@ const getCreatorTag = (shopId) => {
   }
 }
 
+const editCategory = (category:ProdCategory) => {
+  drawParams.value.categoryId = category.id;
+  drawParams.value.parentId = category.parentId;
+  openEdit.value = true;
+}
+
+const handleClose = () => {
+  openEdit.value = false;
+}
+
 </script>
 
 <template>
@@ -118,7 +140,7 @@ const getCreatorTag = (shopId) => {
     <template #header>
       <el-button
           type="primary"
-          @click="">
+          @click="addCategory">
         添加类别
       </el-button>
     </template>
@@ -138,8 +160,6 @@ const getCreatorTag = (shopId) => {
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column property="propertyNum" label="属性数量" :width="100"/>
-      <el-table-column property="parameterNum" label="参数数量" :width="100"/>
       <el-table-column label="设置" :width="270">
         <template #default="scope">
           <el-button
@@ -173,12 +193,13 @@ const getCreatorTag = (shopId) => {
               @change="switchChange(scope.row)"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" :width="160" fixed="right">
+      <el-table-column property="createTime" label="创建时间" :width="180"/>
+      <el-table-column label="操作" :width="140" fixed="right">
         <template #default="scope">
           <el-button
               type="default"
               size="small"
-              @click=""
+              @click="editCategory(scope.row)"
               :disabled="canEdit(scope.row.shopId)">
             编辑
           </el-button>
@@ -191,7 +212,6 @@ const getCreatorTag = (shopId) => {
           </el-button>
         </template>
       </el-table-column>
-
     </el-table>
 
     <el-pagination class="page"
@@ -206,6 +226,8 @@ const getCreatorTag = (shopId) => {
                    layout="sizes, prev, pager, next, total, jumper"
                    :total="page.total"/>
   </el-card>
+
+  <CategoryEdit :category-id="drawParams.categoryId" :parent-id="drawParams.parentId" :open="openEdit" :handle-close="handleClose"/>
 </template>
 
 <style scoped>

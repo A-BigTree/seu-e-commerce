@@ -3,6 +3,8 @@ package cn.seu.cs.eshop.common.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -49,8 +51,8 @@ public class JsonUtils {
     public static <T> List<T> jsonToList(String json, Class<T> clazz) {
         List<T> list = new ArrayList<>();
         try {
-            list = INSTANCE.readValue(json, new TypeReference<List<T>>() {
-            });
+            CollectionType listType = INSTANCE.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+            list = INSTANCE.readValue(json, listType);
         } catch (JsonProcessingException e) {
             log.error("Json String:{} convert list<{}> error", json, clazz.toString());
         }
@@ -63,8 +65,8 @@ public class JsonUtils {
     public static <K, V> Map<K, V> jsonToMap(String json, Class<K> key, Class<V> value) {
         Map<K, V> map = new HashMap<>();
         try {
-            map = INSTANCE.readValue(json, new TypeReference<Map<K, V>>() {
-            });
+            MapType mapType = INSTANCE.getTypeFactory().constructMapType(HashMap.class, key, value);
+            map = INSTANCE.readValue(json, mapType);
         } catch (JsonProcessingException e) {
             log.error("Json String:{} convert map<{}, {}> error", json, key.toString(), value.toString());
         }

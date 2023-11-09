@@ -25,7 +25,7 @@ public class ProdCategoryCache {
 
     public List<ProductCategoryDO> getCategory(Long shopId) {
         List<ProductCategoryDO> value = redisService.getListValue(shopId.toString(), prodCategory, ProductCategoryDO.class);
-        if (value == null) {
+        if (CollectionUtils.isEmpty(value)) {
             List<ProductCategoryDO> result = productCategoryDao.selectPageByShopId(shopId);
             if (!CollectionUtils.isEmpty(result)) {
                 redisService.setObjectValue(shopId.toString(), result, prodCategory);
