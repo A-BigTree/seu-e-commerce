@@ -7,6 +7,7 @@ import type {FormInstance} from "element-plus";
 const props = defineProps(['categoryId', 'parentId', 'open', 'handleClose'])
 
 const formData = ref({
+  action: 1,
   id: 0,
   parentId: 0,
   categoryName: "",
@@ -24,6 +25,14 @@ const options = ref([
 const formRef = ref<FormInstance>();
 
 const init = () => {
+  formData.value = {
+    action: 1,
+    id: 0,
+    parentId: 0,
+    categoryName: "",
+    level: 1,
+    status: 1,
+  };
   const params = {
     url: "/product/category/all/get",
     method: 'get',
@@ -46,6 +55,7 @@ const init = () => {
   http(params);
   if ((!props.categoryId) || parseInt(props.categoryId) === 0) {
     formData.value.parentId = parseInt(props.parentId);
+    formData.value.action = 1;
     formData.value.level = formData.value.parentId === 0 ? 1 : 2;
     return;
   }
@@ -56,6 +66,7 @@ const init = () => {
     callBack: (res) => {
       const data = res.data;
       formData.value = {
+        action: 2,
         id: data.id,
         parentId: data.parentId,
         categoryName: data.categoryName,
@@ -112,7 +123,7 @@ const parentChange = () => {
         <el-form-item label="分类层级" prop="level">
           <el-input type="number" v-model="formData.level" style="width: 150px" disabled/>
         </el-form-item>
-        <el-form-item label="是否上线">
+        <el-form-item label="是否开启">
           <el-switch v-model="formData.status" :inactive-value="0" :active-value="1"/>
         </el-form-item>
         <el-form-item>
