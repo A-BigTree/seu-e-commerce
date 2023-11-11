@@ -48,7 +48,7 @@ const init = () => {
         options.value.push({
           value: value.id,
           label: value.categoryName
-        })
+        });
       })
     }
   }

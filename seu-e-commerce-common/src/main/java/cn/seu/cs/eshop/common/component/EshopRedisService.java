@@ -19,7 +19,7 @@ public class EshopRedisService implements RedisService {
     public String getValue(String key, RedisConf redisConf) {
         return redisTemplate.opsForValue().get(redisConf.buildKey(key));
     }
-    
+
     @Override
     public void setValue(String key, String value, RedisConf redisConf) {
         redisTemplate.opsForValue().set(redisConf.buildKey(key), value,

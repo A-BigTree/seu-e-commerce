@@ -38,3 +38,6 @@ build/
 .idea/workspace.xml
 
 tools/
+
+out/
+*.MF
