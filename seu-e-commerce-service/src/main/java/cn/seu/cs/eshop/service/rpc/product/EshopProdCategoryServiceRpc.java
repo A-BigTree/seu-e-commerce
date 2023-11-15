@@ -40,4 +40,22 @@ public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     public GetAllProdCategoryResponse getAllProdCategory(Long shopId) {
         return prodCategoryService.getAllProdCategory(shopId);
     }
+
+    @Override
+    @RpcMonitor
+    public BaseResponse updateProdProp(UpdateProdPropRequest request) {
+        return null;
+    }
+
+    @Override
+    @RpcMonitor
+    public ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request) {
+        return null;
+    }
+
+    @Override
+    @RpcMonitor
+    public GetProdPropResponse getProdProp(Long id, Long shopId) {
+        return null;
+    }
 }

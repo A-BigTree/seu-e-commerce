@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +33,9 @@ import static java.util.stream.Collectors.groupingBy;
  * Created on 2023/11/7
  */
 @Service
-public class ProdCategoryServiceImpl extends AbstractCrudService<ProdCategoryDTO> implements ProdCategoryService {
+public class ProdCategoryServiceImpl
+        extends AbstractCrudService<ProdCategoryDTO>
+        implements ProdCategoryService {
     @Resource
     private ProductCategoryDao productCategoryDao;
     @Resource
