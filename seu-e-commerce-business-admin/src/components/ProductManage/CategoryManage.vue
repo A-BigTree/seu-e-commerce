@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue';
-import {ElTable} from 'element-plus';
+import {ElMessage, ElMessageBox, ElTable} from 'element-plus';
 import {http} from '@/utils/http';
 import router from '@/router/index'
 import CategoryEdit from "@/components/ProductManage/CategoryEdit.vue";
@@ -96,7 +96,24 @@ const canEdit = (shopId) => {
 }
 
 const switchChange = (category: ProdCategory) => {
-  console.log(category)
+  // console.log(category)
+  updateCategory(category, 3);
+}
+
+const deleteCategory = (category: ProdCategory) => {
+  ElMessageBox.confirm(
+      "确认删除该类目?",
+      "warning",
+      {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "danger",
+      }
+  ).then(() => {
+    updateCategory(category, 2);
+  }).catch(() => {
+
+  })
 }
 
 const switchCategory = (category: ProdCategory) => {
@@ -123,7 +140,7 @@ const getCreatorTag = (shopId) => {
   }
 }
 
-const editCategory = (category:ProdCategory) => {
+const editCategory = (category: ProdCategory) => {
   drawParams.value.categoryId = category.id;
   drawParams.value.parentId = category.parentId;
   openEdit.value = true;
@@ -131,6 +148,32 @@ const editCategory = (category:ProdCategory) => {
 
 const handleClose = () => {
   openEdit.value = false;
+  listData();
+}
+
+const updateCategory = (category: ProdCategory, action: number) => {
+  const params = {
+    url: "/product/category/update",
+    data: {
+      action: action,
+      data: {
+        id: category.id,
+        shopId: 0,
+        parentId: category.parentId,
+        categoryName: category.categoryName,
+        status: category.status,
+        level: category.level
+      }
+    },
+    callBack: (res) => {
+      ElMessage({
+        message: "更新成功",
+        type: "success"
+      });
+      listData();
+    }
+  }
+  http(params);
 }
 
 </script>
@@ -172,13 +215,13 @@ const handleClose = () => {
           <el-button
               size="small"
               type="warning"
-              :disabled="scope.row.level === 1 || !canEdit(scope.row.shopId)">
+              :disabled="scope.row.level === 1 || parseInt(roleType) === 3">
             绑定属性
           </el-button>
           <el-button
               size="small"
               type="success"
-              :disabled="scope.row.level === 1 || !canEdit(scope.row.shopId)">
+              :disabled="scope.row.level === 1 || parseInt(roleType) === 3">
             绑定参数
           </el-button>
         </template>
@@ -206,7 +249,7 @@ const handleClose = () => {
           <el-button
               type="danger"
               size="small"
-              @click=""
+              @click="deleteCategory(scope.row)"
               :disabled="canEdit(scope.row.shopId)">
             删除
           </el-button>
@@ -227,7 +270,8 @@ const handleClose = () => {
                    :total="page.total"/>
   </el-card>
 
-  <CategoryEdit :category-id="drawParams.categoryId" :parent-id="drawParams.parentId" :open="openEdit" :handle-close="handleClose"/>
+  <CategoryEdit :category-id="drawParams.categoryId" :parent-id="drawParams.parentId" :open="openEdit"
+                :handle-close="handleClose"/>
 </template>
 
 <style scoped>

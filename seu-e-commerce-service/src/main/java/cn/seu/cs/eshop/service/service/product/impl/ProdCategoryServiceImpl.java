@@ -13,10 +13,12 @@ import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +55,9 @@ public class ProdCategoryServiceImpl extends AbstractCrudService<ProdCategoryDTO
         List<Long> ids = children.stream()
                 .map(ProductCategoryDO::getId)
                 .toList();
-        productCategoryDao.deleteBatchIds(ids);
+        if (!CollectionUtils.isEmpty(ids)) {
+            productCategoryDao.deleteBatchIds(ids);
+        }
         productCategoryDao.deleteById(id);
         return id;
     }

@@ -3,8 +3,11 @@
 import {ref, watch} from "vue";
 import {http} from "@/utils/http";
 import type {FormInstance} from "element-plus";
+import {ElMessage} from "element-plus";
 
 const props = defineProps(['categoryId', 'parentId', 'open', 'handleClose'])
+
+const drawOpen = ref(false);
 
 const formData = ref({
   action: 1,
@@ -66,7 +69,7 @@ const init = () => {
     callBack: (res) => {
       const data = res.data;
       formData.value = {
-        action: 2,
+        action: 3,
         id: data.id,
         parentId: data.parentId,
         categoryName: data.categoryName,
@@ -79,6 +82,7 @@ const init = () => {
 }
 
 watch(props, (newParams) => {
+  drawOpen.value = newParams.open;
   init();
 })
 
@@ -93,13 +97,43 @@ const parentChange = () => {
   formData.value.level = formData.value.parentId === 0 ? 1 : 2;
 }
 
+const submitEdit = (form) => {
+  if (!form) return;
+  form.validate((valid) => {
+    if (valid) {
+      const params = {
+        url: "/product/category/update",
+        data: {
+          action: formData.value.action,
+          data: {
+            id: formData.value.id,
+            shopId: 0,
+            parentId: formData.value.parentId,
+            categoryName: formData.value.categoryName,
+            status: formData.value.status,
+            level: formData.value.level
+          }
+        },
+        callBack: (res) => {
+          ElMessage({
+            message: "修改成功",
+            type: "success"
+          });
+          drawOpen.value = false;
+        }
+      }
+      http(params);
+    }
+  })
+}
+
 </script>
 
 <template>
   <el-drawer
-      v-model="props.open"
+      v-model="drawOpen"
       direction="rtl"
-      :before-close="props.handleClose">
+      @close="props.handleClose">
     <el-card shadow="always">
       <template #header>
         {{ parseInt(categoryId) === 0 ? '添加商品分类' : '编辑商品分类' }}
@@ -127,7 +161,7 @@ const parentChange = () => {
           <el-switch v-model="formData.status" :inactive-value="0" :active-value="1"/>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="">
+          <el-button type="primary" @click="submitEdit(formRef)">
             保存
           </el-button>
         </el-form-item>
