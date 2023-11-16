@@ -31,23 +31,13 @@ public interface ProductCategoryDao extends MysqlBaseDao<ProductCategoryDO> {
         ProductCategoryDO entity = new ProductCategoryDO();
         entity.setParentId(id);
         QueryWrapper<ProductCategoryDO> wrapper = new QueryWrapper<>(entity);
-        List<Long> ids = new ArrayList<>(Collections.singletonList(shopId));
-        if (shopId != OFFICIAL_ID) {
-            ids.add(OFFICIAL_ID);
-        }
-        wrapper.in("shop_id", ids);
-        return selectPage(page, wrapper);
+        return selectPage(page, buildShopIds(shopId, wrapper));
     }
 
     default List<ProductCategoryDO> selectPageByShopId(Long shopId) {
         ProductCategoryDO entity = new ProductCategoryDO();
         entity.setStatus(VALID.getStatus());
         QueryWrapper<ProductCategoryDO> wrapper = new QueryWrapper<>(entity);
-        List<Long> ids = new ArrayList<>(Collections.singletonList(shopId));
-        if (shopId != OFFICIAL_ID) {
-            ids.add(OFFICIAL_ID);
-        }
-        wrapper.in("shop_id", ids);
-        return selectList(wrapper);
+        return selectList(buildShopIds(shopId, wrapper));
     }
 }

@@ -23,5 +23,5 @@ public class ProdPropDTO implements Serializable {
     private Long shopId;
     private Integer selfAdd;
     private String createTime;
-    private List<ProdPropsValueDTO> value;
+    private List<ProdPropValueDTO> value;
 }

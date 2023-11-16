@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProdPropsValueDTO implements Serializable {
+public class ProdPropValueDTO implements Serializable {
     private Long id;
     private String valueName;
     private Long propId;
