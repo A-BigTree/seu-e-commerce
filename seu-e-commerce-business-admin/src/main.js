@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, ref } from 'vue';
 import VueCookies from 'vue3-cookies';
 import App from './App.vue';
 import router from './router';
@@ -9,6 +9,12 @@ import 'element-plus/dist/index.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 const app = createApp(App);
+
+const roleType = ref(0);
+
+app.provide("roleType", roleType);
+
+app.config.globalProperties.$roleType = roleType;
 
 app.use(router);
 app.use(ElementPlus, {

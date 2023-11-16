@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from "vue";
+import {ref, watch, inject} from "vue";
 import {http} from '@/utils/http';
 import {IMAGE_URL} from '@/utils/config'
 import {ElMessage} from "element-plus";
@@ -10,12 +10,15 @@ const headUrl = ref("");
 const nickname = ref("");
 const index = ref("0");
 
+const roleTypeRef = inject("roleType");
+
 const params = {
   url: "/account/user/info/get",
   method: "get",
   callBack: (res) => {
     const userInfo = res.data;
     roleType.value = userInfo.roleType;
+    roleTypeRef.value = roleType.value;
     headUrl.value = userInfo.image ? IMAGE_URL + userInfo.image : IMAGE_URL + '/head/0.png';
     nickname.value = userInfo.nickname;
     index.value = roleType.value === 2 ? '0' : '1-1';

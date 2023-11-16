@@ -1,11 +1,14 @@
 <script setup lang="ts">
 
-import {ref, watch} from "vue";
+import {inject, ref, watch} from "vue";
 import {http} from "@/utils/http";
 import type {FormInstance} from "element-plus";
 import {ElMessage} from "element-plus";
 
 const props = defineProps(['categoryId', 'parentId', 'open', 'handleClose'])
+
+const role = inject("roleType");
+console.log(role.value);
 
 const drawOpen = ref(false);
 
@@ -126,7 +129,6 @@ const submitEdit = (form) => {
     }
   })
 }
-
 </script>
 
 <template>

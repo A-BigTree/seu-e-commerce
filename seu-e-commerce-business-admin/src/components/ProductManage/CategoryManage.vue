@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {ref, watch, inject} from 'vue';
 import {ElMessage, ElMessageBox, ElTable} from 'element-plus';
 import {http} from '@/utils/http';
 import router from '@/router/index'
@@ -17,6 +17,10 @@ interface ProdCategory {
   createTime: string,
   children: null
 }
+const role = inject("roleType");
+
+// TODO 角色为全局变量
+console.log(role.value);
 
 const tableRef = ref<InstanceType<typeof ElTable>>();
 
@@ -175,7 +179,6 @@ const updateCategory = (category: ProdCategory, action: number) => {
   }
   http(params);
 }
-
 </script>
 
 <template>
