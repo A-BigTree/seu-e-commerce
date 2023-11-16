@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class UpdateProdPropRequest implements BaseCrudRequest<ProdPropDTO> {
-    private Integer action;
+    private int action;
     private ProdPropDTO data;
 }

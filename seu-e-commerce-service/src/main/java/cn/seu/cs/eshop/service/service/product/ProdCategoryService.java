@@ -1,7 +1,6 @@
 package cn.seu.cs.eshop.service.service.product;
 
 import cn.seu.cs.eshop.service.sdk.product.category.req.*;
-import cn.seu.cs.eshop.service.sdk.product.req.*;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**

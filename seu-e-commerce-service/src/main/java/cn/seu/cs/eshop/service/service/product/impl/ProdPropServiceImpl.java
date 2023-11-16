@@ -83,7 +83,7 @@ public class ProdPropServiceImpl
         if (request.getAction() != DELETE.getType() && !CollectionUtils.isEmpty(data.getValue())) {
             List<ProductPropValueDO> origins = productPropValueDao.selectByPropId(data.getId(), data.getShopId());
             List<ProductPropValueDO> news = data.getValue().stream()
-                    .map(ProductCategoryConvert::convertDO)
+                    .map(value -> ProductCategoryConvert.convertDO(value, id))
                     .toList();
             prodPropValueManager.updateDiffEntities(news, origins);
         }

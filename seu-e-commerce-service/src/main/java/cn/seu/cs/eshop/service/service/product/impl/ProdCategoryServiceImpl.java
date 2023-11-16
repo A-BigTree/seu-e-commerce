@@ -8,7 +8,6 @@ import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryListDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.req.*;
-import cn.seu.cs.eshop.service.sdk.product.req.*;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
 import com.baomidou.mybatisplus.core.metadata.IPage;

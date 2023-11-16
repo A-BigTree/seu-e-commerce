@@ -52,11 +52,11 @@ public class ProductCategoryConvert {
         return entity;
     }
 
-    public static ProductPropValueDO convertDO(ProdPropValueDTO dto) {
+    public static ProductPropValueDO convertDO(ProdPropValueDTO dto, Long propId) {
         ProductPropValueDO entity = new ProductPropValueDO();
         entity.setId(dto.getId());
         entity.setShopId(dto.getShopId());
-        entity.setPropId(dto.getPropId());
+        entity.setPropId(dto.getPropId() > 0 ? dto.getPropId() : propId);
         entity.setValueName(dto.getValueName());
         return entity;
     }

@@ -74,7 +74,7 @@ public class ProdCategoryController {
     @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin
     @PostMapping("/prop/list")
-    public ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request, @AuthorUserInfo UserBaseDTO user) {
+    public ListPageProdPropResponse listPageProdProp(@RequestBody ListPageProdPropRequest request, @AuthorUserInfo UserBaseDTO user) {
         request.setShopId(getShopId(user));
         return eshopProdCategoryService.listPageProdProp(request);
     }
