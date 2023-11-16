@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.sdk.product.req;
+package cn.seu.cs.eshop.service.sdk.product.category.req;
 
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
 import lombok.Data;

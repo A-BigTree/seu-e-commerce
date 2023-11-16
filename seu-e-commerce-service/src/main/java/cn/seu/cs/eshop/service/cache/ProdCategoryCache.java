@@ -7,7 +7,6 @@ import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 import static cn.seu.cs.eshop.service.redis.ServiceRedisConfEnum.prodCategory;
@@ -26,7 +25,7 @@ public class ProdCategoryCache {
     public List<ProductCategoryDO> getCategory(Long shopId) {
         List<ProductCategoryDO> value = redisService.getListValue(shopId.toString(), prodCategory, ProductCategoryDO.class);
         if (CollectionUtils.isEmpty(value)) {
-            List<ProductCategoryDO> result = productCategoryDao.selectPageByShopId(shopId);
+            List<ProductCategoryDO> result = productCategoryDao.selectByShopId(shopId);
             if (!CollectionUtils.isEmpty(result)) {
                 redisService.setObjectValue(shopId.toString(), result, prodCategory);
             }

@@ -1,9 +1,10 @@
 package cn.seu.cs.eshop.service.rpc.product;
 
 import cn.seu.cs.eshop.common.aop.RpcMonitor;
-import cn.seu.cs.eshop.service.sdk.product.req.*;
+import cn.seu.cs.eshop.service.sdk.product.category.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdCategoryService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
+import cn.seu.cs.eshop.service.service.product.ProdPropService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -16,6 +17,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     @Resource
     ProdCategoryService prodCategoryService;
+    @Resource
+    ProdPropService prodPropService;
 
     @Override
     @RpcMonitor
@@ -44,18 +47,18 @@ public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     @Override
     @RpcMonitor
     public BaseResponse updateProdProp(UpdateProdPropRequest request) {
-        return null;
+        return prodPropService.updateProdProp(request);
     }
 
     @Override
     @RpcMonitor
     public ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request) {
-        return null;
+        return prodPropService.listPageProdProp(request);
     }
 
     @Override
     @RpcMonitor
     public GetProdPropResponse getProdProp(Long id, Long shopId) {
-        return null;
+        return prodPropService.getProdProp(id, shopId);
     }
 }

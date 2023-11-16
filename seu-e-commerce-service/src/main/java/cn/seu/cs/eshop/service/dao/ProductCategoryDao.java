@@ -7,11 +7,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
 import static cn.seu.cs.eshop.common.enums.ProdStatusEnum.VALID;
 
 /**
@@ -34,7 +31,7 @@ public interface ProductCategoryDao extends MysqlBaseDao<ProductCategoryDO> {
         return selectPage(page, buildShopIds(shopId, wrapper));
     }
 
-    default List<ProductCategoryDO> selectPageByShopId(Long shopId) {
+    default List<ProductCategoryDO> selectByShopId(Long shopId) {
         ProductCategoryDO entity = new ProductCategoryDO();
         entity.setStatus(VALID.getStatus());
         QueryWrapper<ProductCategoryDO> wrapper = new QueryWrapper<>(entity);

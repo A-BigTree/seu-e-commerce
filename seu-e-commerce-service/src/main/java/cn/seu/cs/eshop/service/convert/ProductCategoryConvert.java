@@ -4,9 +4,9 @@ import cn.seu.cs.eshop.common.util.TimeUtils;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
-import cn.seu.cs.eshop.service.sdk.product.dto.ProdCategoryDTO;
-import cn.seu.cs.eshop.service.sdk.product.dto.ProdPropDTO;
-import cn.seu.cs.eshop.service.sdk.product.dto.ProdPropValueDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropValueDTO;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;

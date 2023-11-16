@@ -1,18 +1,21 @@
 package cn.seu.cs.eshop.service.service.product.impl;
 
+import cn.seu.cs.eshop.common.exception.EshopException;
 import cn.seu.cs.eshop.service.convert.ProductCategoryConvert;
 import cn.seu.cs.eshop.service.dao.ProductPropDao;
 import cn.seu.cs.eshop.service.dao.ProductPropValueDao;
 import cn.seu.cs.eshop.service.manager.product.ProdPropValueManager;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
-import cn.seu.cs.eshop.service.sdk.product.dto.ProdPropDTO;
-import cn.seu.cs.eshop.service.sdk.product.req.GetProdPropResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdPropRequest;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdPropResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.UpdateProdPropRequest;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropsListDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.req.GetProdPropResponse;
+import cn.seu.cs.eshop.service.sdk.product.category.req.ListPageProdPropRequest;
+import cn.seu.cs.eshop.service.sdk.product.category.req.ListPageProdPropResponse;
+import cn.seu.cs.eshop.service.sdk.product.category.req.UpdateProdPropRequest;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
 import cn.seu.cs.eshop.service.service.product.ProdPropService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
@@ -23,8 +26,10 @@ import java.util.List;
 
 import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.DELETE;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildEffectEntity;
+import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDO;
+import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -87,12 +92,18 @@ public class ProdPropServiceImpl
 
     @Override
     public ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request) {
-        
-        return null;
+        IPage<ProductPropDO> records = productPropDao.selectPageByShopId(request.getShopId(), request.getPage());
+        ProdPropsListDTO data = buildPageData(ProdPropsListDTO.class, records, value -> convertDTO(value, null));
+        return buildSuccessResponse(ListPageProdPropResponse.class, data);
     }
 
     @Override
     public GetProdPropResponse getProdProp(Long id, Long shopId) {
-        return null;
+        ProductPropDO prop = productPropDao.selectById(id);
+        if (prop == null) {
+            throw new EshopException("属性不存在");
+        }
+        List<ProductPropValueDO> values = productPropValueDao.selectByPropId(prop.getId(), shopId);
+        return buildSuccessResponse(GetProdPropResponse.class, convertDTO(prop, values));
     }
 }

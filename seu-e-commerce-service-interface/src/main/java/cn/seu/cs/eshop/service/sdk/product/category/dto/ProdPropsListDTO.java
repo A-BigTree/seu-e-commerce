@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.sdk.product.dto;
+package cn.seu.cs.eshop.service.sdk.product.category.dto;
 
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageInterface;

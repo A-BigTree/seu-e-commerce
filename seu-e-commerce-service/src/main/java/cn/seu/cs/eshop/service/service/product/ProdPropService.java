@@ -1,9 +1,9 @@
 package cn.seu.cs.eshop.service.service.product;
 
-import cn.seu.cs.eshop.service.sdk.product.req.GetProdPropResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdPropRequest;
-import cn.seu.cs.eshop.service.sdk.product.req.ListPageProdPropResponse;
-import cn.seu.cs.eshop.service.sdk.product.req.UpdateProdPropRequest;
+import cn.seu.cs.eshop.service.sdk.product.category.req.GetProdPropResponse;
+import cn.seu.cs.eshop.service.sdk.product.category.req.ListPageProdPropRequest;
+import cn.seu.cs.eshop.service.sdk.product.category.req.ListPageProdPropResponse;
+import cn.seu.cs.eshop.service.sdk.product.category.req.UpdateProdPropRequest;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**

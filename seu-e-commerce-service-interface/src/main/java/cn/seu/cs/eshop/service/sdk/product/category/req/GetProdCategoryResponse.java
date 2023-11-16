@@ -1,6 +1,6 @@
-package cn.seu.cs.eshop.service.sdk.product.req;
+package cn.seu.cs.eshop.service.sdk.product.category.req;
 
-import cn.seu.cs.eshop.service.sdk.product.dto.ProdCategoryDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryDTO;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import lombok.Data;
 

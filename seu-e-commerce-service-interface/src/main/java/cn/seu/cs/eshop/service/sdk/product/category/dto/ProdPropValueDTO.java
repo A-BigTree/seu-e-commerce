@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.sdk.product.dto;
+package cn.seu.cs.eshop.service.sdk.product.category.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
