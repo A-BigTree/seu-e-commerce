@@ -50,7 +50,13 @@ watch(index, (newIndex) => {
         params: {
           parentId: 0
         }
-      })
+      });
+      return;
+    case '2-4':
+      router.push({
+        name: 'prod-prop-manage'
+      });
+      return;
   }
 })
 

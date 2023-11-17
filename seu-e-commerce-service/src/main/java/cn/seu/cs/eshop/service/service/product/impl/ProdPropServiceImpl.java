@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.DELETE;
+import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.INSERT;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildEffectEntity;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
@@ -85,7 +87,9 @@ public class ProdPropServiceImpl
             List<ProductPropValueDO> news = data.getValue().stream()
                     .map(value -> ProductCategoryConvert.convertDO(value, id))
                     .toList();
-            prodPropValueManager.updateDiffEntities(news, origins);
+            Map<Integer, List<ProductPropValueDO>> map = prodPropValueManager.listDiffEntities(news, origins);
+            map.get(INSERT.getType()).forEach(value -> value.setShopId(data.getShopId()));
+            prodPropValueManager.updateDiffEntities(map);
         }
         return buildSuccessResponse(BaseResponse.class, Long.toString(id));
     }

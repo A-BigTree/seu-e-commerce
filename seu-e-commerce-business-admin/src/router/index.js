@@ -21,6 +21,11 @@ const router = createRouter({
                     name: 'prod-category-manage',
                     component: () => import('@/components/ProductManage/CategoryManage.vue'),
                     props: true
+                },
+                {
+                    path: 'product/prop/manage',
+                    name: 'prod-prop-manage',
+                    component: () => import('@/components/ProductManage/PropManage.vue')
                 }
             ]
         },

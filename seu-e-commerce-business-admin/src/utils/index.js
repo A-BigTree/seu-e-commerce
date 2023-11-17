@@ -67,11 +67,26 @@ const getRegisterStateTag = (type) => {
     }
 }
 
+const getCreatorTag = (shopId) => {
+    if (shopId === 0) {
+        return {
+            name: '平台官方',
+            type: "warning"
+        };
+    } else {
+        return {
+            name: '自定义',
+            type: ""
+        };
+    }
+}
+
 export {
     loadingConfig,
     countDown,
     getRoleName,
     getRegisterStateName,
     getRoleTag,
-    getRegisterStateTag
+    getRegisterStateTag,
+    getCreatorTag,
 }

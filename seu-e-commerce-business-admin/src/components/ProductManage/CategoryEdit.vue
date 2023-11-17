@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {inject, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import {http} from "@/utils/http";
 import type {FormInstance} from "element-plus";
 import {ElMessage} from "element-plus";
@@ -140,7 +140,7 @@ const submitEdit = (form) => {
       <el-form :model="formData"
                :rules="formRule"
                ref="formRef"
-               @keyup.enter.native=""
+               @keyup.enter.native="submitEdit"
                status-icon>
         <el-form-item label="类别名称" prop="categoryName">
           <el-input type="text" v-model="formData.categoryName" style="width: 300px"/>

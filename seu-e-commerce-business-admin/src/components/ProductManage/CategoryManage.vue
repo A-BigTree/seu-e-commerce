@@ -19,8 +19,6 @@ interface ProdCategory {
 }
 const roleType = inject("roleType");
 
-// TODO 角色为全局变量
-
 const tableRef = ref<InstanceType<typeof ElTable>>();
 
 const page = ref({
