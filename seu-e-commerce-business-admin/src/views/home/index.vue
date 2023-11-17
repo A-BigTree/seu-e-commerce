@@ -48,8 +48,7 @@ watch(index, (newIndex) => {
       router.push({
         name: 'prod-category-manage',
         params: {
-          parentId: 0,
-          roleType: roleType.value
+          parentId: 0
         }
       })
   }

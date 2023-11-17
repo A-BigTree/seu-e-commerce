@@ -7,9 +7,6 @@ import {ElMessage} from "element-plus";
 
 const props = defineProps(['categoryId', 'parentId', 'open', 'handleClose'])
 
-const role = inject("roleType");
-console.log(role.value);
-
 const drawOpen = ref(false);
 
 const formData = ref({

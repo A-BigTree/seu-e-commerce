@@ -5,7 +5,7 @@ import {http} from '@/utils/http';
 import router from '@/router/index'
 import CategoryEdit from "@/components/ProductManage/CategoryEdit.vue";
 
-const props = defineProps(['parentId', 'roleType']);
+const props = defineProps(['parentId']);
 
 interface ProdCategory {
   id: number,
@@ -17,10 +17,9 @@ interface ProdCategory {
   createTime: string,
   children: null
 }
-const role = inject("roleType");
+const roleType = inject("roleType");
 
 // TODO 角色为全局变量
-console.log(role.value);
 
 const tableRef = ref<InstanceType<typeof ElTable>>();
 
@@ -96,7 +95,7 @@ const addCategory = () => {
 }
 
 const canEdit = (shopId) => {
-  return (shopId === 0 && props.roleType === '2');
+  return (shopId === 0 && roleType.value === 2);
 }
 
 const switchChange = (category: ProdCategory) => {
@@ -124,8 +123,7 @@ const switchCategory = (category: ProdCategory) => {
   router.push({
     name: 'prod-category-manage',
     params: {
-      parentId: category.id,
-      roleType: props.roleType
+      parentId: category.id
     }
   })
 }
@@ -218,13 +216,13 @@ const updateCategory = (category: ProdCategory, action: number) => {
           <el-button
               size="small"
               type="warning"
-              :disabled="scope.row.level === 1 || parseInt(roleType) === 3">
+              :disabled="scope.row.level === 1 || roleType === 3">
             绑定属性
           </el-button>
           <el-button
               size="small"
               type="success"
-              :disabled="scope.row.level === 1 || parseInt(roleType) === 3">
+              :disabled="scope.row.level === 1 || roleType === 3">
             绑定参数
           </el-button>
         </template>

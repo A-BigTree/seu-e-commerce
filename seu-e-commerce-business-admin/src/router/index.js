@@ -17,7 +17,7 @@ const router = createRouter({
                     component: () => import('@/components/ProductManage/ProductManage.vue')
                 },
                 {
-                    path: 'product/category/manage/:roleType/:parentId',
+                    path: 'product/category/manage/:parentId',
                     name: 'prod-category-manage',
                     component: () => import('@/components/ProductManage/CategoryManage.vue'),
                     props: true
