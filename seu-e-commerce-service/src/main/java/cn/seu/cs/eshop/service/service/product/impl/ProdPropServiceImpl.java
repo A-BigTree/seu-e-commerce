@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.DELETE;
 import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.INSERT;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildEffectEntity;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
@@ -92,7 +91,7 @@ public class ProdPropServiceImpl
 
     @Override
     public ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request) {
-        IPage<ProductPropDO> records = productPropDao.selectPageByShopId(request.getShopId(), request.getPage());
+        IPage<ProductPropDO> records = productPropDao.selectPageByShopId(request.getShopId(), request.getPropType(), request.getPage());
         ProdPropsListDTO data = buildPageData(ProdPropsListDTO.class, records, value -> convertDTO(value, null));
         return buildSuccessResponse(ListPageProdPropResponse.class, data);
     }

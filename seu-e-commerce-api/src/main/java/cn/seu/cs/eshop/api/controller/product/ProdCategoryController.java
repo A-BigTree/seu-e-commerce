@@ -82,7 +82,26 @@ public class ProdCategoryController {
     @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin
     @GetMapping("/prop/get")
-    public GetProdPropResponse getProdProp(@RequestParam("id") Long id, @AuthorUserInfo UserBaseDTO user) {
+    public GetProdPropResponse getProdProp(@RequestParam("id") Long id,
+                                           @AuthorUserInfo UserBaseDTO user) {
         return eshopProdCategoryService.getProdProp(id, getShopId(user));
+    }
+
+    @ApiMonitor(roleType = BUSINESS)
+    @CrossOrigin
+    @GetMapping("/props/get")
+    public GetProdCategoryPropResponse getProdCategoryProp(@RequestParam("id") Long categoryId,
+                                                           @RequestParam("type") Integer propType,
+                                                           @AuthorUserInfo UserBaseDTO user) {
+        return eshopProdCategoryService.getProdCategoryProp(categoryId, getShopId(user), propType);
+    }
+
+    @ApiMonitor(roleType = BUSINESS)
+    @CrossOrigin
+    @PostMapping("/props/update")
+    public BaseResponse updateCategoryProps(@RequestBody UpdateProdCategoryPropRequest request,
+                                            @AuthorUserInfo UserBaseDTO user) {
+        request.setShopId(getShopId(user));
+        return eshopProdCategoryService.updateProdCategoryProp(request);
     }
 }

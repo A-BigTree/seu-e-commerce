@@ -8,6 +8,8 @@ import lombok.Getter;
  */
 @Getter
 public enum ProdPropTypeEnum {
+    // 全部 用于搜索
+    DEFAULT(-1),
     // 规格属性
     SPECIFICATION_PROP(1),
     // 参数属性

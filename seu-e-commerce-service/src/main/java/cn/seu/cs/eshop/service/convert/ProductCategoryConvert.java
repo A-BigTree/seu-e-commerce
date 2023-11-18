@@ -2,9 +2,11 @@ package cn.seu.cs.eshop.service.convert;
 
 import cn.seu.cs.eshop.common.util.TimeUtils;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;
+import cn.seu.cs.eshop.service.pojo.db.ProductCategoryPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryDTO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropValueDTO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -87,5 +89,15 @@ public class ProductCategoryConvert {
                 .valueName(value.getValueName())
                 .createTime(TimeUtils.convertString(value.getCreateTime(), DATE_TIME_FORMAT))
                 .build();
+    }
+
+    public static ProductCategoryPropDO convertDO(ProdCategoryPropDTO dto, Long shopId) {
+        ProductCategoryPropDO entity = new ProductCategoryPropDO();
+        entity.setId(dto.getId() > 0 ? dto.getId() : null);
+        entity.setCategoryId(dto.getCategoryId());
+        entity.setPropId(dto.getPropId());
+        entity.setShopId(shopId);
+        entity.setPropType(dto.getPropType());
+        return entity;
     }
 }

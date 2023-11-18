@@ -12,5 +12,6 @@ import java.io.Serializable;
 @Data
 public class ListPageProdPropRequest implements Serializable {
     private Long shopId;
+    private Integer propType;
     private PageDTO page;
 }

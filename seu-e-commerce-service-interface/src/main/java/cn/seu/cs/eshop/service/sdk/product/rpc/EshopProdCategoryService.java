@@ -15,4 +15,6 @@ public interface EshopProdCategoryService {
     BaseResponse updateProdProp(UpdateProdPropRequest request);
     ListPageProdPropResponse listPageProdProp(ListPageProdPropRequest request);
     GetProdPropResponse getProdProp(Long id, Long shopId);
+    GetProdCategoryPropResponse getProdCategoryProp(Long id, Long shopId, Integer propType);
+    BaseResponse updateProdCategoryProp(UpdateProdCategoryPropRequest request);
 }

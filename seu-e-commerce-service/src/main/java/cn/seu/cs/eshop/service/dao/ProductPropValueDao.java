@@ -18,10 +18,17 @@ public interface ProductPropValueDao extends MysqlBaseDao<ProductPropValueDO> {
         return selectList(buildShopIds(shopId, wrapper));
     }
 
-    default int deleteByPropId(Long propId) {
+    default void deleteByPropId(Long propId) {
         ProductPropValueDO entity = new ProductPropValueDO();
         entity.setPropId(propId);
         QueryWrapper<ProductPropValueDO> wrapper = new QueryWrapper<>(entity);
-        return delete(wrapper);
+        delete(wrapper);
+    }
+
+    default List<ProductPropValueDO> selectByBatchPropIds(List<Long> propIds, Long shopId) {
+        ProductPropValueDO entity = new ProductPropValueDO();
+        QueryWrapper<ProductPropValueDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.in("prop_id", propIds);
+        return selectList(buildShopIds(shopId, wrapper));
     }
 }

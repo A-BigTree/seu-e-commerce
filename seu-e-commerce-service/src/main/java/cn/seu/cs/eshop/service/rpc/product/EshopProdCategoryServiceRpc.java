@@ -3,6 +3,7 @@ package cn.seu.cs.eshop.service.rpc.product;
 import cn.seu.cs.eshop.common.aop.RpcMonitor;
 import cn.seu.cs.eshop.service.sdk.product.category.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdCategoryService;
+import cn.seu.cs.eshop.service.service.product.ProdCategoryPropService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryService;
 import cn.seu.cs.eshop.service.service.product.ProdPropService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -19,6 +20,8 @@ public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     ProdCategoryService prodCategoryService;
     @Resource
     ProdPropService prodPropService;
+    @Resource
+    ProdCategoryPropService prodCategoryPropService;
 
     @Override
     @RpcMonitor
@@ -60,5 +63,17 @@ public class EshopProdCategoryServiceRpc implements EshopProdCategoryService {
     @RpcMonitor
     public GetProdPropResponse getProdProp(Long id, Long shopId) {
         return prodPropService.getProdProp(id, shopId);
+    }
+
+    @Override
+    @RpcMonitor
+    public GetProdCategoryPropResponse getProdCategoryProp(Long id, Long shopId, Integer propType) {
+        return prodCategoryPropService.getProdCategoryProp(id, shopId, propType);
+    }
+
+    @Override
+    @RpcMonitor
+    public BaseResponse updateProdCategoryProp(UpdateProdCategoryPropRequest request) {
+        return prodCategoryPropService.updateProdCategoryProp(request);
     }
 }

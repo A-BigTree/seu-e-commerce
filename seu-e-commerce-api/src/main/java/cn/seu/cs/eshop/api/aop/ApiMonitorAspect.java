@@ -21,7 +21,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 import static cn.seu.cs.eshop.api.constants.ApiConstants.AUTHORIZATION_HEADER;
 
@@ -68,7 +67,7 @@ public class ApiMonitorAspect {
             boolean flag = false;
             for (UserRoleEnum role : apiMonitor.roleType()) {
                 if (role == UserRoleEnum.DEFAULT ||
-                        Objects.equals(user.getRoleType(), role.getValue()) ||
+                        user.getRoleType() == role.getValue() ||
                         user.getRoleType() == UserRoleEnum.ADMIN.getValue()) {
                     flag = true;
                     break;
@@ -82,7 +81,7 @@ public class ApiMonitorAspect {
             // 刷新状态
             userTokenCache.setUserTokenInfo(token, user);
         }
-        // 请求统计
+        // TODO 请求统计
         try {
             return joinPoint.proceed();
         } catch (Throwable e) {
