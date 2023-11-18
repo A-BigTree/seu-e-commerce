@@ -58,20 +58,16 @@ public class ProdPropServiceImpl
 
     @Override
     public long delete(ProdPropDTO data) {
-        List<ProductPropValueDO> values = productPropValueDao.selectByPropId(data.getId(), data.getShopId());
-        List<Long> ids = values.stream()
-                .map(ProductPropValueDO::getId)
-                .toList();
-        if (!CollectionUtils.isEmpty(ids)) {
-            productPropValueDao.deleteBatchIds(ids);
-        }
+        productPropValueDao.deleteByPropId(data.getId());
         productPropDao.deleteById(data.getId());
         return data.getId();
     }
 
     @Override
     public long update(ProdPropDTO data) {
+        ProductPropDO origin = productPropDao.selectById(data.getId());
         ProductPropDO entity = convertDO(data);
+        entity.setShopId(origin.getShopId());
         productPropDao.updateById(entity);
         return entity.getId();
     }
@@ -82,7 +78,7 @@ public class ProdPropServiceImpl
         long id = crudOperation(request);
         ProdPropDTO data = request.getData();
         // 更新属性值
-        if (request.getAction() != DELETE.getType() && !CollectionUtils.isEmpty(data.getValue())) {
+        if (!CollectionUtils.isEmpty(data.getValue())) {
             List<ProductPropValueDO> origins = productPropValueDao.selectByPropId(data.getId(), data.getShopId());
             List<ProductPropValueDO> news = data.getValue().stream()
                     .map(value -> ProductCategoryConvert.convertDO(value, id))

@@ -17,4 +17,11 @@ public interface ProductPropValueDao extends MysqlBaseDao<ProductPropValueDO> {
         QueryWrapper<ProductPropValueDO> wrapper = new QueryWrapper<>(entity);
         return selectList(buildShopIds(shopId, wrapper));
     }
+
+    default int deleteByPropId(Long propId) {
+        ProductPropValueDO entity = new ProductPropValueDO();
+        entity.setPropId(propId);
+        QueryWrapper<ProductPropValueDO> wrapper = new QueryWrapper<>(entity);
+        return delete(wrapper);
+    }
 }

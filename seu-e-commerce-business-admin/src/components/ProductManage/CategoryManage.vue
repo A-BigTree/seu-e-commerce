@@ -104,7 +104,7 @@ const switchChange = (category: ProdCategory) => {
 const deleteCategory = (category: ProdCategory) => {
   ElMessageBox.confirm(
       "确认删除该类目?",
-      "warning",
+      "删除确定",
       {
         confirmButtonText: "确认",
         cancelButtonText: "取消",

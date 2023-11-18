@@ -67,7 +67,9 @@ public class ApiMonitorAspect {
             // 权限鉴别
             boolean flag = false;
             for (UserRoleEnum role : apiMonitor.roleType()) {
-                if (role == UserRoleEnum.DEFAULT || Objects.equals(user.getRoleType(), role.getValue())) {
+                if (role == UserRoleEnum.DEFAULT ||
+                        Objects.equals(user.getRoleType(), role.getValue()) ||
+                        user.getRoleType() == UserRoleEnum.ADMIN.getValue()) {
                     flag = true;
                     break;
                 }

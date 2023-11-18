@@ -44,7 +44,7 @@ public class ProductCategoryConvert {
 
     public static ProductPropDO convertDO(ProdPropDTO dto) {
         ProductPropDO entity = new ProductPropDO();
-        entity.setId(dto.getId());
+        entity.setId(dto.getId() > 0 ? dto.getId() : null);
         entity.setPropName(dto.getPropName());
         entity.setPropType(dto.getPropType());
         entity.setSelfAdd(dto.getSelfAdd());
@@ -54,7 +54,7 @@ public class ProductCategoryConvert {
 
     public static ProductPropValueDO convertDO(ProdPropValueDTO dto, Long propId) {
         ProductPropValueDO entity = new ProductPropValueDO();
-        entity.setId(dto.getId());
+        entity.setId(dto.getId() > 0 ? dto.getId() : null);
         entity.setShopId(dto.getShopId());
         entity.setPropId(dto.getPropId() > 0 ? dto.getPropId() : propId);
         entity.setValueName(dto.getValueName());

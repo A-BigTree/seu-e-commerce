@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {inject, ref} from "vue";
-import {ElTable} from "element-plus";
+import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import {http} from '@/utils/http';
 import {getCreatorTag} from '@/utils';
 import PropEdit from "@/components/ProductManage/PropEdit.vue";
@@ -116,6 +116,40 @@ const editProp = (id) => {
   drawParams.value.open = true;
 }
 
+const deleteProp = (id) => {
+  ElMessageBox.confirm(
+      "确认删除该类目?",
+      "删除确定",
+      {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "danger",
+      }
+  ).then(() => {
+    const param = {
+      url: "/product/category/prop/update",
+      data: {
+        action: 2,
+        data: {
+          id: id,
+          createTime: '',
+          value: []
+        }
+      },
+      callBack: (res) => {
+        ElMessage({
+          message: "删除成功",
+          type: "success"
+        });
+        listData();
+      }
+    };
+    http(param);
+  }).catch(() => {
+
+  })
+}
+
 </script>
 
 <template>
@@ -162,14 +196,13 @@ const editProp = (id) => {
           <el-button
               type="default"
               size="small"
-              @click="editProp(scope.row.id)"
-              :disabled="canEdit(scope.row.shopId)">
+              @click="editProp(scope.row.id)">
             编辑
           </el-button>
           <el-button
               type="danger"
               size="small"
-              @click=""
+              @click="deleteProp(scope.row.id)"
               :disabled="canEdit(scope.row.shopId)">
             删除
           </el-button>
@@ -194,5 +227,7 @@ const editProp = (id) => {
 </template>
 
 <style scoped>
-
+.page {
+  margin-top: 10px;
+}
 </style>

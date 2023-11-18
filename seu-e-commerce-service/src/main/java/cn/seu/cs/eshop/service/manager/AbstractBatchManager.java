@@ -42,7 +42,7 @@ public abstract class AbstractBatchManager<DO extends MysqlBaseDO, Dao extends M
         Set<Long> exist = new HashSet<>();
         List<DO> update = newDO.stream()
                 .filter(value -> {
-                    if (value.getId() > 0) {
+                    if (value.getId() != null && value.getId() > 0) {
                         exist.add(value.getId());
                         return true;
                     } else {
