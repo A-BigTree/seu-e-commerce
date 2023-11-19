@@ -20,6 +20,6 @@ public interface ProductPropDao extends MysqlBaseDao<ProductPropDO> {
         if (propType != null && propType != DEFAULT.getType()) {
             entity.setPropType(propType);
         }
-        return selectPage(page, buildShopIds(shopId, new QueryWrapper<>(new ProductPropDO())));
+        return selectPage(page, buildShopIds(shopId, new QueryWrapper<>(entity)));
     }
 }
