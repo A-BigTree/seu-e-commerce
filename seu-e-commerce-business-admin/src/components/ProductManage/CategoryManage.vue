@@ -4,6 +4,7 @@ import {ElMessage, ElMessageBox, ElTable} from 'element-plus';
 import {http} from '@/utils/http';
 import router from '@/router/index'
 import CategoryEdit from "@/components/ProductManage/CategoryEdit.vue";
+import CategoryPropsEdit from "@/components/ProductManage/CategoryPropsEdit.vue";
 
 const props = defineProps(['parentId']);
 
@@ -175,6 +176,23 @@ const updateCategory = (category: ProdCategory, action: number) => {
   }
   http(params);
 }
+
+const drawParams2 = ref({
+  categoryId: 0,
+  propType: 0,
+  open: false
+})
+
+const editCategoryProp = (categoryId, propType) => {
+  drawParams2.value.categoryId = categoryId;
+  drawParams2.value.propType = propType;
+  drawParams2.value.open = true;
+}
+
+const handleClose2 = () => {
+  drawParams2.value.open = false;
+}
+
 </script>
 
 <template>
@@ -213,13 +231,15 @@ const updateCategory = (category: ProdCategory, action: number) => {
           </el-button>
           <el-button
               size="small"
+              @click="editCategoryProp(scope.row.id, 1)"
               type="warning"
               :disabled="scope.row.level === 1 || roleType === 3">
-            绑定属性
+            绑定规格
           </el-button>
           <el-button
               size="small"
               type="success"
+              @click="editCategoryProp(scope.row.id, 2)"
               :disabled="scope.row.level === 1 || roleType === 3">
             绑定参数
           </el-button>
@@ -269,8 +289,15 @@ const updateCategory = (category: ProdCategory, action: number) => {
                    :total="page.total"/>
   </el-card>
 
-  <CategoryEdit :category-id="drawParams.categoryId" :parent-id="drawParams.parentId" :open="openEdit"
+  <CategoryEdit :category-id="drawParams.categoryId"
+                :parent-id="drawParams.parentId"
+                :open="openEdit"
                 :handle-close="handleClose"/>
+
+  <CategoryPropsEdit :category-id="drawParams2.categoryId"
+                     :prop-type="drawParams2.propType"
+                     :open="drawParams2.open"
+                     :handle-close="handleClose2"/>
 </template>
 
 <style scoped>

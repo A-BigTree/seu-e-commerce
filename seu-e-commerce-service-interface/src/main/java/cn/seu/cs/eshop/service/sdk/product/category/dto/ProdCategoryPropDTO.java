@@ -22,4 +22,5 @@ public class ProdCategoryPropDTO implements Serializable {
     private Long propId;
     private Long shopId;
     private Integer propType;
+    private ProdPropDTO prop;
 }

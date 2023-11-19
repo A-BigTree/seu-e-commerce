@@ -100,4 +100,14 @@ public class ProductCategoryConvert {
         entity.setPropType(dto.getPropType());
         return entity;
     }
+
+    public static ProdCategoryPropDTO convertDTO(ProductCategoryPropDO value, ProdPropDTO prop) {
+        return ProdCategoryPropDTO.builder()
+                .id(value.getId())
+                .categoryId(value.getCategoryId())
+                .propType(value.getPropType())
+                .propId(value.getPropId())
+                .prop(prop)
+                .build();
+    }
 }

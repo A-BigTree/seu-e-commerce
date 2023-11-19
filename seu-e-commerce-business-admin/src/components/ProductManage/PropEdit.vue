@@ -31,7 +31,6 @@ const formData = ref({
   ]
 });
 
-
 const init = () => {
   formData.value = {
     action: 1,
@@ -150,7 +149,7 @@ const submitEdit = (form) => {
       v-model="drawOpen"
       direction="rtl"
       @close="props.handleClose">
-    <el-card shadow="always">
+    <el-card>
       <template #header>
         {{ parseInt(propId) === 0 ? '添加商品属性' : '编辑商品属性' }}
       </template>

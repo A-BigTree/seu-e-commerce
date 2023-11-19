@@ -8,6 +8,7 @@ import cn.seu.cs.eshop.service.manager.product.ProdCategoryPropManager;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
+import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdCategoryPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.dto.ProdPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.category.req.GetProdCategoryPropResponse;
 import cn.seu.cs.eshop.service.sdk.product.category.req.UpdateProdCategoryPropRequest;
@@ -18,9 +19,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDO;
@@ -63,9 +62,14 @@ public class ProdCategoryPropServiceImpl implements ProdCategoryPropService {
         // propId -> list(value)
         Map<Long, List<ProductPropValueDO>> mapValues = propValues.stream()
                 .collect(groupingBy(ProductPropValueDO::getPropId));
-        // 构建结果
-        List<ProdPropDTO> data = props.stream()
+        // propId -> prop
+        Map<Long, ProdPropDTO> propMap = new HashMap<>();
+        props.stream()
                 .map(prop -> convertDTO(prop, mapValues.getOrDefault(prop.getId(), null)))
+                .forEach(value -> propMap.put(value.getId(), value));
+        // 构建结果
+        List<ProdCategoryPropDTO> data = categoryProps.stream()
+                .map(value -> convertDTO(value, propMap.getOrDefault(value.getPropId(), null)))
                 .toList();
         return buildSuccessResponse(GetProdCategoryPropResponse.class, data);
     }
@@ -73,15 +77,27 @@ public class ProdCategoryPropServiceImpl implements ProdCategoryPropService {
     @Override
     @Transactional
     public BaseResponse updateProdCategoryProp(UpdateProdCategoryPropRequest request) {
-        List<ProductCategoryPropDO> origins = productCategoryPropDao.selectByCategoryId(request.getCategoryId(),
-                request.getShopId(), request.getPropType());
+
         List<ProductCategoryPropDO> news = new ArrayList<>();
         if (!CollectionUtils.isEmpty(request.getProps())) {
+            checkDuplication(request.getProps());
             news = request.getProps().stream()
                     .map(value -> convertDO(value, request.getShopId()))
                     .toList();
         }
+        List<ProductCategoryPropDO> origins = productCategoryPropDao.selectByCategoryId(request.getCategoryId(),
+                request.getShopId(), request.getPropType());
         prodCategoryPropManager.updateDiffEntities(news, origins);
         return buildSuccessResponse(BaseResponse.class, "OK");
+    }
+
+    private void checkDuplication(List<ProdCategoryPropDTO> data) {
+        HashSet<Long> set = new HashSet<>();
+        data.forEach(value -> {
+            if (set.contains(value.getPropId())) {
+                throw new EshopException("绑定属性存在重复请重试");
+            }
+            set.add(value.getPropId());
+        });
     }
 }
