@@ -5,7 +5,7 @@ Since 2023.10.09
 - 👨‍💻Xinhe-Li  📫lixinhe669@gmail.com
 - 👨‍💻Shuxin-Wang  📫shuxinwang662@gmail.com
 - 👨‍💻Yibin-Shen 📫-@-
-- 👨‍💻Linjie-Xu    📫-@-
+- 👨‍💻Linjie-Xu    📫xulingjie_seu@163.com
 - 👨‍💻Jincheng-Li  📫1635461341@qq.com
 
 ---
