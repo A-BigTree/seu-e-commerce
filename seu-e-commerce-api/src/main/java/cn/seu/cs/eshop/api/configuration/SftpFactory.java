@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.configuration;
+package cn.seu.cs.eshop.api.configuration;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;

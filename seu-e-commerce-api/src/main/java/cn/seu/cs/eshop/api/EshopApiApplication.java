@@ -8,7 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/16
  */
-@SpringBootApplication(scanBasePackages = {"cn.seu.cs.eshop.common","cn.seu.cs.eshop.api"})
+@SpringBootApplication(scanBasePackages = {
+        "cn.seu.cs.eshop.common.component",
+        "cn.seu.cs.eshop.common.configuration",
+        "cn.seu.cs.eshop.api"
+})
 @EnableDubbo
 public class EshopApiApplication {
     public static void main(String[] args) {

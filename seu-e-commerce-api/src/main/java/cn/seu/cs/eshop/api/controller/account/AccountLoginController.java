@@ -8,7 +8,7 @@ import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.cache.UserTokenCache;
 import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
-import cn.seu.cs.eshop.common.component.SftpUtil;
+import cn.seu.cs.eshop.api.component.SftpUtil;
 import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
 import cn.seu.cs.eshop.common.util.TimeUtils;

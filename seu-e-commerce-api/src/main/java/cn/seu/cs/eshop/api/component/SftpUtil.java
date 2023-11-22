@@ -1,6 +1,6 @@
-package cn.seu.cs.eshop.common.component;
+package cn.seu.cs.eshop.api.component;
 
-import cn.seu.cs.eshop.common.configuration.SftpGenericObjectPool;
+import cn.seu.cs.eshop.api.configuration.SftpGenericObjectPool;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
 import jakarta.annotation.Resource;

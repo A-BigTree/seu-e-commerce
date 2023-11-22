@@ -1,6 +1,5 @@
-package cn.seu.cs.eshop.common.configuration;
+package cn.seu.cs.eshop.api.configuration;
 
-import cn.seu.cs.eshop.common.configuration.SftpFactory;
 import com.jcraft.jsch.ChannelSftp;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
