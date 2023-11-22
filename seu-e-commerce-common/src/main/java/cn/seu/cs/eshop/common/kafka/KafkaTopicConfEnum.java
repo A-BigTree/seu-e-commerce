@@ -10,6 +10,9 @@ import lombok.Getter;
 @Getter
 public enum KafkaTopicConfEnum {
 
+
+
+
     ;
     private final String topic;
 
