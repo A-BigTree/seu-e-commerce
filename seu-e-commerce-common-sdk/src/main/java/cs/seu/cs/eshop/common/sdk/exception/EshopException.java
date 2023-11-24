@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.exception;
+package cs.seu.cs.eshop.common.sdk.exception;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.service.convert;
 
-import cn.seu.cs.eshop.common.util.TimeUtils;
+import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryPropDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropDO;
@@ -14,7 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.seu.cs.eshop.common.util.TimeUtils.DATE_TIME_FORMAT;
+import static cs.seu.cs.eshop.common.sdk.util.TimeUtils.DATE_TIME_FORMAT;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

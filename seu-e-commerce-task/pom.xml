@@ -13,19 +13,47 @@
     <artifactId>seu-e-commerce-task</artifactId>
     <dependencies>
         <dependency>
-            <groupId>cn.seu.cs.eshop.common</groupId>
-            <artifactId>seu-e-commerce-common</artifactId>
+            <groupId>cn.seu.cs.eshop.service</groupId>
+            <artifactId>seu-e-commerce-service</artifactId>
             <version>${eshop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>cn.seu.cs.eshop.service.sdk</groupId>
+                    <artifactId>seu-e-commerce-service-interface</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.dubbo</groupId>
+                    <artifactId>dubbo-spring-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.dubbo</groupId>
+                    <artifactId>dubbo</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                    <!-- 指定该Main Class为全局的唯一入口 -->
+                    <mainClass>cn.seu.cs.eshop.task.EshopTaskApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

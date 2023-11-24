@@ -20,12 +20,12 @@ import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoRequest;
 import cn.seu.cs.eshop.account.sdk.entity.req.ListRegisterInfoResponse;
 import cn.seu.cs.eshop.account.sdk.entity.req.UpdateRegisterStateRequest;
 import cn.seu.cs.eshop.account.service.UserInfoService;
-import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
-import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cs.seu.cs.eshop.common.sdk.enums.RegisterStateEnum;
+import cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum;
 import cn.seu.cs.eshop.common.nacos.ShopConf;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
-import cn.seu.cs.eshop.common.util.RandomGenerateUtils;
-import cn.seu.cs.eshop.common.util.TimeUtils;
+import cs.seu.cs.eshop.common.sdk.util.RandomGenerateUtils;
+import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
@@ -39,8 +39,8 @@ import static cn.seu.cs.eshop.account.constants.AccountConstants.*;
 import static cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum.emailReviewContext;
 import static cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum.pwdGenerateConfig;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
-import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildFailResponse;
-import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
+import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildFailResponse;
+import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
-import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildFailResponse;
-import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
+import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildFailResponse;
+import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDO;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 import static java.util.stream.Collectors.groupingBy;

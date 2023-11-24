@@ -8,7 +8,7 @@ import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
-import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;

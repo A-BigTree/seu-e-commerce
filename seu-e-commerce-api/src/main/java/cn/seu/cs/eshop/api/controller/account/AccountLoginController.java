@@ -10,8 +10,8 @@ import cn.seu.cs.eshop.api.constants.ApiConstants;
 import cn.seu.cs.eshop.api.dto.UserBaseDTO;
 import cn.seu.cs.eshop.api.component.SftpUtil;
 import cn.seu.cs.eshop.common.util.JsonUtils;
-import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
-import cn.seu.cs.eshop.common.util.TimeUtils;
+import cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils;
+import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import static cn.seu.cs.eshop.api.constants.ApiConstants.*;
-import static cn.seu.cs.eshop.common.enums.ResponseStateEnum.OK;
-import static cn.seu.cs.eshop.common.enums.ResponseStateEnum.OTHER_ERROR;
+import static cs.seu.cs.eshop.common.sdk.enums.ResponseStateEnum.OK;
+import static cs.seu.cs.eshop.common.sdk.enums.ResponseStateEnum.OTHER_ERROR;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

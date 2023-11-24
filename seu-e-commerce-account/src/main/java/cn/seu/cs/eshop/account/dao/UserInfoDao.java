@@ -2,7 +2,7 @@ package cn.seu.cs.eshop.account.dao;
 
 import cn.seu.cs.eshop.account.pojo.db.UserInfoDO;
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
-import cn.seu.cs.eshop.common.enums.RegisterStateEnum;
+import cs.seu.cs.eshop.common.sdk.enums.RegisterStateEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;

@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.service.service.product.impl;
 
-import cn.seu.cs.eshop.common.exception.EshopException;
+import cs.seu.cs.eshop.common.sdk.exception.EshopException;
 import cn.seu.cs.eshop.service.convert.ProductCategoryConvert;
 import cn.seu.cs.eshop.service.dao.ProductPropDao;
 import cn.seu.cs.eshop.service.dao.ProductPropValueDao;
@@ -25,10 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.INSERT;
+import static cs.seu.cs.eshop.common.sdk.enums.CrudOperationTypeEnum.INSERT;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildEffectEntity;
 import static cn.seu.cs.eshop.common.util.MysqlUtils.buildPageData;
-import static cn.seu.cs.eshop.common.util.ResponseBuilderUtils.buildSuccessResponse;
+import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDO;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 

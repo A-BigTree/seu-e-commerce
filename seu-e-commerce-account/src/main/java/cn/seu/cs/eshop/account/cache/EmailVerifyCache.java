@@ -4,7 +4,7 @@ import cn.seu.cs.eshop.account.dao.EmailVerifyDao;
 import cn.seu.cs.eshop.account.nacos.AccountNacosConfEnum;
 import cn.seu.cs.eshop.common.nacos.ShopConf;
 import cn.seu.cs.eshop.common.redis.RedisService;
-import cn.seu.cs.eshop.common.util.TimeUtils;
+import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import cn.seu.cs.eshop.account.pojo.db.EmailVerifyDO;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;

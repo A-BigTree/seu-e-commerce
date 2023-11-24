@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static cn.seu.cs.eshop.common.enums.CrudOperationTypeEnum.*;
+import static cs.seu.cs.eshop.common.sdk.enums.CrudOperationTypeEnum.*;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

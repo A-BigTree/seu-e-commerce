@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-import static cn.seu.cs.eshop.common.enums.ProdStatusEnum.VALID;
+import static cs.seu.cs.eshop.common.sdk.enums.ProdStatusEnum.VALID;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

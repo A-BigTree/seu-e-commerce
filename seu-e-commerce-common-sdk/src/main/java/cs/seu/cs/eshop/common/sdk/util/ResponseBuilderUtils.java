@@ -1,21 +1,18 @@
-package cn.seu.cs.eshop.common.util;
+package cs.seu.cs.eshop.common.sdk.util;
 
-import cn.seu.cs.eshop.common.enums.ResponseStateEnum;
+import cs.seu.cs.eshop.common.sdk.enums.ResponseStateEnum;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/10/19
  */
-@Slf4j
 public class ResponseBuilderUtils {
     public static <D, T extends BaseResponseInterface<D>> T buildResponse(Class<T> clazz, ResponseStateEnum responseState, D data) {
-        T response = null;
+        T response;
         try {
             response = clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            log.error("build fail. e:", e);
             return null;
         }
         response.setCode(responseState.getCode());

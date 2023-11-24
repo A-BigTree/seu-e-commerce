@@ -1,7 +1,6 @@
 package cn.seu.cs.eshop.common.util;
 
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDO;
-import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static cn.seu.cs.eshop.common.enums.DeletedStateEnum.UNDELETED;
+import static cs.seu.cs.eshop.common.sdk.enums.DeletedStateEnum.UNDELETED;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

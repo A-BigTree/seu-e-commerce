@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.common.component;
 
-import cn.seu.cs.eshop.common.exception.EshopException;
-import cn.seu.cs.eshop.common.util.ResponseBuilderUtils;
+import cs.seu.cs.eshop.common.sdk.exception.EshopException;
+import cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponseInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

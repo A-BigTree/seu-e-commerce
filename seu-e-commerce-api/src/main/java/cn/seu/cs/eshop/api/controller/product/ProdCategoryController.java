@@ -10,8 +10,8 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
 import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
-import static cn.seu.cs.eshop.common.enums.UserRoleEnum.BUSINESS;
-import static cn.seu.cs.eshop.common.enums.UserRoleEnum.PLATFORM;
+import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.BUSINESS;
+import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.PLATFORM;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

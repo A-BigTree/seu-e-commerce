@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.api.annotation;
 
-import cn.seu.cs.eshop.common.enums.UserRoleEnum;
+import cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum;
 
 import java.lang.annotation.*;
 

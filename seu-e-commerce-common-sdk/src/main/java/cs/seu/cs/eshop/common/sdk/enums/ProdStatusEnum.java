@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.enums;
+package cs.seu.cs.eshop.common.sdk.enums;
 
 import lombok.Getter;
 

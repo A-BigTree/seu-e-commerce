@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.common.util;
+package cs.seu.cs.eshop.common.sdk.util;
 
 
 import java.security.SecureRandom;
