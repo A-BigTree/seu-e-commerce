@@ -67,10 +67,6 @@ public class UserLoginServiceImpl implements UserLoginService {
             return ResponseBuilderUtils.buildResponse(BaseResponse.class,
                     ResponseStateEnum.OPERATION_ERROR, AccountConstants.VERIFY_CODE_RETRY_ERROR);
         }
-        String from = request.getFromEmail();
-        if (StringUtils.isEmpty(from)) {
-            from = eshopConfService.getConfig(AccountNacosConfEnum.fromEmail);
-        }
         int length = eshopConfService.getConfigObject(AccountNacosConfEnum.emailVerifyLength, Integer.class);
         String symbols = eshopConfService.getConfig(AccountNacosConfEnum.emailVerifySymbols);
         String verifyCode = RandomGenerateUtils.generateCode(symbols, length);
@@ -85,7 +81,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         entity.setVerifyCode(verifyCode);
         emailVerifyDao.insert(entity);
         emailVerifyCache.setEmailVerifyDO(entity);
-        emailSendManager.sendEmail(from, request.getToEmail(), "注册验证码", context);
+        emailSendManager.sendEmail("", request.getToEmail(), "注册验证码", context);
         return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, AccountConstants.VERIFY_CODE_SEND_SUCCESS);
     }
 

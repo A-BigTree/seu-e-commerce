@@ -19,7 +19,6 @@ public class EshopKafkaSendServiceImpl implements EshopKafkaSendService {
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
-
     @Override
     public CompletableFuture<SendResult<String, String>> sendMessage(String topic, String key, String message) {
         return StringUtils.isEmpty(key) ?
@@ -29,9 +28,9 @@ public class EshopKafkaSendServiceImpl implements EshopKafkaSendService {
 
     @Override
     public void defaultFuture(CompletableFuture<SendResult<String, String>> result) {
-        result.thenAccept(res -> log.info("Send successfully: {}", res.getProducerRecord()));
+        result.thenAccept(res -> log.info("Message send successfully: {}", res.getProducerRecord()));
         result.exceptionally(e -> {
-            log.error("Send error, e:", e);
+            log.error("Message send error, e:", e);
             return null;
         });
     }

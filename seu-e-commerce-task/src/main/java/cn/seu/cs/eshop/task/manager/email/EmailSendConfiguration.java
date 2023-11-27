@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static cn.seu.cs.eshop.task.nacos.TaskNacosConfEnum.emailSendClientConf;
 
@@ -27,7 +28,7 @@ public class EmailSendConfiguration {
     @Resource
     private EshopConfService eshopConfService;
     private JavaMailSenderImpl javaMailSender;
-    private static boolean isChange = true;
+    private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
 
     @PostConstruct
@@ -44,12 +45,17 @@ public class EmailSendConfiguration {
                         @Override
                         public void receiveConfigInfo(String s) {
                             log.info("Email Client config changed");
-                            isChange = true;
+                            updateSendClient();
                         }
                     });
         } catch (Exception e) {
             log.error("Add listener error. e:", e);
         }
+        this.updateSendClient();
+    }
+
+    private void updateSendClient() {
+        readWriteLock.writeLock().lock();
         JavaMailSenderImpl jms = new JavaMailSenderImpl();
         EmailSendClientBO emailSendClient =
                 eshopConfService.getConfigObject(emailSendClientConf, EmailSendClientBO.class);
@@ -58,15 +64,19 @@ public class EmailSendConfiguration {
         jms.setPassword(emailSendClient.getPassword());
         jms.setDefaultEncoding(emailSendClient.getDefaultEncoding());
         javaMailSender = jms;
-        isChange = false;
+        readWriteLock.writeLock().unlock();
     }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public JavaMailSender javaMailSender() {
-        if(isChange) {
-            this.init();
+        readWriteLock.readLock().lock();
+        try {
+            return javaMailSender;
+        } finally {
+            readWriteLock.readLock().unlock();
         }
-        return javaMailSender;
+
+
     }
 }

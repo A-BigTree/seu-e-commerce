@@ -148,11 +148,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     private void sendReviewEmail(UserInfoDO user, UpdateRegisterStateRequest request) {
-        String from = eshopConfService.getConfig(AccountNacosConfEnum.fromEmail);
         ReviewEmailContextBO contextConf = eshopConfService.getConfigObject(emailReviewContext,
                 ReviewEmailContextBO.class);
         EmailSendDTO emailSend = new EmailSendDTO();
-        emailSend.setFrom(from);
         emailSend.setTo(user.getAccount());
         emailSend.setSubject(contextConf.getSubject());
         String text = contextConf.getPrefix().formatted(user.getNickname(), user.getAccount());
