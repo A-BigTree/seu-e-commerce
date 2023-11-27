@@ -1,9 +1,6 @@
 package cn.seu.cs.eshop.common.entity.elastic;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 
@@ -12,11 +9,10 @@ import java.io.Serializable;
  * Created on 2023/11/27
  */
 @Data
-public class EsBaseIndex implements Serializable {
-    @Id
-    private String docId;
-
-    @Field(type = FieldType.Long)
+public abstract class EsBaseIndex implements Serializable {
+    private String id;
     private Long createTime;
+
+    public abstract String getDocId();
 
 }
