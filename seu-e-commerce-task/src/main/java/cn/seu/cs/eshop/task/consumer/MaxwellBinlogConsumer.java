@@ -2,7 +2,11 @@ package cn.seu.cs.eshop.task.consumer;
 
 import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.task.annotation.KafkaConsumerMonitor;
+import cn.seu.cs.eshop.task.manager.binlog.AbstractBinlogManager;
+import cn.seu.cs.eshop.task.manager.binlog.EshopBinlogService;
+import cn.seu.cs.eshop.task.manager.binlog.InsertBinlogManager;
 import cs.seu.cs.eshop.common.sdk.entity.dto.MaxwellMessageDTO;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,10 +21,13 @@ import static cn.seu.cs.eshop.common.kafka.KafkaTopicConstants.maxwellBinlogTopi
 @Slf4j
 @Component
 public class MaxwellBinlogConsumer {
+    @Resource
+    EshopBinlogService eshopBinlogService;
+
     @KafkaConsumerMonitor
     @KafkaListener(topics = maxwellBinlogTopic)
     public void consumeBinlog(ConsumerRecord<String, String> record) {
         MaxwellMessageDTO binlog = JsonUtils.snakeCaseJsonToObject(record.value(), MaxwellMessageDTO.class);
-        log.info("{}", binlog);
+        eshopBinlogService.handleBinlogData(binlog);
     }
 }

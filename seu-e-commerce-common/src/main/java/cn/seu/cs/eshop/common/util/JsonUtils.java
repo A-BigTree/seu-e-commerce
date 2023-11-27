@@ -44,6 +44,16 @@ public class JsonUtils {
         return res;
     }
 
+    public static <T> T mapToObject(ObjectMapper mapper, Map<String, String> map, Class<T> clazz) {
+        T res = null;
+        try {
+            res = mapper.convertValue(map, clazz);
+        } catch (Exception e) {
+            log.error("Map data:{} convert error, e:", map, e);
+        }
+        return res;
+    }
+
     public static <R, T> R jsonToObject(ObjectMapper mapper, String json, Class<R> clazz1, Class<T> clazz2) {
         R res = null;
         try {
@@ -108,6 +118,10 @@ public class JsonUtils {
         return jsonToObject(INSTANCE, json, clazz1, clazz2);
     }
 
+    public static <T> T mapToObject(Map<String, String> map, Class<T> clazz) {
+        return mapToObject(INSTANCE, map, clazz);
+    }
+
     /**
      * 对象转Json字符
      */
@@ -131,6 +145,10 @@ public class JsonUtils {
 
     public static <T> T snakeCaseJsonToObject(String json, Class<T> clazz) {
         return jsonToObject(UNDERSCORES_INSTANCE, json, clazz);
+    }
+
+    public static <T> T snakeCaseMapToObject(Map<String, String> map, Class<T> clazz) {
+        return mapToObject(UNDERSCORES_INSTANCE, map, clazz);
     }
 
     public static <R, T> R snakeCaseJsonToObject(String json, Class<R> clazz1, Class<T> clazz2) {

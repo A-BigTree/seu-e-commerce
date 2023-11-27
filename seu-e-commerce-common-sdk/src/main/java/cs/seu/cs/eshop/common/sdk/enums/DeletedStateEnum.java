@@ -15,7 +15,7 @@ public enum DeletedStateEnum {
     DELETED(1),
 
     ;
-    private final Integer state;
+    private final int state;
 
     DeletedStateEnum(Integer state) {
         this.state = state;
