@@ -127,7 +127,6 @@ public class AccountLoginController {
         try {
             InputStream image = photo.getInputStream();
             String fileName = photo.getOriginalFilename();
-            log.info(fileName);
             String suffix = DEFAULT_SUFFIX;
             if (fileName != null && !StringUtils.isEmpty(fileName.substring(fileName.lastIndexOf(".")))) {
                 suffix = fileName.substring(fileName.lastIndexOf("."));

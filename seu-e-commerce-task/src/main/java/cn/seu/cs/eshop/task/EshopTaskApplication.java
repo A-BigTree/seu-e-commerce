@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         "cn.seu.cs.eshop.common.component",
         "cn.seu.cs.eshop.common.configuration",
+        "cn.seu.cs.eshop.service.dao",
         "cn.seu.cs.eshop.task"
 })
 public class EshopTaskApplication {

@@ -4,7 +4,7 @@ import cn.seu.cs.eshop.account.sdk.entity.req.*;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.account.service.UserInfoService;
 import cn.seu.cs.eshop.account.service.UserLoginService;
-import cn.seu.cs.eshop.common.aop.RpcMonitor;
+import cn.seu.cs.eshop.common.annotation.RpcMonitor;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

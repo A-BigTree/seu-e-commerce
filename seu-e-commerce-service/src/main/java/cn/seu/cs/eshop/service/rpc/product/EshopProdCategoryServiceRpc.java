@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.service.rpc.product;
 
-import cn.seu.cs.eshop.common.aop.RpcMonitor;
+import cn.seu.cs.eshop.common.annotation.RpcMonitor;
 import cn.seu.cs.eshop.service.sdk.product.category.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdCategoryService;
 import cn.seu.cs.eshop.service.service.product.ProdCategoryPropService;

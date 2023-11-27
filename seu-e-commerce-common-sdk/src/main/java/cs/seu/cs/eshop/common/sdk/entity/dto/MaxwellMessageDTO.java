@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created on 2023/11/24
  */
 @Data
-public class MaxwellMessageDTO<DO> implements Serializable {
+public class MaxwellMessageDTO implements Serializable {
     private String database;
     private String table;
     private String type;
@@ -18,6 +18,6 @@ public class MaxwellMessageDTO<DO> implements Serializable {
     private Boolean commit;
     private Long serverId;
     private Long threadId;
-    private DO data;
-    private DO old;
+    //private DO data;
+    //private DO old;
 }

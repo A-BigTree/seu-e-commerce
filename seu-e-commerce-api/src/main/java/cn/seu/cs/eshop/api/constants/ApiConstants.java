@@ -9,6 +9,7 @@ public class ApiConstants {
 
     public static final String IMAGE_HEADER_PREFIX = "/data/eshop/static/admin/image/head/head%s/";
     public static final String IMAGE_SHOP_HEADER_PREFIX = "/data/eshop/static/admin/image/head/head%s/";
+    public static final String IMAGE_ESHOP_PREFIX = "/data/eshop/static/image";
 
     public static final String DEFAULT_SUFFIX = ".jpg";
 

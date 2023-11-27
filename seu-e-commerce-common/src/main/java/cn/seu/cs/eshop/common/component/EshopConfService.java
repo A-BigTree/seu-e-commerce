@@ -21,7 +21,7 @@ public class EshopConfService implements ShopConf {
     @Resource
     private NacosConfigManager nacosConfigManager;
 
-    private static ConfigService configService;
+    public static ConfigService configService;
 
     @PostConstruct
     public void init() {
@@ -44,5 +44,13 @@ public class EshopConfService implements ShopConf {
         }
 
         return res;
+    }
+
+    public static String getDataId(String dataId, String application) {
+        return ConfigConstants.getDataId(ConfigConstants.COMMON_CONFIG, application, dataId);
+    }
+
+    public static String getGroup() {
+        return ConfigConstants.CONFIG_GROUP;
     }
 }

@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Slf4j
 public class RpcMonitorAspect {
-    @Around("@annotation(cn.seu.cs.eshop.common.aop.RpcMonitor)")
+    @Around("@annotation(cn.seu.cs.eshop.common.annotation.RpcMonitor)")
     @SuppressWarnings("unchecked")
     public Object rpcMonitor(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();

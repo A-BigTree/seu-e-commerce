@@ -14,10 +14,17 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisTemplateConfiguration {
 
-    @ConditionalOnMissingBean
-    @Bean
+    @Bean(name = "redisTemplate")
     public RedisTemplate<String, String> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(lettuceConnectionFactory);
+        template.setDefaultSerializer(StringRedisSerializer.UTF_8);
+        return template;
+    }
+
+    @Bean(name = "sessionTemplate")
+    public RedisTemplate<String, Long> sessionTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+        RedisTemplate<String, Long> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory);
         template.setDefaultSerializer(StringRedisSerializer.UTF_8);
         return template;
