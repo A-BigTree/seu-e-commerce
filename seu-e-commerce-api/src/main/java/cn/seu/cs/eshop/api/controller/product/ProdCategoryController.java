@@ -9,7 +9,7 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
-import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
+import static cn.seu.cs.eshop.api.util.ApiUtil.getShopId;
 import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.BUSINESS;
 import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.PLATFORM;
 
@@ -20,15 +20,8 @@ import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.PLATFORM;
 @RestController
 @RequestMapping("/product/category")
 public class ProdCategoryController {
-    @DubboReference
+    @DubboReference(timeout = 4000, retries = 0)
     EshopProdCategoryService eshopProdCategoryService;
-
-    private Long getShopId(UserBaseDTO user) {
-        if (user.getRoleType() == BUSINESS.getValue()) {
-            return user.getId();
-        }
-        return OFFICIAL_ID;
-    }
 
     @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin

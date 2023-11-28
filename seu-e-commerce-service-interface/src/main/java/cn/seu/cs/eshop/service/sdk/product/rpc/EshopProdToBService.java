@@ -1,9 +1,6 @@
 package cn.seu.cs.eshop.service.sdk.product.rpc;
 
-import cn.seu.cs.eshop.service.sdk.product.prod.req.GetAllProdReviewResponse;
-import cn.seu.cs.eshop.service.sdk.product.prod.req.ListPageProductRequest;
-import cn.seu.cs.eshop.service.sdk.product.prod.req.ListPageProductResponse;
-import cn.seu.cs.eshop.service.sdk.product.prod.req.UpdateProductRequest;
+import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**
@@ -13,5 +10,6 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 public interface EshopProdToBService {
     ListPageProductResponse listPageProduct(ListPageProductRequest request);
     BaseResponse updateProduct(UpdateProductRequest request);
-    GetAllProdReviewResponse getAllProdReview(Long prodId, String modifier);
+    GetAllProdReviewResponse getAllProdReview(Long prodId);
+    BaseResponse updateProdStatus(UpdateProdStatusRequest request);
 }
