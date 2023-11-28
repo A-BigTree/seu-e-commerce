@@ -10,6 +10,6 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 public interface ProductToBService {
     ListPageProductResponse listPageProduct(ListPageProductRequest request);
     BaseResponse updateProduct(UpdateProductRequest request);
-    GetAllProdReviewResponse getAllProdReview(Long prodId, String modifier);
+    GetAllProdReviewResponse getAllProdReview(Long prodId);
     BaseResponse updateProdStatus(UpdateProdStatusRequest request);
 }

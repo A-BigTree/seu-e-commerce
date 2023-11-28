@@ -7,14 +7,14 @@ import lombok.Getter;
  * Created on 2023/11/8
  */
 @Getter
-public enum ProdStatusEnum {
+public enum EshopStatusEnum {
     INVALID(0),
     VALID(1),
 
     ;
     private final int status;
 
-    ProdStatusEnum(int status) {
+    EshopStatusEnum(int status) {
         this.status = status;
     }
 }

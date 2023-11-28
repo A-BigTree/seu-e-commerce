@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class UpdateProdStatusRequest implements Serializable {
     private Long prodId;
     private String modifier;
-    private String status;
+    private Integer status;
     private String remark;
 }

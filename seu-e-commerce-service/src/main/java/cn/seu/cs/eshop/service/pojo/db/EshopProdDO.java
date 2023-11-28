@@ -27,5 +27,4 @@ public class EshopProdDO extends MysqlBaseDO {
     private Integer deliveryMode;
     private Integer deliveryPrice;
     private Long updateTime;
-    private Long publishTime;
 }

@@ -11,10 +11,10 @@ import java.io.Serializable;
  */
 @Data
 public class ListPageProductRequest implements Serializable {
+    private Long prodId;
     private Long shopId;
     private String prodName;
     private Integer status;
     private Long categoryId;
-    private Integer deliveryMode;
     private PageDTO page;
 }

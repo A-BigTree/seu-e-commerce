@@ -1,7 +1,9 @@
 package cn.seu.cs.eshop.service.convert;
 
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
+import cn.seu.cs.eshop.service.pojo.db.EshopProdReviewDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
+import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdReviewDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProductDTO;
@@ -103,6 +105,15 @@ public class EshopProductConvert {
                 .createTime(TimeUtils.convertString(prod.getCreateTime(), TimeUtils.DATE_TIME_FORMAT))
                 .skus(CollectionUtils.isEmpty(skus) ? null : skus.stream().map(EshopProductConvert::covertDTO).toList())
                 .build();
+    }
+
+    public static EshopProdReviewDTO convertToEshopProdReviewDTO(EshopProdReviewDO item) {
+        EshopProdReviewDTO result = new EshopProdReviewDTO();
+        result.setModifier(item.getModifier());
+        result.setRemark(item.getRemark());
+        result.setStatus(item.getStatus());
+        result.setCreateTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT));
+        return result;
     }
 
 }

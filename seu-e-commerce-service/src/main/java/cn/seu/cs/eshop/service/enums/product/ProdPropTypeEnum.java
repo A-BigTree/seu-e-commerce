@@ -15,7 +15,7 @@ public enum ProdPropTypeEnum {
     // 参数属性
     PARAMETER_PROP(2),
     ;
-    final private int type;
+    final int type;
 
     ProdPropTypeEnum(int type) {
         this.type = type;
