@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * Created on 2023/10/19
  */
 public class TimeUtils {
-    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("/yyyy/MM/dd");
+    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("/yyyy/MM/dd/");
     public static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**

@@ -43,7 +43,7 @@ public class EshopFileController {
             }
             Long time = getCurrentTime();
             String file = time + imageIdGenerateService.generateUniqueId() + suffix;
-            String result = convertString(time, DATE_FORMAT) + "/" + prefix + "/";
+            String result =  "/" + prefix + convertString(time, DATE_FORMAT);
             InputStream image = photo.getInputStream();
             sftp.upload(IMAGE_ESHOP_PREFIX + result, file, image);
             return ResponseBuilderUtils.buildSuccessResponse(BaseResponse.class, result + file);

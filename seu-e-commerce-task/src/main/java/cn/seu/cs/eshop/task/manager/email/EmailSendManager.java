@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,9 +18,9 @@ public class EmailSendManager implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     public void sendEmail(EmailSendDTO emailSend) {
-        JavaMailSender javaMailSender = applicationContext.getBean(JavaMailSender.class);
+        JavaMailSenderImpl javaMailSender = applicationContext.getBean(JavaMailSenderImpl.class);
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSend.getFrom());
+        message.setFrom(javaMailSender.getUsername());
         message.setTo(emailSend.getTo());
         message.setSubject(emailSend.getSubject());
         message.setText(emailSend.getContext());

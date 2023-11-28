@@ -69,7 +69,7 @@ public class EmailSendConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public JavaMailSender javaMailSender() {
+    public JavaMailSenderImpl javaMailSender() {
         readWriteLock.readLock().lock();
         try {
             return javaMailSender;
