@@ -26,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.seu.cs.eshop.service.convert.EshopProductConvert.convertToEshopProdReviewDTO;
 import static cn.seu.cs.eshop.service.convert.EshopProductConvert.covertDTO;
+import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 
@@ -112,5 +114,13 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         entity.setRemark(request.getRemark());
         eshopProdReviewDao.insert(entity);
         return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
+    }
+
+    @Override
+    public GetProductInfoResponse getProductInfo(Long prodId) {
+        EshopProdDO prod = eshopProdDao.selectById(prodId);
+        List<EshopProdSkuDO> skus = eshopProdSkuDao.selectByProdId(prodId);
+        EshopProductDTO data = EshopProductConvert.covertDTO(prod, skus);
+        return buildSuccessResponse(GetProductInfoResponse.class, data);
     }
 }

@@ -12,4 +12,5 @@ public interface ProductToBService {
     BaseResponse updateProduct(UpdateProductRequest request);
     GetAllProdReviewResponse getAllProdReview(Long prodId);
     BaseResponse updateProdStatus(UpdateProdStatusRequest request);
+    GetProductInfoResponse getProductInfo(Long prodId);
 }

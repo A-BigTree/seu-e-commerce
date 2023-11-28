@@ -26,6 +26,12 @@ const router = createRouter({
                     path: 'product/prop/manage',
                     name: 'prod-prop-manage',
                     component: () => import('@/components/ProductManage/PropManage.vue')
+                },
+                {
+                    path: 'product/edit/:prodId',
+                    name: 'product-edit',
+                    component: () => import('@/components/ProductManage/ProductEdit.vue'),
+                    props: true
                 }
             ]
         },

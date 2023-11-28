@@ -42,7 +42,12 @@ watch(index, (newIndex) => {
       router.push('/product/manage');
       return;
     case '2-2':
-      router.push();
+      router.push({
+        name: 'product-edit',
+        params: {
+          prodId: 0
+        }
+      });
       return;
     case '2-3':
       router.push({

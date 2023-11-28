@@ -43,7 +43,7 @@ public class ProductToBController {
 
     @ApiMonitor(roleType = {BUSINESS, PLATFORM})
     @CrossOrigin
-    @PostMapping("/prod/review/get")
+    @GetMapping("/prod/review/get")
     GetAllProdReviewResponse getAllProdReview(@RequestParam("prodId") Long prodId) {
         return eshopProdToBService.getAllProdReview(prodId);
     }
@@ -55,6 +55,13 @@ public class ProductToBController {
                                   @AuthorUserInfo UserBaseDTO user) {
         request.setModifier(user.getNickname());
         return eshopProdToBService.updateProdStatus(request);
+    }
+
+    @ApiMonitor(roleType = {BUSINESS, PLATFORM})
+    @CrossOrigin
+    @GetMapping("/prod/info/get")
+    GetProductInfoResponse getProductInfo(@RequestParam("id") Long id) {
+        return eshopProdToBService.getProductInfo(id);
     }
 
 }
