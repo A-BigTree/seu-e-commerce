@@ -22,6 +22,7 @@ public class EshopProdDO extends MysqlBaseDO {
     private Integer soldNum;
     private String brief;
     private String content;
+    private String parameters;
     private String pic;
     private String images;
     private Integer deliveryMode;

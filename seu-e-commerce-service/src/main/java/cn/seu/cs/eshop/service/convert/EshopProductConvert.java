@@ -24,6 +24,12 @@ public class EshopProductConvert {
         if (!CollectionUtils.isEmpty(prod.getImages())) {
             images = String.join(";", prod.getImages());
         }
+        String parameters = "";
+        if (!CollectionUtils.isEmpty(prod.getParameters())) {
+            parameters = prod.getParameters().stream().
+                    map(prop -> prop.getProp() + ":" + prop.getValue())
+                    .collect(Collectors.joining(";"));
+        }
         EshopProdDO entity = new EshopProdDO();
         entity.setId(prod.getId() > 0 ? prod.getId() : null);
         entity.setProdName(prod.getProdName());
@@ -41,6 +47,7 @@ public class EshopProductConvert {
         entity.setDeliveryMode(prod.getDeliveryMode());
         entity.setDeliveryPrice(prod.getDeliveryPrice());
         entity.setUpdateTime(TimeUtils.getCurrentTime());
+        entity.setParameters(parameters);
         return entity;
     }
 
@@ -85,6 +92,11 @@ public class EshopProductConvert {
     }
 
     public static EshopProductDTO covertDTO(EshopProdDO prod, List<EshopProdSkuDO> skus) {
+        List<EshopProdSkuPropDTO> parameters = Arrays.stream(prod.getParameters().split(";"))
+                .map(pv -> {
+                    String[] prop = pv.split(":");
+                    return new EshopProdSkuPropDTO(prop[0], prop[1]);
+                }).toList();
         return EshopProductDTO.builder()
                 .id(prod.getId())
                 .prodName(prod.getProdName())
@@ -97,6 +109,7 @@ public class EshopProductConvert {
                 .soldNum(prod.getSoldNum())
                 .brief(prod.getBrief())
                 .content(prod.getContent())
+                .parameters(parameters)
                 .pic(prod.getPic())
                 .images(prod.getImages() != null ? Arrays.asList(prod.getImages().split(";")) : null)
                 .deliveryMode(prod.getDeliveryMode())

@@ -81,6 +81,14 @@ const getCreatorTag = (shopId) => {
     }
 }
 
+const getDisplayPrice = (price) => {
+    return price / 100;
+}
+
+const getStandPrice = (price) => {
+    return price * 100;
+}
+
 export {
     loadingConfig,
     countDown,
@@ -89,4 +97,6 @@ export {
     getRoleTag,
     getRegisterStateTag,
     getCreatorTag,
+    getDisplayPrice,
+    getStandPrice,
 }
