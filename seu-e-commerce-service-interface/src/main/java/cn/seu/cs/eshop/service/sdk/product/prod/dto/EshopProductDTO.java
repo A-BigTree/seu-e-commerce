@@ -24,7 +24,7 @@ public class EshopProductDTO implements Serializable {
     private Integer status;
     private Long originPrice;
     private Long price;
-    private ProdCategoryDTO category;
+    private Long categoryId;
     private Integer totalStocks;
     private Integer soldNum;
     private String brief;
@@ -34,7 +34,6 @@ public class EshopProductDTO implements Serializable {
     private Integer deliveryMode;
     private Integer deliveryPrice;
     private String updateTime;
-    private String publishTime;
     private String createTime;
     private List<EshopProdSkuDTO> skus;
 }
