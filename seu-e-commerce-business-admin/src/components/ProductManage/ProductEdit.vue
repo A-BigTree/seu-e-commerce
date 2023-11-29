@@ -4,9 +4,9 @@ import {inject, reactive, ref, watch} from "vue";
 import {http} from '@/utils/http';
 import {getToken} from "@/utils/cookies";
 import {getDisplayPrice} from '@/utils';
-import type {FormInstance, FormRules, UploadInstance} from 'element-plus'
+import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";
-import {IMAGE_URL, IMAGE_UPLOAD_URL, IMAGE_UPLOAD_HEADER} from '@/utils/config';
+import {IMAGE_URL, IMAGE_UPLOAD_URL} from '@/utils/config';
 import {Plus} from "@element-plus/icons-vue";
 
 const props = defineProps(['prodId']);
@@ -20,7 +20,6 @@ const roleType = inject("roleType");
 const step = ref(0);
 
 const formRef = ref<FormInstance>();
-const prodRef = ref<UploadInstance>();
 
 const skuRef = ref<FormInstance>();
 
@@ -33,8 +32,22 @@ const formData = ref({
   price: 0,
   brief: "",
   content: "",
-  pic: "",
-  images: [],
+  pic: [{
+    name: "",
+    url: "",
+    response : {
+      data: ""
+    }
+  }],
+  images: [
+    {
+      name: "",
+      url: "",
+      response : {
+        data: ""
+      }
+    }
+  ],
   deliveryMode: 0,
   deliveryPrice: 0,
 });
@@ -52,7 +65,13 @@ const skuForm = ref({
       ],
       skuName: "",
       skuCode: "",
-      pic: "",
+      pic: {
+        url: "",
+        name: "",
+        response: {
+          data: ""
+        }
+      },
       originPrice: 0,
       price: 0,
       stocks: 0
@@ -79,7 +98,10 @@ const categories = ref([
   }
 ]);
 
+const isLoadProp = ref(false);
+
 const init = () => {
+  isLoadProp.value = false;
   formData.value = {
     id: 0,
     categoryId: 0,
@@ -89,7 +111,7 @@ const init = () => {
     price: 0,
     brief: "",
     content: "",
-    pic: "",
+    pic: [],
     images: [],
     deliveryMode: 0,
     deliveryPrice: 0,
@@ -124,6 +146,68 @@ const init = () => {
     }
   }
   http(params);
+  if (propId > 0) {
+    const params2 = {
+      url: "/product/tob/prod/info/get?id=" + propId,
+      method: "get",
+      callBack: (res) => {
+        const data = res.data;
+        const images = [];
+        if (data.images) {
+          data.images.forEach(img => {
+            images.push({
+              name: img,
+              url: IMAGE_URL + img,
+              response: {
+                data: img
+              }
+            });
+          });
+        }
+        formData.value = {
+          id: data.id,
+          categoryId: data.categoryId,
+          status: 0,
+          prodName: data.prodName,
+          originPrice: getDisplayPrice(data.originPrice),
+          price: getDisplayPrice(data.price),
+          brief: data.brief,
+          content: data.content,
+          pic: [
+            {
+              name: data.pic,
+              url: IMAGE_URL + data.pic,
+              response: {
+                data: data.pic
+              }
+            }
+          ],
+          images: images,
+          deliveryMode: data.deliveryMode,
+          deliveryPrice: data.deliveryPrice,
+        };
+        const skus = [];
+        data.skus.forEach(sku => {
+          const sk = JSON.parse(JSON.stringify(sku));
+          sk.pic = {
+            url: IMAGE_URL + sku.pic,
+            name: sku.pic,
+            response: {
+              data: sku.pic
+            }
+          }
+          sk.price = getDisplayPrice(sku.price);
+          sk.originPrice = getDisplayPrice(sku.originPrice);
+          skus.push(sk);
+        });
+        skuForm.value = {
+          skus: skus,
+          parameters: data.parameters
+        }
+      }
+    }
+    http(params2);
+  }
 }
 
 watch(props, (newParams) => {
@@ -151,6 +235,11 @@ const nextStep = (ref1) => {
         }
       }
       step.value++;
+      if (step.value === 1 && !isLoadProp.value) {
+        const params = {
+          url: ""
+        }
+      }
     }
   })
 }
@@ -186,7 +275,18 @@ const headers: Record<string, string> = {
 }
 
 const updateData: Record<string, string> = {
-  "prefix":'product'
+  "prefix": 'product'
+}
+
+const picSuccess = (response) => {
+  console.log(response);
+  console.log(formData.value.pic);
+  formData.value._pic = response.data;
+}
+
+const checkPic = () => {
+  console.log(formData.value.pic);
+  console.log(formData.value.images);
 }
 
 </script>
@@ -214,12 +314,20 @@ const updateData: Record<string, string> = {
         <el-input v-model="formData.prodName" style="width: 300px;"/>
       </el-form-item>
       <el-form-item label="商品主图" prop="pic">
-        <el-upload list-type="picture-card" ref="prodRef"
-                   name="image"
-                   :action="IMAGE_UPLOAD_URL"
-                   :data="updateData"
-                   :headers="headers">
-          <el-icon><Plus /></el-icon>
+        <el-upload
+            v-model:file-list="formData.pic"
+            list-type="picture-card"
+            name="image"
+            :action="IMAGE_UPLOAD_URL"
+            :data="updateData"
+            :headers="headers"
+            :limit="1"
+            :on-success="picSuccess"
+            :on-change="checkPic"
+        >
+          <el-icon>
+            <Plus/>
+          </el-icon>
         </el-upload>
       </el-form-item>
       <el-form-item label="商品原价" prop="originPrice">
@@ -255,7 +363,22 @@ const updateData: Record<string, string> = {
             show-word-limit
             style="width: 500px"/>
       </el-form-item>
-      <el-form-item label="商品主图" prop="pic">
+
+      <el-form-item label="商品封面" prop="images">
+        <el-upload
+            v-model:file-list="formData.images"
+            list-type="picture-card"
+            name="image"
+            :action="IMAGE_UPLOAD_URL"
+            :data="updateData"
+            :headers="headers"
+            :on-success="picSuccess"
+            :on-change="checkPic"
+        >
+          <el-icon>
+            <Plus/>
+          </el-icon>
+        </el-upload>
       </el-form-item>
 
 

@@ -28,4 +28,8 @@ public class UserTokenCache {
     public void removeToken(String token) {
         redisService.removeValue(token, apiTokenCache);
     }
+
+    public void refreshToken(String token) {
+        redisService.refreshExpirationTime(token, apiTokenCache);
+    }
 }

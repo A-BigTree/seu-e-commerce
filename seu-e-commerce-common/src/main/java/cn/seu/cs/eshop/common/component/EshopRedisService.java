@@ -3,6 +3,7 @@ package cn.seu.cs.eshop.common.component;
 import cn.seu.cs.eshop.common.redis.RedisConf;
 import cn.seu.cs.eshop.common.redis.RedisService;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,19 @@ public class EshopRedisService implements RedisService {
     @Override
     public Boolean removeValue(String key, RedisConf redisConf) {
         return redisTemplate.delete(redisConf.buildKey(key));
+    }
+
+    @Override
+    public Boolean existKey(String key, RedisConf redisConf) {
+        return !StringUtils.isEmpty(key) && Boolean.TRUE.equals(redisTemplate.hasKey(redisConf.buildKey(key)));
+    }
+
+    @Override
+    public Boolean refreshExpirationTime(String key, RedisConf redisConf) {
+        boolean isExist = existKey(key, redisConf);
+        if (isExist) {
+            redisTemplate.expire(redisConf.buildKey(key), redisConf.expirationTime(), redisConf.timeUnit());
+        }
+        return isExist;
     }
 }

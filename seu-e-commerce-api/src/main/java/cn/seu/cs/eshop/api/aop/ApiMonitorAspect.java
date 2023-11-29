@@ -79,7 +79,7 @@ public class ApiMonitorAspect {
                         ResponseStateEnum.PRIVILEGES_ERROR, null);
             }
             // 刷新状态
-            userTokenCache.setUserTokenInfo(token, user);
+            userTokenCache.refreshToken(token);
         }
         // TODO 请求统计
         try {

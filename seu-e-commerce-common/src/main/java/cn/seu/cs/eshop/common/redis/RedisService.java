@@ -17,6 +17,10 @@ public interface RedisService {
 
     Boolean removeValue(String key, RedisConf redisConf);
 
+    Boolean existKey(String key, RedisConf redisConf);
+
+    Boolean refreshExpirationTime(String key, RedisConf redisConf);
+
     default <T> T getObjectValue(String key, RedisConf redisConf, Class<T> clazz) {
         String res = getValue(key, redisConf);
         if (StringUtils.isEmpty(res)) {
