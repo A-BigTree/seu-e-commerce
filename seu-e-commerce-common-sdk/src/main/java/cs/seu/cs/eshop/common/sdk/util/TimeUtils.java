@@ -13,6 +13,8 @@ public class TimeUtils {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("/yyyy/MM/dd/");
     public static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    public static SimpleDateFormat DATE_TIME_CODE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+
     /**
      * 计算time偏移量
      * @param time 初始时间

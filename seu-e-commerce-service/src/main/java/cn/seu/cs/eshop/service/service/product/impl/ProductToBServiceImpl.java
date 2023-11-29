@@ -84,7 +84,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         long id = this.crudOperation(request);
         EshopProductDTO data = request.getData();
         List<EshopProdSkuDO> skus = CollectionUtils.isEmpty(data.getSkus()) ? new ArrayList<>() :
-                data.getSkus().stream().map(EshopProductConvert::covertDO).toList();
+                data.getSkus().stream().map(sku -> EshopProductConvert.covertDO(sku, id)).toList();
         List<EshopProdSkuDO> origins = eshopProdSkuDao.selectByProdId(id);
         eshopProdSkuManager.updateDiffEntities(skus, origins);
         return buildSuccessResponse(BaseResponse.class, String.valueOf(id));

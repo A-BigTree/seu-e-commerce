@@ -51,7 +51,7 @@ public class EshopProductConvert {
         return entity;
     }
 
-    public static EshopProdSkuDO covertDO(EshopProdSkuDTO dto) {
+    public static EshopProdSkuDO covertDO(EshopProdSkuDTO dto, Long prodId) {
         String properties = "";
         if (!CollectionUtils.isEmpty(dto.getProperties())) {
             properties = dto.getProperties().stream()
@@ -60,13 +60,13 @@ public class EshopProductConvert {
         }
         EshopProdSkuDO sku = new EshopProdSkuDO();
         sku.setId(dto.getId() > 0 ? dto.getId() : null);
-        sku.setProdId(dto.getProdId());
+        sku.setProdId(dto.getProdId() > 0 ? dto.getProdId() : prodId);
         sku.setProperties(properties);
         sku.setSkuName(dto.getSkuName());
         sku.setSkuCode(dto.getSkuCode());
         sku.setPic(dto.getPic());
         sku.setOriginPrice(dto.getOriginPrice());
-        sku.setPic(dto.getPic());
+        sku.setPrice(dto.getPrice());
         sku.setStocks(dto.getStocks());
         return sku;
     }

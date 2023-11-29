@@ -22,14 +22,24 @@ public abstract class AbstractBatchManager<DO extends MysqlBaseDO, Dao extends M
     public abstract void deleteBatchByIds(List<DO> entities);
 
     @Transactional
+    public void saveEntities(List<DO> entities) {
+        this.saveBatch(entities);
+    }
+
+    @Transactional
+    public void updateEntities(List<DO> entities) {
+        this.updateBatchById(entities);
+    }
+
+    @Transactional
     public void updateDiffEntities(Map<Integer, List<DO>> entityMap) {
         // 批量插入
         if (!CollectionUtils.isEmpty(entityMap.get(INSERT.getType()))) {
-            this.saveBatch(entityMap.get(INSERT.getType()));
+            this.saveEntities(entityMap.get(INSERT.getType()));
         }
         // 批量更新
         if (!CollectionUtils.isEmpty(entityMap.get(UPDATE.getType()))) {
-            this.updateBatchById(entityMap.get(UPDATE.getType()));
+            this.updateEntities(entityMap.get(UPDATE.getType()));
         }
         // 批量删除
         if (!CollectionUtils.isEmpty(entityMap.get(DELETE.getType()))) {
