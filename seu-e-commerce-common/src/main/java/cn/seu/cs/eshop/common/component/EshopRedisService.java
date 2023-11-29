@@ -38,11 +38,10 @@ public class EshopRedisService implements RedisService {
     }
 
     @Override
-    public Boolean refreshExpirationTime(String key, RedisConf redisConf) {
+    public void refreshExpirationTime(String key, RedisConf redisConf) {
         boolean isExist = existKey(key, redisConf);
         if (isExist) {
             redisTemplate.expire(redisConf.buildKey(key), redisConf.expirationTime(), redisConf.timeUnit());
         }
-        return isExist;
     }
 }
