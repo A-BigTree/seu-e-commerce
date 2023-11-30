@@ -1,11 +1,17 @@
 package cn.seu.cs.eshop.service.service.product.impl;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.GetUserInfoResponse;
+import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
+import cn.seu.cs.eshop.common.component.EshopConfService;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
+import cn.seu.cs.eshop.service.bo.ProdReviewEmailBO;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
 import cn.seu.cs.eshop.service.dao.EshopProdDao;
 import cn.seu.cs.eshop.service.dao.EshopProdReviewDao;
 import cn.seu.cs.eshop.service.dao.EshopProdSkuDao;
+import cn.seu.cs.eshop.service.manager.email.EmailSendService;
 import cn.seu.cs.eshop.service.manager.product.EshopProdSkuManager;
+import cn.seu.cs.eshop.service.nacos.ServiceNacosConfEnum;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdReviewDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
@@ -16,10 +22,12 @@ import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
 import cn.seu.cs.eshop.service.service.product.ProductToBService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +37,8 @@ import java.util.List;
 import static cn.seu.cs.eshop.service.convert.EshopProductConvert.convertToEshopProdReviewDTO;
 import static cn.seu.cs.eshop.service.convert.EshopProductConvert.covertDTO;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
+import static cn.seu.cs.eshop.service.enums.product.ProdStatusEnum.PUBLISHED;
+import static cn.seu.cs.eshop.service.enums.product.ProdStatusEnum.TO_BE_REVIEWED;
 import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 
@@ -47,6 +57,12 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
     EshopProdDao eshopProdDao;
     @Resource
     EshopProdReviewDao eshopProdReviewDao;
+    @Resource
+    EshopConfService eshopConfService;
+    @DubboReference(timeout = 4000, retries = 0)
+    EshopAccountService eshopAccountService;
+    @Resource
+    EmailSendService emailSendService;
 
     @Override
     public long insert(EshopProductDTO data) {
@@ -115,6 +131,22 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         entity.setModifier(request.getModifier());
         entity.setRemark(request.getRemark());
         eshopProdReviewDao.insert(entity);
+        if (request.getStatus() != TO_BE_REVIEWED.getStatus() && request.getStatus() != PUBLISHED.getStatus()) {
+            // 发送审核邮件
+            ProdReviewEmailBO review = eshopConfService.getConfigObject(ServiceNacosConfEnum.emailReviewContext, ProdReviewEmailBO.class);
+            EmailSendDTO email = new EmailSendDTO();
+            GetUserInfoResponse response = eshopAccountService.getUserInfo(origin.getShopId());
+            String account = response.getData().getAccount();
+            email.setTo(account);
+            email.setSubject(review.getSubject());
+            String context = "";
+            context += review.getPrefix().formatted(account, response.getData().getNickname(),
+                    origin.getProdName(), origin.getId());
+            context += review.getText().get(request.getStatus()).formatted(request.getRemark());
+            context += review.getSuffix().formatted(request.getModifier());
+            email.setContext(context);
+            emailSendService.sendEmail(email);
+        }
         return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
     }
 

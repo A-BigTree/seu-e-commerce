@@ -2,6 +2,7 @@ package cn.seu.cs.eshop.service.nacos;
 
 import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.nacos.ConfDataId;
+import cn.seu.cs.eshop.service.bo.ProdReviewEmailBO;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  * Created on 2023/11/6
  */
 public enum ServiceNacosConfEnum implements ConfDataId<Object> {
+    emailReviewContext(new ProdReviewEmailBO()),
 
     ;
 
@@ -42,7 +44,7 @@ public enum ServiceNacosConfEnum implements ConfDataId<Object> {
 
     @Override
     public String getApplication() {
-        return ConfigConstants.ACCOUNT_CONFIG;
+        return ConfigConstants.SERVICE_CONFIG;
     }
 
     @SuppressWarnings("unchecked")
