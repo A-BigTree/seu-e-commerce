@@ -59,7 +59,12 @@ const formData = ref({
 
 
 const listData = () => {
-
+  const params = {
+    url: "/product/tob/prod/page/list",
+    data: {
+      
+    }
+  }
 }
 
 const filterData = () => {
