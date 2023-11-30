@@ -13,5 +13,6 @@ public class EshopProdReviewDTO implements Serializable {
     private String modifier;
     private String remark;
     private Integer status;
+    private Integer oldStatus;
     private String createTime;
 }

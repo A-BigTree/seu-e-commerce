@@ -89,6 +89,41 @@ const getStandPrice = (price) => {
     return price * 100;
 }
 
+const getProdStatusTag = (status) => {
+    switch (status) {
+        case 0:
+            return {
+                name: "待审核",
+                type: "warning"
+            };
+        case 1:
+            return {
+                name: "审核失败",
+                type: "danger"
+            };
+        case 2:
+            return {
+                name: "审核成功",
+                type: "success"
+            };
+        case 3:
+            return {
+                name: "已上架",
+                type: ""
+            };
+        case 4:
+            return {
+                name: "已下架",
+                type: "danger"
+            };
+        default:
+            return {
+                name:"",
+                type:""
+            }
+    }
+}
+
 export {
     loadingConfig,
     countDown,
@@ -99,4 +134,5 @@ export {
     getCreatorTag,
     getDisplayPrice,
     getStandPrice,
+    getProdStatusTag,
 }

@@ -17,4 +17,5 @@ public class EshopProdReviewDO extends MysqlBaseDO {
     private String modifier;
     private String remark;
     private Integer status;
+    private Integer oldStatus;
 }

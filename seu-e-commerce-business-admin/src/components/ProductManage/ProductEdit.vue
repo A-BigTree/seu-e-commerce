@@ -3,7 +3,7 @@
 import {inject, ref, watch} from "vue";
 import {http} from '@/utils/http';
 import {getToken} from "@/utils/cookies";
-import {getDisplayPrice , getStandPrice} from '@/utils';
+import {getDisplayPrice, getStandPrice} from '@/utils';
 import type {FormInstance} from 'element-plus'
 import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import {IMAGE_URL, IMAGE_UPLOAD_URL} from '@/utils/config';
@@ -422,7 +422,7 @@ const syncStocks = () => {
 }
 
 const submitData = () => {
-  if(checkSkuData()) {
+  if (checkSkuData()) {
     // 基本信息
     const data = JSON.parse(JSON.stringify(formData.value));
     data.categoryId = formData.value.categoryId[1];
@@ -436,6 +436,7 @@ const submitData = () => {
     formData.value.images.forEach(image => {
       images.push(image.response.data);
     });
+    data.images = images;
     data.deliveryPrice = getStandPrice(formData.value.deliveryPrice);
     const params = [];
     paProp.value.forEach(prop => {
@@ -458,12 +459,13 @@ const submitData = () => {
     const params1 = {
       url: "/product/tob/prod/update",
       data: {
-        action: propId === 0 ? 1 : 3,
+        action: propId.value === 0 ? 1 : 3,
         data: data
       },
       callBack: (res) => {
+        addReview(res.data);
         ElMessage({
-          message: propId === 0 ? "添加成功": "修改成功",
+          message: propId.value === 0 ? "添加成功" : "修改成功",
           type: "success"
         });
         step.value += 2;
@@ -478,7 +480,7 @@ const checkSkuData = () => {
   let message = "";
   if (skuForm.value.skus.length === 0) {
     message = "SKU未配置";
-  } else if(paProp.value.find(value => {
+  } else if (paProp.value.find(value => {
     return value.selected === '';
   })) {
     message = "商品参数未配置";
@@ -494,6 +496,17 @@ const checkSkuData = () => {
   return isOk;
 }
 
+const addReview = (prodID) => {
+  const params = {
+    url: "/product/tob/prod/status/update",
+    data: {
+      prodId: prodID,
+      status: 0,
+      remark: propId.value === 0 ? "添加商品" : "修改商品"
+    }
+  };
+  http(params);
+}
 
 const formRules = ref({
   prodName: [
@@ -576,7 +589,8 @@ const backHome = () => {
       </el-form-item>
       <el-form-item label="配送费用">
         <el-input-number v-model="formData.deliveryPrice"
-                         :controls="false" :precision="2" :min="0" :disabled="formData.deliveryMode === 0" size="small"/>
+                         :controls="false" :precision="2" :min="0" :disabled="formData.deliveryMode === 0"
+                         size="small"/>
         &nbsp;&nbsp;￥
       </el-form-item>
       <el-form-item label="商品原价" prop="originPrice">
@@ -733,7 +747,7 @@ const backHome = () => {
         <template #header>
           配置产品参数
         </template>
-        <el-form-item v-for="(item, index) in paProp"
+        <el-form-item v-for="item in paProp"
                       :label="item.propName"
         >
           <el-select

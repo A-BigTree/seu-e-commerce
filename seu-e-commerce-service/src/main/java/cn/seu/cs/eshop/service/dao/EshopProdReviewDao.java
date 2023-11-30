@@ -16,6 +16,8 @@ public interface EshopProdReviewDao extends MysqlBaseDao<EshopProdReviewDO> {
     default List<EshopProdReviewDO> selectByProdId(Long prodId) {
         EshopProdReviewDO entity = new EshopProdReviewDO();
         entity.setProdId(prodId);
-        return selectList(new QueryWrapper<>(entity));
+        QueryWrapper<EshopProdReviewDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.orderByAsc("createTime");
+        return selectList(wrapper);
     }
 }

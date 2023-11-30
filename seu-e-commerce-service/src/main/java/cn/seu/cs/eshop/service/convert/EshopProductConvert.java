@@ -9,7 +9,9 @@ import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuPropDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProductDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,11 +94,14 @@ public class EshopProductConvert {
     }
 
     public static EshopProductDTO covertDTO(EshopProdDO prod, List<EshopProdSkuDO> skus) {
-        List<EshopProdSkuPropDTO> parameters = Arrays.stream(prod.getParameters().split(";"))
-                .map(pv -> {
-                    String[] prop = pv.split(":");
-                    return new EshopProdSkuPropDTO(prop[0], prop[1]);
-                }).toList();
+        List<EshopProdSkuPropDTO> parameters = new ArrayList<>();
+        if (!StringUtils.isEmpty(prod.getParameters())) {
+            parameters = Arrays.stream(prod.getParameters().split(";"))
+                    .map(pv -> {
+                        String[] prop = pv.split(":");
+                        return new EshopProdSkuPropDTO(prop[0], prop[1]);
+                    }).toList();
+        }
         return EshopProductDTO.builder()
                 .id(prod.getId())
                 .prodName(prod.getProdName())
@@ -125,6 +130,7 @@ public class EshopProductConvert {
         result.setModifier(item.getModifier());
         result.setRemark(item.getRemark());
         result.setStatus(item.getStatus());
+        result.setOldStatus(item.getOldStatus());
         result.setCreateTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT));
         return result;
     }

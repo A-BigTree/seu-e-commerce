@@ -101,6 +101,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
     @Override
     @Transactional
     public BaseResponse updateProdStatus(UpdateProdStatusRequest request) {
+        EshopProdDO origin = eshopProdDao.selectById(request.getProdId());
         EshopProdDO prod = new EshopProdDO();
         prod.setId(request.getProdId());
         prod.setStatus(request.getStatus());
@@ -109,6 +110,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         EshopProdReviewDO entity = new EshopProdReviewDO();
         MysqlUtils.buildEffectEntity(entity);
         entity.setStatus(request.getStatus());
+        entity.setOldStatus(origin.getStatus());
         entity.setProdId(request.getProdId());
         entity.setModifier(request.getModifier());
         entity.setRemark(request.getRemark());
