@@ -140,6 +140,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
             email.setTo(account);
             email.setSubject(review.getSubject());
             String context = "";
+            
             context += review.getPrefix().formatted(account, response.getData().getNickname(),
                     origin.getProdName(), origin.getId());
             context += review.getText().get(request.getStatus()).formatted(request.getRemark());
