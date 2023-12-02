@@ -21,7 +21,7 @@ const params = {
     roleTypeRef.value = roleType.value;
     headUrl.value = userInfo.image ? IMAGE_URL + userInfo.image : IMAGE_URL + '/head/0.png';
     nickname.value = userInfo.nickname;
-    index.value = roleType.value === 2 ? '0' : '1-1';
+    index.value = roleType.value === 2 ? '2-1' : '1-1';
   }
 }
 http(params);
@@ -117,9 +117,6 @@ const logout = () => {
         <el-menu
             @select="select"
             :default-active="index">
-          <el-menu-item index="0" v-if="roleType===2">
-            商家首页
-          </el-menu-item>
           <el-sub-menu index="1" v-if="roleType===3">
             <template #title>
               账号管理

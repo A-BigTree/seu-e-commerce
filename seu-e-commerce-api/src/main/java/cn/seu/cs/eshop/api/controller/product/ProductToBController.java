@@ -9,6 +9,7 @@ import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
+import static cn.seu.cs.eshop.api.util.ApiUtil.getSearchShopId;
 import static cn.seu.cs.eshop.api.util.ApiUtil.getShopId;
 import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.BUSINESS;
 import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.PLATFORM;
@@ -28,7 +29,7 @@ public class ProductToBController {
     @PostMapping("/prod/page/list")
     ListPageProductResponse listPageProduct(@RequestBody ListPageProductRequest request,
                                             @AuthorUserInfo UserBaseDTO user) {
-        request.setShopId(getShopId(user));
+        request.setShopId(getSearchShopId(user, request.getShopId()));
         return eshopProdToBService.listPageProduct(request);
     }
 
@@ -63,5 +64,6 @@ public class ProductToBController {
     GetProductInfoResponse getProductInfo(@RequestParam("id") Long id) {
         return eshopProdToBService.getProductInfo(id);
     }
+
 
 }

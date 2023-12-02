@@ -28,11 +28,24 @@ const formData = ref({
   shopId: 0,
   prodName: "",
   status: -1,
-  categoryId: -1,
+  categoryId: [-1],
 });
 
 const dialogSkuOpen = ref(false);
 const editProdId = ref(0);
+
+const categories = ref([
+  {
+    value: 0,
+    label: "",
+    children: [
+      {
+        value: 1,
+        label: ""
+      }
+    ]
+  }
+]);
 
 const listData = () => {
   const params = {
@@ -42,7 +55,7 @@ const listData = () => {
       shopId: formData.value.shopId,
       prodName: formData.value.prodName,
       status: formData.value.status,
-      categoryId: formData.value.categoryId,
+      categoryId: formData.value.categoryId[formData.value.categoryId.length - 1],
       page: page.value
     },
     callBack: (res) => {
@@ -57,8 +70,41 @@ const listData = () => {
   http(params);
 }
 
+const init = () => {
+  const params = {
+    url: "/product/category/all/get",
+    method: "get",
+    callBack: (res) => {
+      const data = res.data;
+      categories.value = [];
+      categories.value.push({
+        value: -1,
+        label: "全部"
+      });
+      data.forEach(category => {
+        const children = [];
+        category.children.forEach(value => {
+          children.push({
+            value: value.id,
+            label: value.categoryName
+          });
+        });
+        if (children.length > 0) {
+          categories.value.push({
+            value: category.id,
+            label: category.categoryName,
+            children: children
+          });
+        }
+      });
+    }
+  }
+  http(params);
+}
+
 //初始化
 listData();
+init();
 
 const filterData = () => {
   listData();
@@ -190,7 +236,34 @@ const submitReview = (ref) => {
   <el-card shadow="always">
     <template #header>
       <el-form :inline="true" :model="formData">
+        <el-form-item label="ID">
+          <el-input type="number" v-model="formData.prodId"/>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="formData.prodName"/>
+        </el-form-item>
+        <el-form-item label="商品状态">
+          <el-select v-model="formData.status">
+            <el-option :value="-1" label="全部"/>
+            <el-option :value="0" label="待审核"/>
+            <el-option :value="1" label="审核失败"/>
+            <el-option :value="2" label="待上架"/>
+            <el-option :value="3" label="已上架"/>
+            <el-option :value="4" label="已下架"/>
+          </el-select>
+        </el-form-item>
 
+        <el-form-item v-if="roleType === 3" label="商家ID">
+          <el-input type="number" v-model="formData.shopId"/>
+        </el-form-item>
+
+        <el-form-item label="商品分类">
+            <el-cascader v-model="formData.categoryId" :options="categories"/>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="filterData">筛选</el-button>
+        </el-form-item>
       </el-form>
     </template>
 
@@ -200,7 +273,10 @@ const submitReview = (ref) => {
         border
         :data="tableData"
     >
-      <el-table-column label="编号" prop="id"/>
+      <el-table-column label="编号" prop="id" width="80"/>
+
+      <el-table-column v-if="roleType === 3" label="商家ID" prop="shopId" width="80"/>
+
       <el-table-column label="图片">
         <template #default="scope">
           <div class="block" style="text-align: center">
@@ -208,6 +284,7 @@ const submitReview = (ref) => {
           </div>
         </template>
       </el-table-column>
+
       <el-table-column label="商品名称" prop="prodName"/>
       <el-table-column label="售价">
         <template #default="scope">

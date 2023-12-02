@@ -11,9 +11,10 @@ import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.BUSINESS;
  */
 public class ApiUtil {
     public static Long getShopId(UserBaseDTO user) {
-        if (user.getRoleType() == BUSINESS.getValue()) {
-            return user.getId();
-        }
-        return OFFICIAL_ID;
+        return user.getRoleType() == BUSINESS.getValue() ? user.getId():OFFICIAL_ID;
+    }
+
+    public static Long getSearchShopId(UserBaseDTO user, Long shopId) {
+        return user.getRoleType() == BUSINESS.getValue() ? user.getId() : shopId;
     }
 }

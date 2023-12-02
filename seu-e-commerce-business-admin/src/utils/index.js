@@ -103,13 +103,13 @@ const getProdStatusTag = (status) => {
             };
         case 2:
             return {
-                name: "审核成功",
-                type: "success"
+                name: "待上架",
+                type: ""
             };
         case 3:
             return {
                 name: "已上架",
-                type: ""
+                type: "success"
             };
         case 4:
             return {
