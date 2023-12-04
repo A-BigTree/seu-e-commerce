@@ -12,7 +12,7 @@ import static cn.seu.cs.eshop.service.constants.ElasticConstants.ES_PRODUCT_INFO
  */
 @Service
 public class EsProductInfoService extends AbstractElasticService<EshopProductInfoIndex> {
-    
+
     @Override
     public String getIndex() {
         return ES_PRODUCT_INFO_INDEX;
