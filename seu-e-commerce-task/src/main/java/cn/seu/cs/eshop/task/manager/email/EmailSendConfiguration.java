@@ -76,7 +76,5 @@ public class EmailSendConfiguration {
         } finally {
             readWriteLock.readLock().unlock();
         }
-
-
     }
 }

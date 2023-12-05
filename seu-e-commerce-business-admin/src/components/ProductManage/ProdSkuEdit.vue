@@ -1,6 +1,4 @@
 <script setup>
-
-
 import {ref, watch} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {IMAGE_URL} from "@/utils/config";
