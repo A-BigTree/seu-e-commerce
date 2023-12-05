@@ -18,10 +18,6 @@
             <version>${eshop.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>cn.seu.cs.eshop.service.sdk</groupId>
-                    <artifactId>seu-e-commerce-service-interface</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.apache.dubbo</groupId>
                     <artifactId>dubbo-spring-boot-starter</artifactId>
                 </exclusion>
