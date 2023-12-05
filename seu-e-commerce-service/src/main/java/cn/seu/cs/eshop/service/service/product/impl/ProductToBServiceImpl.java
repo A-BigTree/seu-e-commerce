@@ -5,6 +5,8 @@ import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.common.component.EshopConfService;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
 import cn.seu.cs.eshop.service.bo.ProdReviewEmailBO;
+import cn.seu.cs.eshop.service.cache.ProdToBCache;
+import cn.seu.cs.eshop.service.cache.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
 import cn.seu.cs.eshop.service.dao.EshopProdDao;
 import cn.seu.cs.eshop.service.dao.EshopProdReviewDao;
@@ -34,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.seu.cs.eshop.service.convert.EshopProductConvert.convertToEshopProdReviewDTO;
 import static cn.seu.cs.eshop.service.convert.EshopProductConvert.covertDTO;
 import static cn.seu.cs.eshop.service.convert.ProductCategoryConvert.convertDTO;
 import static cn.seu.cs.eshop.service.enums.product.ProdStatusEnum.PUBLISHED;
@@ -63,6 +64,10 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
     EshopAccountService eshopAccountService;
     @Resource
     EmailSendService emailSendService;
+    @Resource
+    ProdSkusToBCache prodSkusToBCache;
+    @Resource
+    ProdToBCache prodToBCache;
 
     @Override
     public long insert(EshopProductDTO data) {
@@ -103,6 +108,8 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
                 data.getSkus().stream().map(sku -> EshopProductConvert.covertDO(sku, id)).toList();
         List<EshopProdSkuDO> origins = eshopProdSkuDao.selectByProdId(id);
         eshopProdSkuManager.updateDiffEntities(skus, origins);
+        prodToBCache.deleteProd(id);
+        prodSkusToBCache.deleteProdSkus(id);
         return buildSuccessResponse(BaseResponse.class, String.valueOf(id));
     }
 
@@ -123,6 +130,8 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         prod.setStatus(request.getStatus());
         prod.setUpdateTime(TimeUtils.getCurrentTime());
         eshopProdDao.updateById(prod);
+        Long prodID = request.getProdId();
+        prodToBCache.deleteProd(prodID);
         EshopProdReviewDO entity = new EshopProdReviewDO();
         MysqlUtils.buildEffectEntity(entity);
         entity.setStatus(request.getStatus());
@@ -152,8 +161,8 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
 
     @Override
     public GetProductInfoResponse getProductInfo(Long prodId) {
-        EshopProdDO prod = eshopProdDao.selectById(prodId);
-        List<EshopProdSkuDO> skus = eshopProdSkuDao.selectByProdId(prodId);
+        EshopProdDO prod = prodToBCache.getProd(prodId);
+        List<EshopProdSkuDO> skus = prodSkusToBCache.getProdSkus(prodId);
         EshopProductDTO data = EshopProductConvert.covertDTO(prod, skus);
         return buildSuccessResponse(GetProductInfoResponse.class, data);
     }

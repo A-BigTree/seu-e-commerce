@@ -8,9 +8,8 @@ import lombok.EqualsAndHashCode;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/12/4
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class EshopProductInfoIndex extends EsBaseIndex {
+public class EshopProductInfoIndex implements EsBaseIndex {
     private Long id;
     private String prodName; // 分词
     private Long shopId;
@@ -40,6 +39,6 @@ public class EshopProductInfoIndex extends EsBaseIndex {
 
     @Override
     public String getDocId() {
-        return id + "_" + skuId;
+        return shopId + "_" + id + "_" + skuId;
     }
 }

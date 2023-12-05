@@ -8,9 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Created on 2023/11/6
  */
 @SpringBootApplication(scanBasePackages = {
-        "cn.seu.cs.eshop.common.component",
-        "cn.seu.cs.eshop.common.configuration",
-        "cn.seu.cs.eshop.service.dao",
+        "cn.seu.cs.eshop.common",
+        "cn.seu.cs.eshop.service",
         "cn.seu.cs.eshop.task"
 })
 public class EshopTaskApplication {

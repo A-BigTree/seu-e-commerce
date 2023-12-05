@@ -12,7 +12,9 @@ import static cn.seu.cs.eshop.common.constants.RedisConstants.DEFAULT_EXPIRATION
  */
 public enum ServiceRedisConfEnum implements RedisConf {
     prodCategory("prod:category:", 5L, TimeUnit.MINUTES),
-    prodSkuCodeGenerate("prod:sku:code:generate");
+    prodSkuCodeGenerate("prod:sku:code:generate"),
+    prodToBCache("prod:tob:cache:", 3L, TimeUnit.MINUTES),
+    prodSkusToBCache("prod:tob:skus:cache:", 3L, TimeUnit.MINUTES),
 
 
     ;

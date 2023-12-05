@@ -43,5 +43,9 @@ public abstract class AbstractElasticService<INDEX extends EsBaseIndex> {
                 .toList();
     }
 
+    public String deleteByDocId(String docId) {
+        return elasticsearchTemplate.delete(docId, IndexCoordinates.of(getIndex()));
+    }
+
     public abstract String getIndex();
 }

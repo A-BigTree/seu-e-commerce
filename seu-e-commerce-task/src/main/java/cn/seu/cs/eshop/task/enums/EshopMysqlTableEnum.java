@@ -2,6 +2,8 @@ package cn.seu.cs.eshop.task.enums;
 
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDO;
 import cn.seu.cs.eshop.common.util.JsonUtils;
+import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
+import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +22,8 @@ import static cn.seu.cs.eshop.task.constants.EshopDatabaseConstants.*;
 public enum EshopMysqlTableEnum {
     DEFAULT("", "", MysqlBaseDO.class),
     PROD_PROP_VALUE(SERVICE_DATABASE, "prod_prop_value", ProductPropValueDO.class),
-
+    ESHOP_PROD(SERVICE_DATABASE, "eshop_prod", EshopProdDO.class),
+    ESHOP_PROD_SKU(SERVICE_DATABASE, "eshop_prod_sku", EshopProdSkuDO.class),
     ;
     final String database;
     final String table;

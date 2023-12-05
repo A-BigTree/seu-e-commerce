@@ -3,6 +3,7 @@ package cn.seu.cs.eshop.service.convert;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdReviewDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
+import cn.seu.cs.eshop.service.pojo.es.EshopProductInfoIndex;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdReviewDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuPropDTO;
@@ -132,6 +133,39 @@ public class EshopProductConvert {
         result.setStatus(item.getStatus());
         result.setOldStatus(item.getOldStatus());
         result.setCreateTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT));
+        return result;
+    }
+
+    public static EshopProductInfoIndex convertToEshopProductInfoIndex(EshopProdDO item, EshopProdSkuDO sku) {
+        if (item == null) {
+            return null;
+        }
+        EshopProductInfoIndex result = new EshopProductInfoIndex();
+        result.setId(item.getId());
+        result.setProdName(item.getProdName());
+        result.setShopId(item.getShopId());
+        result.setOriginPrice(item.getOriginPrice());
+        result.setPrice(item.getPrice());
+        result.setCategoryId(item.getCategoryId());
+        result.setTotalStocks(item.getTotalStocks());
+        result.setSoldNum(item.getSoldNum());
+        result.setBrief(item.getBrief());
+        result.setContent(item.getContent());
+        result.setParameters(item.getParameters());
+        result.setPic(item.getPic());
+        result.setImages(item.getImages());
+        result.setDeliveryMode(item.getDeliveryMode());
+        result.setDeliveryPrice(item.getDeliveryPrice());
+        result.setUpdateTime(item.getUpdateTime());
+        result.setCreateTime(item.getCreateTime());
+        result.setSkuId(sku.getId());
+        result.setProperties(sku.getProperties());
+        result.setSkuName(sku.getSkuName());
+        result.setSkuCode(sku.getSkuCode());
+        result.setSkuPic(sku.getPic());
+        result.setSkuOriginPrice(sku.getOriginPrice());
+        result.setSkuPrice(sku.getPrice());
+        result.setSkuStocks(sku.getStocks());
         return result;
     }
 
