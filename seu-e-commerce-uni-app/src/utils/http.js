@@ -1,4 +1,4 @@
-const config = require("@/utils/config");
+import {domain} from "@/utils/config";
 /**
  * 统一请求
  * @param {Object} params 请求参数
@@ -16,7 +16,7 @@ const request = function(params) {
 	}).then(r => {
 	});
 	uni.request({
-		url: (params.domain? params.domain : config.domain) + params.url,
+		url: (params.domain? params.domain : domain) + params.url,
 		data: params.data,
 		header: {
 			"Access-Control-Allow-Origin": "*",
@@ -132,6 +132,6 @@ const request = function(params) {
 
 }
 
-module.exports = {
+export {
 	request,
 }

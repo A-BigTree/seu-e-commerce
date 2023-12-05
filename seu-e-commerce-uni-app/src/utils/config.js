@@ -8,7 +8,7 @@ const salt = "eshop-app"
 const picDomain = "https://www.abigtree.top/eshop/static/admin/image"
 
 
-module.exports = {
+export  {
     domain,
     salt,
     picDomain,

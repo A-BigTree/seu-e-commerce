@@ -1,11 +1,9 @@
 <template>
   <view class="container">
-
-
     <view class="userinfo" v-if="isAuthInfo">
       <view class="userinfo-con">
         <view class="userinfo-avatar" @click="selectImage">
-          <image :src="loginResult.image ? picDomain + loginResult.image: '/static/images/icon/head04.png'"></image>
+          <image :src="loginResult.image ? picDomain1 + loginResult.image: '/static/images/icon/head04.png'"></image>
         </view>
         <view class="userinfo-name" @click="toUpdatePage">
           <view>{{ loginResult.nickname ? loginResult.nickname : "用户昵称" }}</view>
@@ -120,211 +118,161 @@
   </view>
 </template>
 
-<script>
-const http = require("@/utils/http")
-const config = require("@/utils/config")
-export default {
-  data() {
-    return {
-      orderAmount: '',
-      sts: '',
-      collectionCount: 0,
-      isAuthInfo: false,
-      loginResult: '',
-      picDomain: ''
-    };
-  },
+<script setup>
 
-  components: {},
-  props: {},
+import {ref} from "vue";
+import {request} from "@/utils/http"
+import {domain, picDomain} from "@/utils/config"
+import {onShow} from "@dcloudio/uni-app";
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  },
+const orderAmount = ref("");
+const sts = ref("");
+const collectionCount = ref(0);
+const isAuthInfo = ref(false);
+const loginResult = ref("");
+const picDomain1 = ref("");
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  },
+const init = () => {
+  const params = {
+    url: "/account/user/info/get",
+    method: "GET",
+    callBack: (response) => {
+      const user = response.data;
+      uni.setStorageSync("userInfo", user);
+    }
+  };
+  request(params);
+    loginResult.value = uni.getStorageSync("userInfo")
+  if (loginResult.value) {
+      isAuthInfo.value = true,
+      picDomain1.value = picDomain
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    uni.setNavigationBarTitle({
-      title: "个人中心"
-    });
-    const params = {
-      url: "/account/user/info/get",
-      method: "GET",
-      callBack: (response) => {
-        const user = response.data;
-        uni.setStorageSync("userInfo", user);
-      }
-    };
-    http.request(params);
-    this.setData({
-      loginResult: uni.getStorageSync("userInfo"),
-    });
-    if (this.loginResult) {
-      this.setData({
-        isAuthInfo: true,
-        picDomain: config.picDomain
+  } else {
+      isAuthInfo.value = false
+  }
+  if (isAuthInfo.value) {
+    // TODO 个人订单信息
+  }
+}
+
+onShow(() => {
+  init();
+})
+
+const selectImage = () => {
+  uni.chooseImage({
+    count: 1,
+    success: function (result) {
+      uni.showLoading({
+        title: "Loading",
+        mask: true
+      }).then(r => {
       });
-    } else {
+      const paths = result.tempFilePaths;
+      uni.uploadFile({
+        url: domain + "/account/user/head/load",
+        filePath: paths[0],
+        name: "photo",
+        header: {
+          "Access-Control-Allow-Origin": "*",
+          "Authorization": uni.getStorageSync("token"),
+        },
+        success: (res) => {
+          uni.hideLoading();
+          console.log(res);
+          const data = JSON.parse(res.data);
+          console.log(data);
+          if (data.code === 200) {
+            uni.showToast({
+              title: "头像修改成功~",
+              icon: "success"
+            });
+            uni.reLaunch({
+              url: "/pages/user/user"
+            });
+          } else {
+            uni.showToast({
+              title: "头像修改失败",
+              icon: "none"
+            });
+          }
+        }
+      });
+      uni.hideLoading();
+    }
+  });
+
+}
+
+const toUpdatePage = function () {
+  console.log("点击")
+}
+
+const toDistCenter = function () {
+
+}
+
+const toCouponCenter = function () {
+
+}
+
+const toMyCouponPage = function () {
+
+}
+
+const handleTips = function () {
+
+}
+
+const toAddressList = function () {
+
+}
+
+const toOrderListPage = function (e) {
+
+}
+
+/**
+ * 查询所有的收藏量
+ */
+const showCollectionCount = function () {
+
+}
+
+/**
+ * 我的收藏跳转
+ */
+const myCollectionHandle = function () {
+
+}
+
+/**
+ * 去登陆
+ */
+const toLogin = function () {
+  uni.navigateTo({
+    url: "/pages/login/login"
+  })
+}
+
+/**
+ * 退出登录
+ */
+const logout = function () {
+  const params = {
+    url: "/account/user/logout",
+    callBack: (res) => {
+      uni.removeStorageSync("userInfo");
+      uni.removeStorageSync("token");
       this.setData({
         isAuthInfo: false
       });
     }
-    if (this.isAuthInfo) {
-      // TODO 个人订单信息
-    }
-  },
-
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  },
-
-  methods: {
-    selectImage: function () {
-      uni.chooseImage({
-        count: 1,
-        success: function (result) {
-          uni.showLoading({
-            title: "Loading",
-            mask: true
-          }).then(r => {
-          });
-          const paths = result.tempFilePaths;
-          uni.uploadFile({
-            url: config.domain + "/account/user/head/load",
-            filePath: paths[0],
-            name: "photo",
-            header: {
-              "Access-Control-Allow-Origin": "*",
-              "Authorization": uni.getStorageSync("token"),
-            },
-            success: (res) => {
-              uni.hideLoading();
-              console.log(res);
-              const data = JSON.parse(res.data);
-              console.log(data);
-              if (data.code === 200) {
-                uni.showToast({
-                  title: "头像修改成功~",
-                  icon: "success"
-                });
-                uni.reLaunch({
-                  url: "/pages/user/user"
-                });
-              } else {
-                uni.showToast({
-                  title: "头像修改失败",
-                  icon: "none"
-                });
-              }
-            }
-          });
-          uni.hideLoading();
-        }
-      });
-
-    },
-    toUpdatePage: function () {
-      console.log("点击")
-    },
-    toDistCenter: function () {
-
-    },
-    toCouponCenter: function () {
-
-    },
-    toMyCouponPage: function () {
-
-    },
-    handleTips: function () {
-
-    },
-    toAddressList: function () {
-
-    },
-    toOrderListPage: function (e) {
-
-    },
-
-    /**
-     * 查询所有的收藏量
-     */
-    showCollectionCount: function () {
-
-    },
-
-    /**
-     * 我的收藏跳转
-     */
-    myCollectionHandle: function () {
-
-    },
-
-    /**
-     * 去登陆
-     */
-    toLogin: function () {
-      uni.navigateTo({
-        url: "/pages/login/login"
-      })
-    },
-
-    /**
-     * 退出登录
-     */
-    logout: function () {
-      const params = {
-        url: "/account/user/logout",
-        callBack: (res) => {
-          uni.removeStorageSync("userInfo");
-          uni.removeStorageSync("token");
-          this.setData({
-            isAuthInfo: false
-          });
-        }
-      };
-      http.request(params)
-    },
-  }
-
-};
+  };
+  request(params)
+}
 </script>
-<style>
+
+<style scoped>
 @import "./user.css";
 </style>

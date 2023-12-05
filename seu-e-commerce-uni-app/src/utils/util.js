@@ -1,4 +1,4 @@
-const {ref} = require("@dcloudio/uni-mp-vue");
+import {ref} from "vue";
 const formatTime = date => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -63,7 +63,7 @@ const countDown = (second, callBack) => {
     }, 1000);
 }
 
-module.exports = {
+export {
     formatTime,
     getUrlKey,
     formatHtml,
