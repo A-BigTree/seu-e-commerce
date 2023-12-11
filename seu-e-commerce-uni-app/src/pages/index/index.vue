@@ -2,23 +2,98 @@
 
 import {ref} from "vue";
 import ImgShow from "../../components/img-show/img-show.vue";
+import {picDomain} from "../../utils/config";
 
 const indicatorColor = ref('#d1e5fb')
 const indicatorActiveColor = ref('#1b7dec')
 const autoplay = ref(true)
-const interval = ref(2000)
-const duration = ref(1000)
-const indexImages = ref([])
-const tagList = ref([])
+const interval = ref(4000)
+const duration = ref(2000)
+const indexImages = ref([
+  {
+    imgUrl: '/index/index1.jpg',
+    relation: 1
+  },
+  {
+    imgUrl: '/index/index2.jpg',
+    relation: 2
+  }
+])
+const tagList = ref([
+  {
+    style: '2',
+    id: 2,
+    title: '每日上新',
+    prods: [
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      },
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      },
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      }
+    ]
+  },
+  {
+    style: '1',
+    id: 1,
+    title: '商城热卖',
+    prods: [
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      },
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      },
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      },
+      {
+        prodName: "商品名称",
+        pic: "/index/index1.jpg",
+        prodId: 1,
+        price: 1000
+      }
+    ]
+  }
+])
 const updata = ref(true)
 
 
 const toSearchPage = () => {
-
+  uni.navigateTo({
+    url: '/pages/search-page/search-page'
+  })
 }
 
-const toProdPage = () => {
+const toProdPage = (e) => {
+  const prodId = e.currentTarget.dataset.prodid
 
+  if (prodId) {
+    uni.navigateTo({
+      url: '/pages/prod/prod?prodId=' + prodId
+    })
+  }
 }
 
 const toClassifyPage = () => {
@@ -71,8 +146,8 @@ const addToCart = (prod) => {
           <swiper-item class="banner-item">
             <view class="img-box">
               <image
-                  :src="item.imgUrl"
-                  :data-prodid="item.relation"
+                  :src="picDomain + item.imgUrl"
+                  :data-prodId="item.relation"
                   class="banner"
                   @tap="toProdPage"
               />
@@ -117,13 +192,13 @@ const addToCart = (prod) => {
             >
               <view
                   class="prod-item"
-                  :data-prodid="prod.prodId"
+                  :data-prodId="prod.prodId"
                   @tap="toProdPage"
               >
                 <view>
                   <view class="imagecont">
                     <img-show
-                        :src="prod.pic"
+                        :src="picDomain + prod.pic"
                         :class-list="['prodimg']"
                     />
                   </view>
@@ -135,10 +210,7 @@ const addToCart = (prod) => {
                       ￥
                     </text>
                     <text class="big-num">
-                      {{ }}
-                    </text>
-                    <text class="small-num">
-                      .{{ }}
+                      {{prod.price}}
                     </text>
                   </view>
                 </view>
@@ -146,7 +218,6 @@ const addToCart = (prod) => {
             </block>
           </view>
         </view>
-
         <!-- 商城热卖 -->
         <view
             v-if="item.style==='1' && item.prods && item.prods.length"
@@ -174,12 +245,12 @@ const addToCart = (prod) => {
             >
               <view
                   class="prod-items"
-                  :data-prodid="prod.prodId"
+                  :data-prodId="prod.prodId"
                   @tap="toProdPage"
               >
                 <view class="hot-imagecont">
                   <img-show
-                      :src="prod.pic"
+                      :src="picDomain + prod.pic"
                       :class-list="['hotsaleimg']"
                   />
                 </view>
@@ -196,70 +267,12 @@ const addToCart = (prod) => {
                         ￥
                       </text>
                       <text class="big-num">
-                        {{ }}
-                      </text>
-                      <text class="small-num">
-                        .{{ }}
+                        {{prod.price}}
                       </text>
                     </view>
                     <image
                         src="@/static/images/tabbar/basket-sel.png"
                         class="basket-img"
-                    />
-                  </view>
-                </view>
-              </view>
-            </block>
-          </view>
-        </view>
-
-        <!-- 更多宝贝 -->
-        <view
-            v-if="item.style==='0' && item.prods && item.prods.length"
-            class="more-prod"
-        >
-          <view class="title">
-            {{ item.title }}
-          </view>
-          <view class="prod-show">
-            <block
-                v-for="(prod, index2) in item.prods"
-                :key="index2"
-            >
-              <view
-                  class="show-item"
-                  :data-prodid="prod.prodId"
-                  @tap="toProdPage"
-              >
-                <view class="more-prod-pic">
-                  <img-show
-                      :src="prod.pic"
-                      :class-list="['more-pic']"
-                  />
-                </view>
-                <view class="prod-text-right">
-                  <view class="prod-text more">
-                    {{ prod.prodName }}
-                  </view>
-                  <view class="prod-info">
-                    {{ prod.brief }}
-                  </view>
-                  <view class="b-cart">
-                    <view class="price">
-                      <text class="symbol">
-                        ￥
-                      </text>
-                      <text class="big-num">
-                        {{ }}
-                      </text>
-                      <text class="small-num">
-                        .{{ }}
-                      </text>
-                    </view>
-                    <image
-                        src="@/static/images/tabbar/basket-sel.png"
-                        class="basket-img"
-                        @tap.stop="addToCart(prod)"
                     />
                   </view>
                 </view>

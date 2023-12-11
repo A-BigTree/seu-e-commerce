@@ -1,19 +1,9 @@
 <template>
   <image
-    v-if="!isError && imgPath"
-    :src="imgPath"
+    :src="props.src"
     :style="imgStyle"
     :class="classList"
     :mode="imgMode"
-    @error="imgError"
-    @load="imgLoad"
-    @tap="handleTap"
-  />
-  <image
-    v-else
-    :src="defaultImgPath"
-    :style="imgStyle"
-    :class="classList"
     @tap="handleTap"
   />
 </template>
@@ -47,24 +37,7 @@ const props = defineProps({
   }
 })
 
-const imgPath = computed(() => {
-  return util.checkFileUrl(props.src)
-})
-const defaultImgPath = computed(() => {
-  if (props.defaultImgType) return '/static/images/icon/head04.png'
-  return '/static/images/icon/def.png'
-})
-
-const emit = defineEmits(['imgError', 'imgLoad', 'handleTap'])
-const isError = ref(false)
-const imgError = () => {
-  isError.value = true
-  emit('imgError')
-}
-
-const imgLoad = (e) => {
-  emit('imgLoad', e)
-}
+const emit = defineEmits(['handleTap'])
 
 const handleTap = () => {
   emit('handleTap')

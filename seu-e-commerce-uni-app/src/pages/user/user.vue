@@ -77,27 +77,6 @@
       </view>
 
       <view class="my-menu">
-        <view class="memu-item" @tap="toDistCenter">
-          <view class="i-name">
-            <image src="/static/images/icon/promotion.png"></image>
-            <text>分销中心</text>
-          </view>
-          <view class="arrowhead"></view>
-        </view>
-        <view class="memu-item" @tap="toCouponCenter">
-          <view class="i-name">
-            <image src="/static/images/icon/getCoupon.png"></image>
-            <text>领券中心</text>
-          </view>
-          <view class="arrowhead"></view>
-        </view>
-        <view class="memu-item" @tap="toMyCouponPage">
-          <view class="i-name">
-            <image src="/static/images/icon/myCoupon.png"></image>
-            <text>我的优惠券</text>
-          </view>
-          <view class="arrowhead"></view>
-        </view>
         <view class="memu-item" @tap="toAddressList">
           <view class="i-name">
             <image src="/static/images/icon/myAddr.png"></image>
@@ -208,24 +187,14 @@ const toUpdatePage = function () {
   console.log("点击")
 }
 
-const toDistCenter = function () {
-
-}
-
-const toCouponCenter = function () {
-
-}
-
-const toMyCouponPage = function () {
-
-}
-
 const handleTips = function () {
 
 }
 
 const toAddressList = function () {
-
+  uni.navigateTo({
+    url: '/pages/delivery-address/delivery-address'
+  });
 }
 
 const toOrderListPage = function (e) {

@@ -39,6 +39,49 @@
 		},
 		{
 			"path": "pages/register/register"
+		},
+		{
+			"path": "pages/delivery-address/delivery-address",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "收货地址",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/editAddress/editAddress",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "编辑收货地址",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/search-page/search-page",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "搜索",
+				"navigationBarTextStyle": "black",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/search-prod-show/search-prod-show",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "搜索结果",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/prod/prod",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
 		}
 	],
 

@@ -9,6 +9,9 @@ export default {
   onHide: function () {
     console.log('App Hide')
   },
+  onLoad: function (query) {
+    console.log('App onLoad', query)
+  }
 }
 </script>
 

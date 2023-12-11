@@ -6,7 +6,7 @@
   >
     <view class="hot-imagecont">
       <image
-        :src="item.pic"
+        :src="picDomain + item.pic"
         class="hotsaleimg"
       />
     </view>
@@ -22,20 +22,11 @@
       </view>
       <view class="prod-text-info">
         <view class="price">
-          <text
-            v-if="sts===2"
-            class="deadline-price"
-          >
-            限时价
-          </text>
           <text class="symbol">
             ￥
           </text>
           <text class="big-num">
-            {{ wxs.parsePrice(item.price)[0] }}
-          </text>
-          <text class="small-num">
-            .{{ wxs.parsePrice(item.price)[1] }}
+            {{item.price}}
           </text>
         </view>
       </view>
@@ -43,8 +34,8 @@
   </view>
 </template>
 <script setup>
-const wxs = number()
-// eslint-disable-next-line no-unused-vars
+import {picDomain} from "../../utils/config";
+
 const props = defineProps({
   item: {
     type: Object,
