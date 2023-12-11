@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdReviewDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.es.EshopProductInfoIndex;
+import cn.seu.cs.eshop.service.pojo.es.ProductEsIndex;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdReviewDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuDTO;
 import cn.seu.cs.eshop.service.sdk.product.prod.dto.EshopProdSkuPropDTO;
@@ -169,4 +170,29 @@ public class EshopProductConvert {
         return result;
     }
 
+    public static ProductEsIndex convertToProductEsIndex(EshopProdDO item, String skuProperties){
+        if (item == null) {
+            return null;
+        }
+        ProductEsIndex result = new ProductEsIndex();
+        result.setId(item.getId());
+        result.setProdName(item.getProdName());
+        result.setShopId(item.getShopId());
+        result.setOriginPrice(item.getOriginPrice());
+        result.setPrice(item.getPrice());
+        result.setCategoryId(item.getCategoryId());
+        result.setTotalStocks(item.getTotalStocks());
+        result.setSoldNum(item.getSoldNum());
+        result.setBrief(item.getBrief());
+        result.setContent(item.getContent());
+        result.setParameters(item.getParameters());
+        result.setPic(item.getPic());
+        result.setImages(item.getImages());
+        result.setDeliveryMode(item.getDeliveryMode());
+        result.setDeliveryPrice(item.getDeliveryPrice());
+        result.setUpdateTime(item.getUpdateTime());
+        result.setCreateTime(item.getCreateTime());
+        result.setSkuProperties(skuProperties);
+        return result;
+    }
 }

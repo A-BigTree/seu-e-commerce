@@ -448,14 +448,24 @@ const submitData = () => {
     data.parameters = params;
     // SKU信息
     const skus = [];
+    let price = 0;
+    let originPrice = 0;
     skuForm.value.skus.forEach(sku => {
       const sk = JSON.parse(JSON.stringify(sku));
       sk.pic = sku.pic.length === 0 ? null : sku.pic[0].response.data;
       sk.originPrice = getStandPrice(sku.originPrice);
       sk.price = getStandPrice(sku.price);
       skus.push(sk);
+      if (price === 0 || price > sk.price) {
+        price = sk.price;
+      }
+      if (originPrice === 0 || originPrice > sk.originPrice) {
+        originPrice = sk.originPrice;
+      }
     });
     data.skus = skus;
+    data.price = price;
+    data.originPrice = originPrice;
     const params1 = {
       url: "/product/tob/prod/update",
       data: {

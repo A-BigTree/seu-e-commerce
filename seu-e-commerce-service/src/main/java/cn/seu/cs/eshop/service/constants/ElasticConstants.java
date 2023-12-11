@@ -6,4 +6,5 @@ package cn.seu.cs.eshop.service.constants;
  */
 public class ElasticConstants {
     public final static String ES_PRODUCT_INFO_INDEX = "eshop_product_info";
+    public final static String ES_PRODUCT_SEARCH_INDEX = "eshop_product_index";
 }

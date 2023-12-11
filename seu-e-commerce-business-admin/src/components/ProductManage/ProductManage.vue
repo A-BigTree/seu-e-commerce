@@ -194,6 +194,7 @@ const editSkuCallBack = (status) => {
   };
   http(params);
   dialogSkuOpen.value = false
+  listData();
 }
 
 // 操作历史

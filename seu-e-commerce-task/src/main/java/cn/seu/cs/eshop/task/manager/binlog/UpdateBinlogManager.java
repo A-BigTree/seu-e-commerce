@@ -4,16 +4,19 @@ import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
 import cn.seu.cs.eshop.service.es.EsProductInfoService;
+import cn.seu.cs.eshop.service.es.EsProductSearchService;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
 import cn.seu.cs.eshop.service.pojo.es.EshopProductInfoIndex;
+import cn.seu.cs.eshop.service.pojo.es.ProductEsIndex;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -28,6 +31,8 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
     ProdSkusToBCache prodSkusToBCache;
     @Resource
     EsProductInfoService esProductInfoService;
+    @Resource
+    EsProductSearchService esProductSearchService;
 
     @Override
     public void writeProdPropValue(ProductPropValueDO data) {
@@ -47,6 +52,11 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
                 .map(sku -> EshopProductConvert.convertToEshopProductInfoIndex(prod, sku))
                 .toList();
         indies.forEach(index -> esProductInfoService.save(index));
+        String skuProperties = skus.stream()
+                .map(EshopProdSkuDO::getProperties)
+                .collect(Collectors.joining(";"));
+        ProductEsIndex productEsIndex = EshopProductConvert.convertToProductEsIndex(prod, skuProperties);
+        esProductSearchService.save(productEsIndex);
     }
 
     @Override

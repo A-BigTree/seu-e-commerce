@@ -21,7 +21,7 @@ const indexImages = ref([
 ])
 const tagList = ref([
   {
-    style: '2',
+    style: 2,
     id: 2,
     title: '每日上新',
     prods: [
@@ -46,7 +46,7 @@ const tagList = ref([
     ]
   },
   {
-    style: '1',
+    style: 1,
     id: 1,
     title: '商城热卖',
     prods: [
@@ -168,7 +168,7 @@ const addToCart = (prod) => {
       >
         <!-- 每日上新 -->
         <view
-            v-if="item.style==='2' && item.prods && item.prods.length"
+            v-if="item.style===2 && item.prods && item.prods.length"
             class="up-to-date"
         >
           <view class="title">
@@ -220,7 +220,7 @@ const addToCart = (prod) => {
         </view>
         <!-- 商城热卖 -->
         <view
-            v-if="item.style==='1' && item.prods && item.prods.length"
+            v-if="item.style===1 && item.prods && item.prods.length"
             class="hot-sale"
         >
           <view class="title">

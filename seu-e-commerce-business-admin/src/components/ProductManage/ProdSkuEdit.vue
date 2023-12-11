@@ -105,14 +105,26 @@ const submitData = () => {
     return pre + curr.stocks;
   }, 0);
   const skus = [];
+  let stock = 0;
+  let price = 0;
+  let originPrice = 0;
   skusData.value.forEach(sku => {
     const sk = JSON.parse(JSON.stringify(sku));
     sk.originPrice = getStandPrice(sku.originPrice);
     sk.price = getStandPrice(sku.price);
     skus.push(sk);
+    stock += sk.stocks;
+    if (price === 0 || price > sk.price) {
+      price = sk.price;
+    }
+    if (originPrice === 0 || originPrice > sk.originPrice) {
+      originPrice = sk.originPrice;
+    }
   });
   prodData.value.skus = skus;
-
+  prodData.value.price = price;
+  prodData.value.originPrice = originPrice;
+  prodData.value.totalStocks = stock;
   const params1 = {
     url: "/product/tob/prod/update",
     data: {
