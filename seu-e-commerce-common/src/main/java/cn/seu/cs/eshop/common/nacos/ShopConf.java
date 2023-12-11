@@ -63,7 +63,7 @@ public interface ShopConf {
         return res;
     }
 
-    default <T> List<T> getConfigList(ConfDataId<T> dataId, Class<T> clazz) {
+    default <D, T extends D> List<T> getConfigList(ConfDataId<D> dataId, Class<T> clazz) {
         return getConfigList(dataId.getDataId(), dataId.getApplication(), clazz);
     }
 

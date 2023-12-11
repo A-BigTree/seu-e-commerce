@@ -177,6 +177,7 @@ public class EshopProductConvert {
         ProductEsIndex result = new ProductEsIndex();
         result.setId(item.getId());
         result.setProdName(item.getProdName());
+        result.setStatus(item.getStatus());
         result.setShopId(item.getShopId());
         result.setOriginPrice(item.getOriginPrice());
         result.setPrice(item.getPrice());
@@ -195,4 +196,36 @@ public class EshopProductConvert {
         result.setSkuProperties(skuProperties);
         return result;
     }
+
+    public static EshopProductDTO convertToEshopProductDTO(ProductEsIndex item) {
+        if (item == null) {
+            return null;
+        }
+        return EshopProductDTO.builder()
+                .id(item.getId())
+                .prodName(item.getProdName())
+                .shopId(item.getShopId())
+                .status(item.getStatus())
+                .originPrice(item.getOriginPrice())
+                .price(item.getPrice())
+                .categoryId(item.getCategoryId())
+                .totalStocks(item.getTotalStocks())
+                .soldNum(item.getSoldNum())
+                .brief(item.getBrief())
+                .content(item.getContent())
+                .pic(item.getPic())
+                .images(item.getImages() != null ? Arrays.asList(item.getImages().split(";")) : null)
+                .deliveryMode(item.getDeliveryMode())
+                .deliveryPrice(item.getDeliveryPrice())
+                .updateTime(TimeUtils.convertString(item.getUpdateTime(), TimeUtils.DATE_TIME_FORMAT))
+                .createTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT))
+                .skus(new ArrayList<>())
+                .parameters(item.getParameters() != null ? Arrays.stream(item.getParameters().split(";"))
+                        .map(pv -> {
+                            String[] prop = pv.split(":");
+                            return new EshopProdSkuPropDTO(prop[0], prop[1]);
+                        }).toList() : null)
+                .build();
+    }
+
 }

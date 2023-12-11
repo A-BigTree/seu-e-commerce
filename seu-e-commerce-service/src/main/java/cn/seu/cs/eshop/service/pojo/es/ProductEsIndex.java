@@ -26,6 +26,7 @@ public class ProductEsIndex implements EsBaseIndex {
     private Integer deliveryPrice;
     private Long updateTime;
     private Long createTime;
+    private Integer status;
     // SKU信息
     private String skuProperties;
 

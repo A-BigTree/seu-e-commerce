@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.bo;
+package cn.seu.cs.eshop.service.pojo.bo;
 
 import lombok.Data;
 

@@ -4,7 +4,8 @@ import cn.seu.cs.eshop.account.sdk.entity.req.GetUserInfoResponse;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.common.component.EshopConfService;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
-import cn.seu.cs.eshop.service.bo.ProdReviewEmailBO;
+import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
+import cn.seu.cs.eshop.service.pojo.bo.ProdReviewEmailBO;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
@@ -68,6 +69,8 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
     ProdSkusToBCache prodSkusToBCache;
     @Resource
     ProdToBCache prodToBCache;
+    @Resource
+    ProdIndexToCCache prodIndexToCCache;
 
     @Override
     public long insert(EshopProductDTO data) {
@@ -110,6 +113,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         eshopProdSkuManager.updateDiffEntities(skus, origins);
         prodToBCache.deleteProd(id);
         prodSkusToBCache.deleteProdSkus(id);
+        prodIndexToCCache.removeProdIndex();
         return buildSuccessResponse(BaseResponse.class, String.valueOf(id));
     }
 
@@ -132,6 +136,7 @@ public class ProductToBServiceImpl extends AbstractCrudService<EshopProductDTO>
         eshopProdDao.updateById(prod);
         Long prodID = request.getProdId();
         prodToBCache.deleteProd(prodID);
+        prodIndexToCCache.removeProdIndex();
         EshopProdReviewDO entity = new EshopProdReviewDO();
         MysqlUtils.buildEffectEntity(entity);
         entity.setStatus(request.getStatus());

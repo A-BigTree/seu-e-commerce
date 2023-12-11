@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
+import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.es.EsProductInfoService;
@@ -23,6 +24,8 @@ public class DeleteBinlogManager extends AbstractBinlogManager{
     ProdSkusToBCache prodSkusToBCache;
     @Resource
     EsProductInfoService esProductInfoService;
+    @Resource
+    ProdIndexToCCache prodIndexToCCache;
 
     @Override
     public void writeProdPropValue(ProductPropValueDO data) {
@@ -32,6 +35,7 @@ public class DeleteBinlogManager extends AbstractBinlogManager{
     @Override
     protected void writeEshopProd(EshopProdDO data) {
         prodToBCache.deleteProd(data.getId());
+        prodIndexToCCache.removeProdIndex();
     }
 
     @Override

@@ -2,8 +2,11 @@ package cn.seu.cs.eshop.service.nacos;
 
 import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.nacos.ConfDataId;
-import cn.seu.cs.eshop.service.bo.ProdReviewEmailBO;
+import cn.seu.cs.eshop.service.pojo.bo.EshopIndexProdConfBO;
+import cn.seu.cs.eshop.service.pojo.bo.ProdReviewEmailBO;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -11,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum ServiceNacosConfEnum implements ConfDataId<Object> {
     emailReviewContext(new ProdReviewEmailBO()),
+    eshopIndexProdConf(new ArrayList<EshopIndexProdConfBO>()),
 
     ;
 
