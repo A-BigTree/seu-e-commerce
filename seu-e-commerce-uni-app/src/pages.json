@@ -82,6 +82,15 @@
 			"style": {
 				"navigationBarTitleText": "商品详情"
 			}
+		},
+		{
+			"path": "pages/submit-order/submit-order",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "提交订单",
+				"navigationBarTextStyle": "black"
+			}
 		}
 	],
 
