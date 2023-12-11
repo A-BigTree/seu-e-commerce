@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.cache;
+package cn.seu.cs.eshop.service.cache.product;
 
 import cn.seu.cs.eshop.common.redis.RedisService;
 import cn.seu.cs.eshop.service.dao.EshopProdDao;

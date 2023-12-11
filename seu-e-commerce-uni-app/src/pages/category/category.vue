@@ -1,35 +1,46 @@
 <script setup>
 import {ref} from "vue";
 import {onShow} from "@dcloudio/uni-app";
+import {request} from "../../utils/http";
 
 const categoryList = ref([
   {
     categoryName: '电子电器',
-    categoryId: 1
-  },
-  {
-    categoryName: '服装鞋帽',
-    categoryId: 2
+    id: 1
   }
 ]);
 const subCategoryList = ref([]);
 const selIndex = ref(0);
 
 const init = () => {
-
+  categoryList.value = [];
+  request({
+    url: "/product/category/all/get",
+    method: "GET",
+    callBack: (res) => {
+      categoryList.value = res.data;
+      if (categoryList.value && categoryList.value.length) {
+        selIndex.value = 0;
+        subCategoryList.value = categoryList.value[0].children;
+      }
+    }
+  });
 }
 
 onShow(() => {
   init();
 });
 
-const toSearchPage = () => {
-
+const onMenuTab = (e) => {
+  const index = e.currentTarget.dataset.index;
+  selIndex.value = index;
+  subCategoryList.value = categoryList.value[index].children;
 }
 
-const onMenuTab = (e) => {
-  selIndex.value = parseInt(e.currentTarget.dataset.index);
-  console.log(e.currentTarget.dataset.id);
+const toCatePage = (e) => {
+  const categoryId = e.currentTarget.dataset.id;
+  const parentId = e.currentTarget.dataset.parentid;
+
 }
 
 </script>
@@ -49,7 +60,7 @@ const onMenuTab = (e) => {
         <view
             :class="'menu-item ' + (selIndex===index?'active':'') + ' '"
             :data-index="index"
-            :data-id="item.categoryId"
+            :data-id="item.id"
             @tap="onMenuTab"
         >
           {{ item.categoryName }}
@@ -62,6 +73,42 @@ const onMenuTab = (e) => {
         {{ categoryList && categoryList.length ? '该分类下暂无商品' : '暂无商品' }}
       </view>
     </scroll-view>
+    <!-- 左侧菜单end -->
+
+    <!-- 右侧内容start -->
+    <scroll-view
+        scroll-y="true"
+        class="rightcontent"
+    >
+      <!-- 子分类 -->
+      <view
+          v-if="subCategoryList.length"
+          class="th-cate-con"
+      >
+        <block
+            v-for="(thCateItem, index) in subCategoryList"
+            :key="index"
+        >
+          <view class="sub-category">
+            <view
+                class="sub-category-item"
+                :data-categoryid="thCateItem.id"
+                :data-parentid="thCateItem.parentId"
+                @tap="toCatePage"
+            >
+              <text>{{ thCateItem.categoryName }}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view
+          v-else
+          class="cont-item empty"
+      >
+        该分类下暂无子分类~
+      </view>
+    </scroll-view>
+    <!-- 右侧内容end -->
   </view>
 </template>
 

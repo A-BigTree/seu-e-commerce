@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.service.service.product.impl;
 
 import cn.seu.cs.eshop.common.util.MysqlUtils;
-import cn.seu.cs.eshop.service.cache.ProdCategoryCache;
+import cn.seu.cs.eshop.service.cache.product.ProdCategoryCache;
 import cn.seu.cs.eshop.service.convert.ProductCategoryConvert;
 import cn.seu.cs.eshop.service.dao.ProductCategoryDao;
 import cn.seu.cs.eshop.service.pojo.db.ProductCategoryDO;

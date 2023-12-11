@@ -10,8 +10,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
 import static cn.seu.cs.eshop.api.util.ApiUtil.getShopId;
-import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.BUSINESS;
-import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.PLATFORM;
+import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.*;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>

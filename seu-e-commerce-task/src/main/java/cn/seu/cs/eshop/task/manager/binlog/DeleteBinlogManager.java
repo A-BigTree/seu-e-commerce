@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
-import cn.seu.cs.eshop.service.cache.ProdSkusToBCache;
-import cn.seu.cs.eshop.service.cache.ProdToBCache;
+import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
+import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.es.EsProductInfoService;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
