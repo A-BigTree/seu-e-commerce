@@ -220,8 +220,6 @@ onShow(() => {
   loadOrderData()
 })
 
-let couponIds = []
-const coupons = ref({})
 const total = ref(0)
 const actualTotal = ref(0)
 const orderItems = ref([])
