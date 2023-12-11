@@ -3,6 +3,8 @@
 import {ref} from "vue";
 import ImgShow from "../../components/img-show/img-show.vue";
 import {picDomain} from "../../utils/config";
+import {request} from "../../utils/http";
+import {onShow} from "@dcloudio/uni-app";
 
 const indicatorColor = ref('#d1e5fb')
 const indicatorActiveColor = ref('#1b7dec')
@@ -80,6 +82,22 @@ const tagList = ref([
 const updata = ref(true)
 
 
+const init = () => {
+  const params = {
+    url: "/product/toc/shop/index/prod/get",
+    method: "GET",
+    callBack: (res) => {
+      const data = res.data;
+      tagList.value = data;
+    }
+  };
+  request(params);
+}
+
+onShow(() => {
+  init();
+});
+
 const toSearchPage = () => {
   uni.navigateTo({
     url: '/pages/search-page/search-page'
@@ -88,7 +106,6 @@ const toSearchPage = () => {
 
 const toProdPage = (e) => {
   const prodId = e.currentTarget.dataset.prodid
-
   if (prodId) {
     uni.navigateTo({
       url: '/pages/prod/prod?prodId=' + prodId
@@ -192,7 +209,7 @@ const addToCart = (prod) => {
             >
               <view
                   class="prod-item"
-                  :data-prodId="prod.prodId"
+                  :data-prodId="prod.id"
                   @tap="toProdPage"
               >
                 <view>
@@ -245,7 +262,7 @@ const addToCart = (prod) => {
             >
               <view
                   class="prod-items"
-                  :data-prodId="prod.prodId"
+                  :data-prodId="prod.id"
                   @tap="toProdPage"
               >
                 <view class="hot-imagecont">
