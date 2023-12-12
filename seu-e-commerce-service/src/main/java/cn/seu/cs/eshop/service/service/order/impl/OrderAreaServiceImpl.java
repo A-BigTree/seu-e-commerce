@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.service.service.order.impl;
 
 import cn.seu.cs.eshop.common.util.MysqlUtils;
-import cn.seu.cs.eshop.service.cache.product.OrderAreaAddressCache;
+import cn.seu.cs.eshop.service.cache.order.OrderAreaAddressCache;
 import cn.seu.cs.eshop.service.convert.EshopOrderConvert;
 import cn.seu.cs.eshop.service.dao.EshopUserAddressDao;
 import cn.seu.cs.eshop.service.pojo.db.EshopAreaDO;
@@ -17,9 +17,12 @@ import cn.seu.cs.eshop.service.service.order.OrderAreaService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static cs.seu.cs.eshop.common.sdk.enums.EshopStatusEnum.INVALID;
+import static cs.seu.cs.eshop.common.sdk.enums.EshopStatusEnum.VALID;
 import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 /**
@@ -76,9 +79,30 @@ public class OrderAreaServiceImpl extends AbstractCrudService<EshopOrderAddressD
     }
 
     @Override
+    @Transactional
     public BaseResponse updateAddress(UpdateUserAddressRequest request) {
         areaAddressCache.deleteOrderAddressCache(request.getData().getUserId());
         long id = crudOperation(request);
+        areaAddressCache.deleteOrderAddressIdCache(id);
         return buildSuccessResponse(BaseResponse.class, Long.toString(id));
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse changeDefaultAddress(Long addressId, Long userId) {
+        areaAddressCache.deleteOrderAddressIdCache(addressId);
+        areaAddressCache.deleteOrderAddressCache(userId);
+        List<EshopUserAddressDO> addresses = eshopUserAddressDao.selectByUserIdAndDefault(userId);
+        addresses.forEach(addr -> {
+            EshopUserAddressDO entity = new EshopUserAddressDO();
+            entity.setId(addr.getId());
+            entity.setDefaultAddress(INVALID.getStatus());
+            eshopUserAddressDao.updateById(entity);
+        });
+        EshopUserAddressDO entity = new EshopUserAddressDO();
+        entity.setId(addressId);
+        entity.setDefaultAddress(VALID.getStatus());
+        eshopUserAddressDao.updateById(entity);
+        return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
     }
 }

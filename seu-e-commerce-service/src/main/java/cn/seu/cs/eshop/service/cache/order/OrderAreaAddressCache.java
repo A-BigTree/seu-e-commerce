@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.cache.product;
+package cn.seu.cs.eshop.service.cache.order;
 
 import cn.seu.cs.eshop.common.component.EshopRedisService;
 import cn.seu.cs.eshop.service.convert.EshopOrderConvert;
@@ -107,8 +107,12 @@ public class OrderAreaAddressCache {
             }
             EshopOrderAreaDTO area = getOrderArea(address.getAreaId());
             value = EshopOrderConvert.convertToEshopOrderAddressDTO(address, area);
-            eshopRedisService.setObjectValue(addressId.toString(), value, orderUserAddressCache);
+            eshopRedisService.setObjectValue(addressId.toString(), value, orderUserAddressIdCache);
         }
         return value;
+    }
+
+    public void deleteOrderAddressIdCache(Long addressId) {
+        eshopRedisService.removeValue(addressId.toString(), orderUserAddressIdCache);
     }
 }

@@ -31,27 +31,26 @@
                 </text>
                 <image
                   src="@/static/images/icon/revise.png"
-                  :data-addrid="item.addrId"
+                  :data-addrid="item.id"
                   @tap.stop="toEditAddress"
                 />
               </view>
               <view class="addr">
                 <text class="addr-get">
-                  {{ item.province }}{{ item.city }}{{ item.area }}{{ item.addr }}
+                  {{ item.area.province.areaName }}{{ item.area.city.areaName }}{{ item.area.area.areaName }}{{ item.address }}
                 </text>
               </view>
             </view>
             <view
               class="select-btn"
-              :data-addrid="item.addrId"
-              @tap="onDefaultAddr"
             >
               <view class="box">
                 <radio
-                  :value="item.prodId"
-                  :checked="item.commonAddr===1"
+                  :value="item.id"
+                  :checked="item.defaultAddress === 1"
                   color="#eb2444"
-                  :data-addrid="item.addrId"
+                  :data-addrid="item.id"
+                  :data-default="item.defaultAddress"
                   @tap="onDefaultAddr"
                 />
                 设为默认地址
@@ -73,6 +72,7 @@
 <script setup>
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import {request} from "../../utils/http";
 
 const order = ref(-1)
 onLoad((option) => {
@@ -93,7 +93,13 @@ onShow(() => {
  * 获取收获列表接口
  */
 const onGetList = () => {
-
+  request({
+    url: "/order/area/address/list",
+    method: "GET",
+    callBack: (res) => {
+      addressList.value = res.data
+    }
+  })
 }
 
 /**
@@ -109,8 +115,17 @@ const onAddAddr = () => {
  * 设置为默认地址
  */
 const onDefaultAddr = (e) => {
-  const addrId = e.currentTarget.dataset.addrid
-
+  const addrId = e.currentTarget.dataset.addrid;
+  const defaultAddr = parseInt(e.currentTarget.dataset.default);
+  if (defaultAddr === 1) {
+    return;
+  }
+  request({
+    url: "/order/area/address/default/change?addressId=" + addrId,
+    callBack: (res) => {
+      onGetList();
+    }
+  })
 }
 
 /**
@@ -127,8 +142,11 @@ const toEditAddress = (e) => {
  * 选择地址 跳转回提交订单页
  */
 const selAddrToOrder = (item) => {
+  if (order.value > 0) {
 
+  }
 }
+
 </script>
 
 <style scoped lang="scss">

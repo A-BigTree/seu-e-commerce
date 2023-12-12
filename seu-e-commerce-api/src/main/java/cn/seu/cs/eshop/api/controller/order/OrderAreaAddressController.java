@@ -33,7 +33,8 @@ public class OrderAreaAddressController {
     @ApiMonitor(roleType = CUSTOMER)
     @CrossOrigin
     @PostMapping("/address/update")
-    public BaseResponse updateAddress(@RequestBody UpdateUserAddressRequest request) {
+    public BaseResponse updateAddress(@RequestBody UpdateUserAddressRequest request, @AuthorUserInfo Long userId) {
+        request.getData().setUserId(userId);
         return eshopOrderAreaService.updateAddress(request);
     }
 
@@ -49,5 +50,12 @@ public class OrderAreaAddressController {
     @GetMapping("/address/get")
     public GetUserAddressInfoResponse getUserAddressInfo(@RequestParam("addressId") Long addressId) {
         return eshopOrderAreaService.getUserAddressInfo(addressId);
+    }
+
+    @ApiMonitor(roleType = CUSTOMER)
+    @CrossOrigin
+    @PostMapping("/address/default/change")
+    public BaseResponse changeDefaultAddress(@RequestParam("addressId") Long addressId, @AuthorUserInfo Long userId) {
+        return eshopOrderAreaService.changeDefaultAddress(addressId, userId);
     }
 }
