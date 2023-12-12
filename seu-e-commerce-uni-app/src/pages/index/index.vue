@@ -5,6 +5,7 @@ import ImgShow from "../../components/img-show/img-show.vue";
 import {picDomain} from "../../utils/config";
 import {request} from "../../utils/http";
 import {onShow} from "@dcloudio/uni-app";
+import {getDisplayPrice} from "../../utils/util";
 
 const indicatorColor = ref('#d1e5fb')
 const indicatorActiveColor = ref('#1b7dec')
@@ -22,62 +23,6 @@ const indexImages = ref([
   }
 ])
 const tagList = ref([
-  {
-    style: 2,
-    id: 2,
-    title: '每日上新',
-    prods: [
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      },
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      },
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      }
-    ]
-  },
-  {
-    style: 1,
-    id: 1,
-    title: '商城热卖',
-    prods: [
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      },
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      },
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      },
-      {
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        prodId: 1,
-        price: 1000
-      }
-    ]
-  }
 ])
 const updata = ref(true)
 
@@ -227,7 +172,7 @@ const addToCart = (prod) => {
                       ￥
                     </text>
                     <text class="big-num">
-                      {{prod.price}}
+                      {{getDisplayPrice(prod.price)}}
                     </text>
                   </view>
                 </view>
@@ -284,7 +229,7 @@ const addToCart = (prod) => {
                         ￥
                       </text>
                       <text class="big-num">
-                        {{prod.price}}
+                        {{getDisplayPrice(prod.price)}}
                       </text>
                     </view>
                     <image

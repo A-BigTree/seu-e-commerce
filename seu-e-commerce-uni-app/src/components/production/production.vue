@@ -1,7 +1,7 @@
 <template>
   <view
     class="prod-items"
-    :data-prodid="item.prodId"
+    :data-prodid="item.id"
     @tap="toProdPage"
   >
     <view class="hot-imagecont">
@@ -13,12 +13,6 @@
     <view class="hot-text">
       <view class="hotprod-text">
         {{ item.prodName }}
-      </view>
-      <view
-        v-if="sts===6"
-        class="prod-info"
-      >
-        {{ item.prodCommNumber }}评价 {{ item.positiveRating }}%好评
       </view>
       <view class="prod-text-info">
         <view class="price">
@@ -42,19 +36,13 @@ const props = defineProps({
     default: () => {
       return null
     }
-  },
-  sts: {
-    type: Number,
-    default: () => {
-      return 2
-    }
   }
 })
 
 const toProdPage = (e) => {
-  const prodid = e.currentTarget.dataset.prodid
+  const prodId = e.currentTarget.dataset.prodid
   uni.navigateTo({
-    url: '/pages/prod/prod?prodid=' + prodid
+    url: '/pages/prod/prod?prodId=' + prodId
   })
 }
 </script>

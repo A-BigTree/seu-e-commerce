@@ -70,7 +70,6 @@
           >
             <production
               :item="item"
-              sts="6"
             />
           </block>
         </view>

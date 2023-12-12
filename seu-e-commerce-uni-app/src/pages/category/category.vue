@@ -39,8 +39,10 @@ const onMenuTab = (e) => {
 
 const toCatePage = (e) => {
   const categoryId = e.currentTarget.dataset.id;
-  const parentId = e.currentTarget.dataset.parentid;
-
+  const title = e.currentTarget.dataset.title;
+  uni.navigateTo({
+    url: '/pages/prod-classify/prod-classify?tagId=' + categoryId + '&sts=5&title=' + title
+  })
 }
 
 </script>
@@ -93,7 +95,7 @@ const toCatePage = (e) => {
             <view
                 class="sub-category-item"
                 :data-categoryid="thCateItem.id"
-                :data-parentid="thCateItem.parentId"
+                :data-title="thCateItem.categoryName"
                 @tap="toCatePage"
             >
               <text>{{ thCateItem.categoryName }}</text>

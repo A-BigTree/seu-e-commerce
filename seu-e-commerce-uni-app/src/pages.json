@@ -124,6 +124,12 @@
 				"navigationBarTitleText": "订单详情",
 				"navigationBarTextStyle": "black"
 			}
+		},
+		{
+			"path": "pages/prod-classify/prod-classify",
+			"style": {
+				"onReachBottomDistance": 0
+			}
 		}
 	],
 

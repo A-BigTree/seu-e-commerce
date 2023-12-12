@@ -63,11 +63,16 @@ const countDown = (second, callBack) => {
     }, 1000);
 }
 
+const getDisplayPrice = (price) => {
+    return price / 100;
+}
+
 export {
     formatTime,
     getUrlKey,
     formatHtml,
     removeTabBadge,
     checkEmail,
-    countDown
+    countDown,
+    getDisplayPrice
 };
