@@ -48,7 +48,6 @@ public class ProdIndexToCCache {
                     public Executor getExecutor() {
                         return null;
                     }
-
                     @Override
                     public void receiveConfigInfo(String s) {
                         eshopRedisService.removeValue(String.valueOf(OFFICIAL_ID), prodIndexToCCache);
@@ -70,7 +69,7 @@ public class ProdIndexToCCache {
                                                 StringUtils.EMPTY,
                                                 conf.getOrderBy(),
                                                 conf.getOrder(),
-                                                new PageDTO((long) 1, (long) conf.getLimit(), 0L, 0L));
+                                                new PageDTO(1, conf.getLimit(), 0L, 0L));
                                 List<EshopProductDTO> prods = indices.stream()
                                         .map(EshopProductConvert::convertToEshopProductDTO)
                                         .toList();

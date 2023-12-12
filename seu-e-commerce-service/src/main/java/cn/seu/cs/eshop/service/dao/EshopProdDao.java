@@ -21,7 +21,12 @@ import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
 @Mapper
 public interface EshopProdDao extends MysqlBaseDao<EshopProdDO> {
 
-    default IPage<EshopProdDO> selectByConditions(Long id, Long shopId, String prodName, Integer status, Long categoryId, PageDTO page) {
+    default IPage<EshopProdDO> selectByConditions(Long id,
+                                                  Long shopId,
+                                                  String prodName,
+                                                  Integer status,
+                                                  Long categoryId,
+                                                  PageDTO page) {
         EshopProdDO entity = new EshopProdDO();
         if (id > 0) {
             entity.setId(id);
@@ -41,4 +46,6 @@ public interface EshopProdDao extends MysqlBaseDao<EshopProdDO> {
         }
         return selectPage(page, wrapper);
     }
+
+    List<EshopProdDO> selectByProdIds(List<Long> prodIds);
 }

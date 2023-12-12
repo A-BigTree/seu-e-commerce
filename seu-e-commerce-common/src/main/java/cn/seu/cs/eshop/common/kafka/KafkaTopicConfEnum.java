@@ -2,6 +2,7 @@ package cn.seu.cs.eshop.common.kafka;
 
 import cn.seu.cs.eshop.common.util.JsonUtils;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
+import cs.seu.cs.eshop.common.sdk.entity.dto.EshopProdUserHistoryDTO;
 import cs.seu.cs.eshop.common.sdk.entity.dto.MaxwellMessageDTO;
 import lombok.Getter;
 
@@ -17,6 +18,8 @@ public enum KafkaTopicConfEnum {
     EMAIL_SEND_TOPIC(emailSendTopic, EmailSendDTO.class),
     // maxWell binlog监控消息
     MAXWELL_BINLOG_TOPIC(maxwellBinlogTopic, MaxwellMessageDTO.class),
+    // 商品用户浏览历史消息
+    PROD_USER_HISTORY_TOPIC(prodUserHistoryTopic, EshopProdUserHistoryDTO.class),
 
 
     ;

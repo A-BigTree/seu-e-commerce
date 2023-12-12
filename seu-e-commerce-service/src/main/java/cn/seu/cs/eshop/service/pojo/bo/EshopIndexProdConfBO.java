@@ -13,7 +13,7 @@ public class EshopIndexProdConfBO implements Serializable {
     private Integer style;
     private Long id;
     private String title;
-    private Integer limit;
+    private Long limit;
     private String orderBy;
     private String order;
 }

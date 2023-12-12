@@ -17,7 +17,6 @@ import static cn.seu.cs.eshop.common.kafka.KafkaTopicConstants.emailSendTopic;
  * Created on 2023/11/24
  */
 @Component
-@Slf4j
 public class EmailSendConsumer {
     @Resource
     EmailSendManager emailSendManager;

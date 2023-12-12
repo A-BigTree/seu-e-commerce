@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.seu.cs.eshop.service.dao.EshopProdDao">
+
+    <select id="selectByProdIds" resultType="cn.seu.cs.eshop.service.pojo.db.EshopProdDO">
+        select * from eshop_prod where id in
+        <foreach collection="prodIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and status = 3
+        and deleted = 0
+        order by field(id,
+        <foreach item="id" collection="prodIds" separator=",">
+            #{id}
+        </foreach>
+        );
+    </select>
+
 </mapper>
