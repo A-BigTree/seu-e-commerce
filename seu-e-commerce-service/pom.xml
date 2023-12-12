@@ -49,6 +49,11 @@
             <artifactId>seu-e-commerce-account-interface</artifactId>
             <version>${eshop.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.23.1</version>
+        </dependency>
     </dependencies>
 
     <build>

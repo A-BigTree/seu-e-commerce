@@ -3,7 +3,7 @@ package cn.seu.cs.eshop.service.manager.product;
 import cn.seu.cs.eshop.service.dao.EshopProdSkuDao;
 import cn.seu.cs.eshop.service.manager.AbstractBatchManager;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
-import cn.seu.cs.eshop.service.redission.ProdSkuCodeGenerateService;
+import cn.seu.cs.eshop.service.redisson.ProdSkuCodeGenerateService;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
