@@ -16,8 +16,10 @@ public enum ServiceRedisConfEnum implements RedisConf {
     prodToBCache("prod:tob:cache:", 3L, TimeUnit.MINUTES),
     prodSkusToBCache("prod:tob:skus:cache:", 3L, TimeUnit.MINUTES),
     prodIndexToCCache("prod:toc:index:cache:", 5L, TimeUnit.MINUTES),
-    orderAreaLevelCache("order:area:level:cache:", 2L, TimeUnit.HOURS),
-    orderAreaIdCache("order:area:id:cache:", 2L, TimeUnit.HOURS),
+    orderAreaLevelCache("order:address:level:cache:", 2L, TimeUnit.HOURS),
+    orderAreaIdCache("order:address:id:cache:", 2L, TimeUnit.HOURS),
+    orderUserAddressCache("order:user:address:cache:", 5L, TimeUnit.MINUTES),
+    orderUserAddressIdCache("order:user:address:id:cache:", 30L, TimeUnit.SECONDS),
 
 
     ;

@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.sdk.order.area.dto;
+package cn.seu.cs.eshop.service.sdk.order.address.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EshopOrderAreaDTO implements Serializable {
+public class EshopAreaDTO implements Serializable {
     private Long id;
-    private EshopAreaDTO province;
-    private EshopAreaDTO city;
-    private EshopAreaDTO area;
+    private String areaName;
 }
