@@ -26,6 +26,7 @@ import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
 import cn.seu.cs.eshop.service.service.product.ProductToCService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EshopProdUserHistoryDTO;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import cs.seu.cs.eshop.common.sdk.exception.EshopException;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,6 +43,8 @@ import static cn.seu.cs.eshop.service.enums.product.ProdStatusEnum.PUBLISHED;
 import static cn.seu.cs.eshop.service.enums.product.ProdUserInfoTypeEnum.FAVORITE_PROD;
 import static cn.seu.cs.eshop.service.enums.product.ProdUserInfoTypeEnum.HISTORY_PROD;
 import static cn.seu.cs.eshop.service.nacos.ServiceNacosConfEnum.eshopIndexProdConf;
+import static cs.seu.cs.eshop.common.sdk.enums.CrudOperationTypeEnum.DELETE;
+import static cs.seu.cs.eshop.common.sdk.enums.CrudOperationTypeEnum.INSERT;
 import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 /**
@@ -180,12 +183,30 @@ public class ProductToCServiceImpl implements ProductToCService {
         }
         List<EshopProdSkuDO> skus = prodSkusToBCache.getProdSkus(prodId);
         EshopProductDTO data = EshopProductConvert.covertDTO(prod, skus);
-        data.setExt(eshopProdFavoriteDao.isFavorite(userId, prodId) ? "1" : "0");
+        data.setExt(eshopProdFavoriteDao.getFavoriteId(userId, prodId).toString());
         eshopKafkaSendService.sendMessage(PROD_USER_HISTORY_TOPIC,
                 EshopProdUserHistoryDTO.builder()
                 .userId(userId)
                 .prodId(prodId)
                 .build());
         return buildSuccessResponse(GetProductInfoResponse.class, data);
+    }
+
+    @Override
+    public BaseResponse updateFavoriteProdStatus(Long userId, Long prodId, Long favoriteId, Integer action) {
+        if (action == INSERT.getType()) {
+            EshopProdFavoriteDO entity = new EshopProdFavoriteDO();
+            MysqlUtils.buildEffectEntity(entity);
+            entity.setUserId(userId);
+            entity.setProdId(prodId);
+            eshopProdFavoriteDao.insert(entity);
+            return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
+        } else if (DELETE.getType() == action) {
+            eshopProdFavoriteDao.deleteById(favoriteId);
+            return buildSuccessResponse(BaseResponse.class, favoriteId.toString());
+        } else {
+            throw new EshopException("请求参数有误");
+        }
+
     }
 }

@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.common.annotation.RpcMonitor;
 import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdToCService;
 import cn.seu.cs.eshop.service.service.product.ProductToCService;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 
@@ -56,5 +57,10 @@ public class EshopProdToCServiceRpc implements EshopProdToCService {
     @RpcMonitor
     public GetProductInfoResponse getProductInfo(Long prodId, Long userId) {
         return productToCService.getProductInfo(prodId, userId);
+    }
+
+    @Override
+    public BaseResponse updateFavoriteProdStatus(Long userId, Long prodId, Long favoriteId, Integer action) {
+        return productToCService.updateFavoriteProdStatus(userId, prodId, favoriteId, action);
     }
 }

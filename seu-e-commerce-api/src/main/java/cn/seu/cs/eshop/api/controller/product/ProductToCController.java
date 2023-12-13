@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.api.annotation.ApiMonitor;
 import cn.seu.cs.eshop.api.annotation.AuthorUserInfo;
 import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
 import cn.seu.cs.eshop.service.sdk.product.rpc.EshopProdToCService;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,5 +72,15 @@ public class ProductToCController {
     @GetMapping("/prod/info/get")
     public GetProductInfoResponse getProductInfo(@RequestParam("prodId") Long prodId, @AuthorUserInfo Long userId) {
         return eshopProdToCService.getProductInfo(prodId, userId);
+    }
+
+    @ApiMonitor(roleType = CUSTOMER)
+    @CrossOrigin
+    @PostMapping("/favorite/prod/status/update")
+    public BaseResponse updateFavoriteProdStatus(@AuthorUserInfo Long userId,
+                                                 @RequestParam("prodId") Long prodId,
+                                                 @RequestParam(value = "id", required = false, defaultValue = "0") Long favoriteId,
+                                                 @RequestParam("action") Integer action) {
+        return eshopProdToCService.updateFavoriteProdStatus(userId, prodId, favoriteId, action);
     }
 }

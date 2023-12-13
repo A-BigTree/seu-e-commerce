@@ -1,6 +1,7 @@
 package cn.seu.cs.eshop.service.sdk.product.rpc;
 
 import cn.seu.cs.eshop.service.sdk.product.prod.req.*;
+import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -14,4 +15,5 @@ public interface EshopProdToCService {
     ListPageProductResponse listPageSearchProd(ListPageSearchProdRequest request);
     GetProdUserInfoResponse getProdUserInfo(Long userId);
     GetProductInfoResponse getProductInfo(Long prodId, Long userId);
+    BaseResponse updateFavoriteProdStatus(Long userId, Long prodId, Long favoriteId,  Integer action);
 }

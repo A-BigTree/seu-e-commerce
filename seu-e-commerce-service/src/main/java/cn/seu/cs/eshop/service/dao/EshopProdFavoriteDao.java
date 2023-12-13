@@ -5,6 +5,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopProdFavoriteDO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,10 +28,15 @@ public interface EshopProdFavoriteDao extends MysqlBaseDao<EshopProdFavoriteDO> 
         return selectPage(page, new QueryWrapper<>(entity));
     }
 
-    default Boolean isFavorite(Long userId, Long prodId) {
+    default Long getFavoriteId(Long userId, Long prodId) {
         EshopProdFavoriteDO entity = new EshopProdFavoriteDO();
         entity.setUserId(userId);
         entity.setProdId(prodId);
-        return selectCount(new QueryWrapper<>(entity)) > 0;
+        List<EshopProdFavoriteDO> res = selectList(new QueryWrapper<>(entity));
+        if (CollectionUtils.isEmpty(res)) {
+            return 0L;
+        } else {
+            return res.stream().map(EshopProdFavoriteDO::getId).findFirst().orElse(0L);
+        }
     }
 }
