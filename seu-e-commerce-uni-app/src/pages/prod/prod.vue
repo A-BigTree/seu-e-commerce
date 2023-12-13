@@ -537,7 +537,13 @@ const getProdInfo = () => {
 }
 
 
-const prodCommData = ref({})
+const prodCommData = ref({
+  number: 0,
+  positiveRating: 0,
+  praiseNumber: 0,
+  secondaryNumber: 0,
+  negativeNumber: 0
+})
 const getProdCommData = () => {
 
 }
