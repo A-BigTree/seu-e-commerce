@@ -29,4 +29,14 @@ public class RedisTemplateConfiguration {
         template.setDefaultSerializer(StringRedisSerializer.UTF_8);
         return template;
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisTemplate<?, ?> redisCommTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+        return redisTemplate;
+    }
+
+
 }

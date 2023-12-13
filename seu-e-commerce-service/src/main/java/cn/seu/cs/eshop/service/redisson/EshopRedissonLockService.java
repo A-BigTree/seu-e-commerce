@@ -1,8 +1,8 @@
 package cn.seu.cs.eshop.service.redisson;
 
 import jakarta.annotation.Resource;
-import org.redisson.Redisson;
 import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EshopRedissonLockService {
     @Resource
-    private Redisson redisson;
+    private RedissonClient redisson;
 
     public void init() {
         RLock lock = redisson.getLock("test");

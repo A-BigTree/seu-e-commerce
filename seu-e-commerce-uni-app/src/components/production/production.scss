@@ -24,6 +24,12 @@
       .price {
         color: #eb2444;
         padding-left: 20rpx;
+        .cate-prod-info {
+          display: inline-block;
+          font-size: 22rpx;
+          color: #999;
+          margin-left: 20rpx;
+        }
       }
     }
   }

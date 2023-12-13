@@ -38,10 +38,10 @@ const onMenuTab = (e) => {
 }
 
 const toCatePage = (e) => {
-  const categoryId = e.currentTarget.dataset.id;
+  const categoryId = e.currentTarget.dataset.categoryid;
   const title = e.currentTarget.dataset.title;
   uni.navigateTo({
-    url: '/pages/prod-classify/prod-classify?tagId=' + categoryId + '&sts=5&title=' + title
+    url: '/pages/prod-classify/prod-classify?tagId=' + categoryId + '&sts=2&title=' + title
   })
 }
 

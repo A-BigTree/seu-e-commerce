@@ -58,8 +58,12 @@ const toProdPage = (e) => {
   }
 }
 
-const toClassifyPage = () => {
-
+const toClassifyPage = (e) => {
+  const tagId = e.currentTarget.dataset.id;
+  const title = e.currentTarget.dataset.title;
+  uni.navigateTo({
+    url: "/pages/prod-classify/prod-classify?sts=1&title=" + title + "&tagId=" + tagId
+  })
 }
 
 const addToCart = (prod) => {

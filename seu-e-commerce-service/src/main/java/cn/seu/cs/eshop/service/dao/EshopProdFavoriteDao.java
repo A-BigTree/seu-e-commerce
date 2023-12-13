@@ -26,4 +26,11 @@ public interface EshopProdFavoriteDao extends MysqlBaseDao<EshopProdFavoriteDO> 
         entity.setUserId(userId);
         return selectPage(page, new QueryWrapper<>(entity));
     }
+
+    default Boolean isFavorite(Long userId, Long prodId) {
+        EshopProdFavoriteDO entity = new EshopProdFavoriteDO();
+        entity.setUserId(userId);
+        entity.setProdId(prodId);
+        return selectCount(new QueryWrapper<>(entity)) > 0;
+    }
 }

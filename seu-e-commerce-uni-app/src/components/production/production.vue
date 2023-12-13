@@ -20,8 +20,11 @@
             ￥
           </text>
           <text class="big-num">
-            {{item.price}}
+            {{getDisplayPrice(item.price)}}
           </text>
+          <view class="cate-prod-info">
+            {{item.soldNum}}人付款
+          </view>
         </view>
       </view>
     </view>
@@ -29,6 +32,7 @@
 </template>
 <script setup>
 import {picDomain} from "../../utils/config";
+import {getDisplayPrice} from "../../utils/util";
 
 const props = defineProps({
   item: {

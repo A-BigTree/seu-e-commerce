@@ -180,6 +180,7 @@ public class ProductToCServiceImpl implements ProductToCService {
         }
         List<EshopProdSkuDO> skus = prodSkusToBCache.getProdSkus(prodId);
         EshopProductDTO data = EshopProductConvert.covertDTO(prod, skus);
+        data.setExt(eshopProdFavoriteDao.isFavorite(userId, prodId) ? "1" : "0");
         eshopKafkaSendService.sendMessage(PROD_USER_HISTORY_TOPIC,
                 EshopProdUserHistoryDTO.builder()
                 .userId(userId)

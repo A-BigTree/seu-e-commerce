@@ -60,19 +60,21 @@
 
       <view class="prod-col">
         <view class="col-item" @tap="myCollectionHandle">
-          <view v-if="loginResult" class="num">{{ collectionCount }}</view>
+          <view v-if="loginResult" class="num">{{favoriteNum}}</view>
           <view v-else class="num">--</view>
           <view class="tit">我的收藏</view>
         </view>
-        <view class="col-item" @tap="handleTips">
-          <view v-if="loginResult" class="num">5</view>
-          <view v-else class="num">--</view>
-          <view class="tit">我的消息</view>
-        </view>
-        <view class="col-item" @tap="handleTips">
-          <view v-if="loginResult" class="num">3</view>
+
+        <view class="col-item" @tap="toMyHistoryPage">
+          <view v-if="loginResult" class="num">{{historyNum}}</view>
           <view v-else class="num">--</view>
           <view class="tit">我的足迹</view>
+        </view>
+
+        <view class="col-item" @tap="handleTips">
+          <view v-if="loginResult" class="num">--</view>
+          <view v-else class="num">--</view>
+          <view class="tit">我的消息</view>
         </view>
       </view>
 
@@ -110,6 +112,8 @@ const collectionCount = ref(0);
 const isAuthInfo = ref(false);
 const loginResult = ref("");
 const picDomain1 = ref("");
+const favoriteNum = ref(0);
+const historyNum = ref(0);
 
 const init = () => {
   const params = {
@@ -121,15 +125,24 @@ const init = () => {
     }
   };
   request(params);
-    loginResult.value = uni.getStorageSync("userInfo")
+  loginResult.value = uni.getStorageSync("userInfo")
   if (loginResult.value) {
-      isAuthInfo.value = true,
-      picDomain1.value = picDomain
+    isAuthInfo.value = true;
+    picDomain1.value = picDomain
 
   } else {
-      isAuthInfo.value = false
+    isAuthInfo.value = false
   }
   if (isAuthInfo.value) {
+    request({
+      url: "/product/toc/user/prod/info/get",
+      method: "GET",
+      callBack: (res) => {
+        const data = res.data;
+        favoriteNum.value = data.favoriteCount;
+        historyNum.value = data.historyCount;
+      }
+    })
     // TODO 个人订单信息
   }
 }
@@ -212,7 +225,15 @@ const showCollectionCount = function () {
  * 我的收藏跳转
  */
 const myCollectionHandle = function () {
+  uni.navigateTo({
+    url: '/pages/prod-classify/prod-classify?tagId=1&sts=3&title=我的收藏'
+  })
+}
 
+const toMyHistoryPage = () => {
+  uni.navigateTo({
+    url: '/pages/prod-classify/prod-classify?tagId=2&sts=3&title=浏览历史'
+  })
 }
 
 /**

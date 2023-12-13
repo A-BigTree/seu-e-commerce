@@ -86,7 +86,7 @@
         >
           <view
             class="show-item"
-            :data-prodid="item.prodId"
+            :data-prodid="item.id"
             @tap="toProdPage"
           >
             <view class="more-prod-pic">
@@ -100,15 +100,18 @@
                 {{ item.prodName }}
               </view>
               <view class="cate-prod-info">
-                {{ item.praiseNumber }}评价 {{ item.positiveRating }}%好评
+                {{ item.brief}}
               </view>
               <view class="prod-price more">
                 <text class="symbol">
                   ￥
                 </text>
                 <text class="big-num">
-                  {{item.price}}
+                  {{getDisplayPrice(item.price)}}
                 </text>
+                <view class="cate-prod-info">
+                  {{item.soldNum}}人付款
+                </view>
               </view>
             </view>
           </view>
@@ -117,8 +120,8 @@
 
       <!-- 空占位 -->
       <view
-        v-if="!searchProdList.length"
-        :class="['empty',showType===1? 'empty-top':'']"
+        v-if="searchProdList.length === 0"
+        :class="['empty','empty-top']"
       >
         暂无结果
       </view>
@@ -129,11 +132,21 @@
 <script setup>
 import Production from "../../components/production/production.vue";
 import {picDomain} from "../../utils/config";
-import {onLoad, onShow} from "@dcloudio/uni-app";
+import {onLoad, onReachBottom, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import {request} from "../../utils/http";
+import {getDisplayPrice} from "../../utils/util";
 
 
 const prodName = ref('')
+const sts = ref(0)
+const searchProdList = ref([])
+const isOver = ref(false);
+const page = ref({
+  pageNum: 1,
+  pageSize: 10
+})
+
 /**
  * 生命周期函数--监听页面加载
  */
@@ -166,13 +179,30 @@ const getSearchContent = (e) => {
   prodName.value = e.detail.value
 }
 
-const sts = ref(0)
-const searchProdList = ref([])
 /**
  *  请求热门搜索商品接口
  */
 const toLoadData = () => {
-
+  request({
+    url: "/product/toc/search/prod/list",
+    data: {
+      keyword: prodName.value,
+      type: sts.value,
+      page: page.value
+    },
+    callBack: (res) => {
+      const data = res.data;
+      if (data.records.length === 0) {
+        isOver.value = true;
+      }
+      if (data.page.pageNum === 1) {
+        searchProdList.value = data.records;
+      } else {
+        let list = searchProdList.value;
+        searchProdList.value = list.concat(data.records);
+      }
+    }
+  })
 }
 
 /**
@@ -197,7 +227,7 @@ const toSearchConfirm = (e) => {
  * 状态点击事件
  */
 const onStsTap = (e) => {
-  sts.value = e.currentTarget.dataset.sts
+  sts.value = parseInt(e.currentTarget.dataset.sts);
   toLoadData()
 }
 
@@ -206,6 +236,16 @@ const toProdPage = (e) => {
     url: '/pages/prod/prod?prodId=' + e.currentTarget.dataset.prodid
   })
 }
+
+/**
+ * 页面上拉触底事件的处理函数
+ */
+onReachBottom(() => {
+  if (!isOver.value) {
+    page.value.pageNum = page.value.pageNum + 1;
+    toLoadData();
+  }
+})
 </script>
 
 <style scoped lang="scss">

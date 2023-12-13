@@ -37,4 +37,5 @@ public class EshopProductDTO implements Serializable {
     private String createTime;
     private List<EshopProdSkuDTO> skus;
     private List<EshopProdSkuPropDTO> parameters;
+    private String ext;
 }

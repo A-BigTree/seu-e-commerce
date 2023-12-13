@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -47,5 +48,5 @@ public interface EshopProdDao extends MysqlBaseDao<EshopProdDO> {
         return selectPage(page, wrapper);
     }
 
-    List<EshopProdDO> selectByProdIds(List<Long> prodIds);
+    List<EshopProdDO> selectByProdIds(@Param("prodIds") List<Long> prodIds);
 }

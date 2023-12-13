@@ -15,5 +15,4 @@ import lombok.EqualsAndHashCode;
 public class EshopProdUserHistoryDO extends MysqlBaseDO {
     private Long userId;
     private Long prodId;
-    private Integer type;
 }
