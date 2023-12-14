@@ -2,10 +2,14 @@ package cn.seu.cs.eshop.common.component;
 
 import cn.seu.cs.eshop.common.redis.RedisConf;
 import cn.seu.cs.eshop.common.redis.RedisService;
+import cn.seu.cs.eshop.common.util.JsonUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -43,5 +47,42 @@ public class EshopRedisService implements RedisService {
         if (isExist) {
             redisTemplate.expire(redisConf.buildKey(key), redisConf.expirationTime(), redisConf.timeUnit());
         }
+    }
+
+    public <T> void setHashObject(RedisConf conf, T value, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        Map<String, String> map = JsonUtils.jsonToMap(JsonUtils.objectToJson(value), String.class, String.class);
+        redisTemplate.opsForHash().putAll(key, map);
+        redisTemplate.expire(key, conf.expirationTime(), conf.timeUnit());
+    }
+
+    public <T> T getHashObject(RedisConf conf, Class<T> clazz, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        HashOperations<String, String, String> operations = redisTemplate.opsForHash();
+        Map<String, String> map = operations.entries(key);
+        return JsonUtils.mapToObject(map, clazz);
+    }
+
+    public void deleteHashObject(RedisConf conf, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        redisTemplate.delete(key);
+    }
+
+    public <T> void setHashField(RedisConf conf, String field, T value, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        String json = JsonUtils.objectToJson(value);
+        redisTemplate.opsForHash().put(key, field, json);
+        redisTemplate.expire(key, conf.expirationTime(), conf.timeUnit());
+    }
+
+    public <T> T getHashField(RedisConf conf, String field, Class<T> clazz, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        String json = (String) redisTemplate.opsForHash().get(key, field);
+        return JsonUtils.jsonToObject(json, clazz);
+    }
+
+    public void deleteHashField(RedisConf conf, String field, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        redisTemplate.opsForHash().delete(key, field);
     }
 }

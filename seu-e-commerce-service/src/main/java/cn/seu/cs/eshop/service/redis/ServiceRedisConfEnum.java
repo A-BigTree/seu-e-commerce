@@ -20,7 +20,10 @@ public enum ServiceRedisConfEnum implements RedisConf {
     orderAreaIdCache("order:address:id:cache:", 2L, TimeUnit.HOURS),
     orderUserAddressCache("order:user:address:cache:", 5L, TimeUnit.MINUTES),
     orderUserAddressIdCache("order:user:address:id:cache:", 30L, TimeUnit.SECONDS),
-
+    basketListUserIdCache("basket:list:user:id:cache:", 30L, TimeUnit.MINUTES),
+    basketProdSkuHashCache("basket:prod:sku:hash:cache:%s", 30L, TimeUnit.MINUTES),
+    prodHashCache("prod:hash:cache:%s", 30L, TimeUnit.MINUTES),
+    prodSkuHashCache("prod:sku:hash:cache:%s:%s", 30L, TimeUnit.MINUTES),
 
     ;
     private final String prefix;
