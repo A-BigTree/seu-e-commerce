@@ -46,7 +46,7 @@
             >
               <view class="box">
                 <radio
-                  :value="item.id"
+                  :value="'' + item.id"
                   :checked="item.defaultAddress === 1"
                   color="#eb2444"
                   :data-addrid="item.id"
@@ -77,7 +77,7 @@ import {request} from "../../utils/http";
 const order = ref(-1)
 onLoad((option) => {
   if (option.order) {
-    order.value = option.order
+    order.value = parseInt(option.order)
   }
 })
 
@@ -142,8 +142,13 @@ const toEditAddress = (e) => {
  * 选择地址 跳转回提交订单页
  */
 const selAddrToOrder = (item) => {
-  if (order.value > 0) {
-
+  if (order.value === 0) {
+    const page = getCurrentPages();
+    const prevPage = page[page.length - 2];
+    prevPage.address = item;
+    uni.navigateBack({
+      delta: 1
+    });
   }
 }
 

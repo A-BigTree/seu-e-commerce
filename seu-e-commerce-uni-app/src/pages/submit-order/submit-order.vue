@@ -174,9 +174,6 @@
               <text class="big-num">
                 {{actualTotal}}
               </text>
-              <text class="small-num">
-                .{{actualTotal}}
-              </text>
             </view>
           </view>
         </view>
@@ -212,9 +209,9 @@ const userAddr = ref(null)
 onShow(() => {
   const pages = getCurrentPages()
   const currPage = pages[pages.length - 1]
-  if (currPage.selAddress === 'yes') {
+  if (currPage.address) {
     // 将携带的参数赋值
-    userAddr.value = currPage.item
+    userAddr.value = currPage.address
   }
   // 获取订单数据
   loadOrderData()

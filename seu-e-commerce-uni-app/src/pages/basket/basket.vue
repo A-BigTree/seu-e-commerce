@@ -12,6 +12,8 @@ const shopCartItemDiscounts = ref([
 ]);
 
 onShow(() => {
+  finalMoney.value = 0;
+  allChecked.value = false;
   listData();
 })
 
@@ -57,10 +59,14 @@ const onCountMinus = (e) => {
   const index = e.currentTarget.dataset.index;
   const scIndex = e.currentTarget.dataset.scindex;
   const item = shopCartItemDiscounts.value[scIndex].shopCartItems[index];
+  if (item.prodCount === 1) {
+    return;
+  }
   request({
     url: "/product/basket/prod/count/change?count=-1&id=" + item.id,
     callBack: (res) => {
       item.prodCount = parseInt(res.data);
+      freshFinalPrice();
     }
   })
 }
@@ -73,6 +79,7 @@ const onCountPlus = (e) => {
     url: "/product/basket/prod/count/change?count=1&id=" + item.id,
     callBack: (res) => {
       item.prodCount = parseInt(res.data);
+      freshFinalPrice();
     }
   })
 }
@@ -129,7 +136,7 @@ const freshFinalPrice = () => {
   let temp = true;
   items.forEach(item => {
     if (item.checked) {
-      finalMoney.value += item.price;
+      finalMoney.value += (item.price * item.prodCount);
     } else {
       temp = false;
     }
@@ -155,7 +162,11 @@ const toFirmOrder = () => {
       title: "请选择商品",
       icon: "none"
     })
+    return;
   }
+  uni.navigateTo({
+    url: '/pages/submit-order/submit-order?orderEntry=0'
+  })
 }
 
 </script>
@@ -179,7 +190,7 @@ const toFirmOrder = () => {
                   <checkbox
                       :data-scindex="scIndex"
                       :data-index="index"
-                      :value="prod.prodId"
+                      :value="'' + prod.prodId"
                       :checked="prod.checked"
                       color="#105c3e"
                       @tap="onSelectedItem"
