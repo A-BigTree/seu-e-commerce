@@ -18,4 +18,11 @@ public interface EshopBasketDao extends MysqlBaseDao<EshopBasketDO> {
         entity.setUserId(userId);
         return selectList(new QueryWrapper<>(entity));
     }
+
+    default EshopBasketDO getBasketByUserIdAndProdId(Long userId, Long prodId) {
+        EshopBasketDO entity = new EshopBasketDO();
+        entity.setUserId(userId);
+        entity.setProdId(prodId);
+        return selectOne(new QueryWrapper<>(entity));
+    }
 }

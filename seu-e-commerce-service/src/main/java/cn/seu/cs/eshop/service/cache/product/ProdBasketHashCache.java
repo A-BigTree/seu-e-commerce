@@ -76,6 +76,11 @@ public class ProdBasketHashCache {
 
     public long changeBasketCount(Long basketId, Integer count) {
         if (refreshBasketHashData(basketId)) {
+            Integer origin =
+                    eshopRedisService.getHashField(basketProdSkuHashCache, PROD_BASKET_COUNT, Integer.class, basketId);
+            if (origin == null || origin + count <= 0) {
+                return -1L;
+            }
             return eshopRedisService.incrementHashField(basketProdSkuHashCache, PROD_BASKET_COUNT, count, basketId);
         }
         return -1;
