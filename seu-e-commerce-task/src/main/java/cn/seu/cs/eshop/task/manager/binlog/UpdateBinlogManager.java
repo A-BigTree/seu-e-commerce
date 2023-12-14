@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
+import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
 import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
@@ -36,6 +37,8 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
     EsProductSearchService esProductSearchService;
     @Resource
     ProdIndexToCCache prodIndexToCCache;
+    @Resource
+    ProdHashCache prodHashCache;
 
     @Override
     public void writeProdPropValue(ProductPropValueDO data) {
@@ -46,6 +49,7 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
     protected void writeEshopProd(EshopProdDO data) {
         prodToBCache.deleteProd(data.getId());
         prodIndexToCCache.removeProdIndex();
+        prodHashCache.deleteProdData(data.getId());
         EshopProdDO prod = prodToBCache.getProd(data.getId());
         if (!Objects.equals(prod.getUpdateTime(), data.getUpdateTime())) {
             log.info("Updated Data: {} has changed, skip this", data);
@@ -66,5 +70,6 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
     @Override
     protected void writeEshopProdSku(EshopProdSkuDO data) {
         prodToBCache.deleteProd(data.getId());
+        prodHashCache.deleteProdSkuData(data.getProdId(), data.getId());
     }
 }

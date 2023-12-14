@@ -46,7 +46,7 @@ public class EshopProdBasketServiceRpc implements EshopProdBasketService {
 
     @Override
     @RpcMonitor
-    public BaseResponse batchDeleteBaskets(List<Long> ids) {
-        return prodBasketService.batchDeleteBaskets(ids);
+    public BaseResponse batchDeleteBaskets(List<Long> ids, Long userId) {
+        return prodBasketService.batchDeleteBaskets(ids, userId);
     }
 }

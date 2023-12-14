@@ -60,6 +60,9 @@ public class EshopRedisService implements RedisService {
         String key = conf.prefixKey().formatted(keys);
         HashOperations<String, String, String> operations = redisTemplate.opsForHash();
         Map<String, String> map = operations.entries(key);
+        if (map.isEmpty()) {
+            return null;
+        }
         return JsonUtils.mapToObject(map, clazz);
     }
 

@@ -56,7 +56,8 @@ public class ProdBasketController {
     @ApiMonitor(roleType = CUSTOMER)
     @CrossOrigin
     @PostMapping("/batch/delete")
-    public BaseResponse deleteBaskets(@RequestBody List<Long> ids) {
-        return eshopProdBasketService.batchDeleteBaskets(ids);
+    public BaseResponse deleteBaskets(@RequestBody List<Long> ids,
+                                      @AuthorUserInfo Long userId) {
+        return eshopProdBasketService.batchDeleteBaskets(ids, userId);
     }
 }

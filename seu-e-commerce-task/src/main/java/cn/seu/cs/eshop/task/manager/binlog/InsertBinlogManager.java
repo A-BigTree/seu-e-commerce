@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
+import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
 import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;

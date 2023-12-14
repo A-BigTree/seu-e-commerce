@@ -17,6 +17,7 @@ public class ProdBasketConvert {
                 .id(item.getId())
                 .userId(item.getUserId())
                 .prodId(item.getProdId())
+                .pic(item.getPic())
                 .prodName(item.getProdName())
                 .skuId(item.getSkuId())
                 .skuName(item.getSkuName())
@@ -33,6 +34,7 @@ public class ProdBasketConvert {
         }
         EshopBasketDO result = new EshopBasketDO();
         result.setUserId(item.getUserId());
+        result.setPic(item.getPic());
         result.setProdId(item.getProdId());
         result.setProdName(item.getProdName());
         result.setSkuId(item.getSkuId());

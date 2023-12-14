@@ -175,7 +175,7 @@
         <image src="@/static/images/tabbar/basket.png"/>
         购物车
         <view
-            v-if="totalCartNum>0"
+            v-if="totalCartNum > 0"
             class="badge badge-1"
         >
           {{ totalCartNum }}
@@ -478,6 +478,7 @@ const addOrCancelCollection = () => {
 const skuList = ref([])
 const brief = ref('')
 const prodNum = ref(1)
+const shopId = ref(0)
 const pic = ref('')
 const imgs = ref('')
 const prodName = ref('')
@@ -500,7 +501,8 @@ const getProdInfo = () => {
       const prodInfo = res.data
       skuList.value = prodInfo.skus
       brief.value = prodInfo.brief
-      pic.value = prodInfo.pic
+      pic.value = prodInfo.pic;
+      shopId.value = prodInfo.shopId;
       imgs.value = [prodInfo.pic];
       if (prodInfo.images) {
         prodInfo.images.forEach(image => {
@@ -532,6 +534,13 @@ const getProdInfo = () => {
           skuLine: values
         });
       }
+    }
+  });
+  request({
+    url: "/product/basket/user/count/get",
+    method: "GET",
+    callBack: (res) => {
+      totalCartNum.value = parseInt(res.data);
     }
   })
 }
@@ -626,12 +635,33 @@ const toCartPage = () => {
   })
 }
 
-const shopId = 1
 /**
  * 加入购物车
  */
 const addToCart = () => {
-
+  request({
+    url: "/product/basket/user/update",
+    data: {
+      action: 1,
+      data: {
+        id: 0,
+        prodId: prodId,
+        prodName: prodName.value,
+        skuId: defaultSku.value.id,
+        skuName: defaultSku.value.skuName,
+        price: defaultSku.value.price,
+        shopId: shopId.value,
+        prodCount: prodNum.value,
+        pic: defaultSku.value.pic ? defaultSku.value.pic : pic.value
+      }
+    },
+    callBack: (res) => {
+      uni.showToast({
+        icon: "success",
+        title: "加入购物车成功"
+      })
+    }
+  })
 }
 
 /**

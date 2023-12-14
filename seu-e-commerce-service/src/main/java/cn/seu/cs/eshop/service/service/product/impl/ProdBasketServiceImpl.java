@@ -65,6 +65,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
             origin.setCreateTime(TimeUtils.getCurrentTime());
             eshopBasketDao.updateById(origin);
             prodBasketHashCache.updateBasketData(origin);
+            prodBasketHashCache.deleteBasketListByUserId(data.getUserId());
             id = origin.getId();
         }
         return id;
@@ -141,7 +142,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
             entity.setId(basketId);
             entity.setProdCount((int) res);
             eshopBasketDao.updateById(entity);
-            return buildSuccessResponse(BaseResponse.class, Long.toString(basketId));
+            return buildSuccessResponse(BaseResponse.class, Long.toString(res));
         } finally {
             lock.unlock();
         }
@@ -149,7 +150,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
 
     @Override
     @Transactional
-    public BaseResponse batchDeleteBaskets(List<Long> ids) {
+    public BaseResponse batchDeleteBaskets(List<Long> ids, Long userId) {
         if (CollectionUtils.isEmpty(ids)) {
             throw new EshopException("删除ID不能为空");
         }

@@ -20,6 +20,7 @@ public class EshopProdBasketDTO implements Serializable {
     private Long userId;
     private Long prodId;
     private String prodName;
+    private String pic;
     private Long skuId;
     private String skuName;
     private Long price;

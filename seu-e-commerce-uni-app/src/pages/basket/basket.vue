@@ -1,65 +1,161 @@
 <script setup>
 import {ref} from "vue";
 import {picDomain} from "../../utils/config";
+import {onShow} from "@dcloudio/uni-app";
+import {request} from "../../utils/http";
+import {getDisplayPrice} from "../../utils/util";
 
 const shopCartItemDiscounts = ref([
   {
-    shopCartItems: [
-      {
-        prodId: 1,
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        skuName: "规格名称",
-        price: 1000,
-        prodCount: 1,
-        checked: false
-      },
-      {
-        prodId: 1,
-        prodName: "商品名称",
-        pic: "/index/index1.jpg",
-        skuName: "规格名称",
-        price: 1000,
-        prodCount: 1,
-        checked: false
-      }
-    ]
+    shopCartItems: []
   }
 ]);
 
+onShow(() => {
+  listData();
+})
+
+const listData = () => {
+  request({
+    url: "/product/basket/user/list",
+    method: "GET",
+    callBack: (res) => {
+      shopCartItemDiscounts.value = [{
+        shopCartItems: []
+      }]
+      res.data.forEach(data => {
+        shopCartItemDiscounts.value[0].shopCartItems.push({
+          id: data.id,
+          prodId: data.prodId,
+          prodName: data.prodName,
+          pic: data.pic,
+          skuName: data.skuName,
+          price: data.price,
+          prodCount: data.prodCount,
+          status: data.status,
+          checked: false
+        })
+      })
+    }
+  })
+}
+
 const allChecked = ref(false);
 
-const totalMoney = ref(0);
-
-const subtractMoney = ref(0);
 
 const finalMoney = ref(0);
 
 const onSelectedItem = (e) => {
   const index = e.currentTarget.dataset.index;
   const scIndex = e.currentTarget.dataset.scindex;
+  const item = shopCartItemDiscounts.value[scIndex].shopCartItems[index];
+  item.checked = (!item.checked);
+  freshFinalPrice();
 }
 
 const onCountMinus = (e) => {
   const index = e.currentTarget.dataset.index;
   const scIndex = e.currentTarget.dataset.scindex;
+  const item = shopCartItemDiscounts.value[scIndex].shopCartItems[index];
+  request({
+    url: "/product/basket/prod/count/change?count=-1&id=" + item.id,
+    callBack: (res) => {
+      item.prodCount = parseInt(res.data);
+    }
+  })
 }
 
 const onCountPlus = (e) => {
   const index = e.currentTarget.dataset.index;
   const scIndex = e.currentTarget.dataset.scindex;
+  const item = shopCartItemDiscounts.value[scIndex].shopCartItems[index];
+  request({
+    url: "/product/basket/prod/count/change?count=1&id=" + item.id,
+    callBack: (res) => {
+      item.prodCount = parseInt(res.data);
+    }
+  })
 }
 
 const onSelAll = () => {
-
+  allChecked.value = (!allChecked.value);
+  const baskets = shopCartItemDiscounts.value[0].shopCartItems;
+  baskets.forEach(basket => {
+    basket.checked = allChecked.value;
+  })
+  freshFinalPrice();
 }
 
 const onDelBasket = () => {
+  const ids = [];
+  const items = shopCartItemDiscounts.value[0].shopCartItems;
+  items.forEach(item => {
+    if (item.checked) {
+      ids.push(item.id);
+    }
+  })
+  if (ids.length === 0) {
+    uni.showToast({
+      title: "请选择商品",
+      icon: "none"
+    })
+  } else {
+    uni.showModal({
+      title: '',
+      content: '确定要删除所选商品吗？',
+      confirmColor: '#eb2444',
+      success(res) {
+        if (res.confirm) {
+          request({
+            url: "/product/basket/batch/delete",
+            data: ids,
+            callBack: (res) => {
+              uni.showToast({
+                title: "删除成功",
+                icon: "success"
+              });
+              listData();
+            }
+          })
+        }
+      }
+    });
+  }
+}
 
+const freshFinalPrice = () => {
+  finalMoney.value = 0;
+  const items = shopCartItemDiscounts.value[0].shopCartItems;
+  let temp = true;
+  items.forEach(item => {
+    if (item.checked) {
+      finalMoney.value += item.price;
+    } else {
+      temp = false;
+    }
+  });
+  allChecked.value = temp;
 }
 
 const toFirmOrder = () => {
-
+  const ids = []
+  const items = shopCartItemDiscounts.value[0].shopCartItems;
+  items.forEach(item => {
+    if (item.checked) {
+      ids.push({
+        id: item.id,
+        prodId: item.prodId,
+        skuId: item.skuId,
+        prodCount: item.prodCount
+      });
+    }
+  });
+  if (ids.length === 0) {
+    uni.showToast({
+      title: "请选择商品",
+      icon: "none"
+    })
+  }
 }
 
 </script>
@@ -107,7 +203,7 @@ const toFirmOrder = () => {
                         ￥
                       </text>
                       <text class="big-num">
-                        {{ prod.price }}
+                        {{ getDisplayPrice(prod.price) }}
                       </text>
                     </view>
                     <view class="m-numSelector">
@@ -177,15 +273,9 @@ const toFirmOrder = () => {
               ￥
             </text>
             <text class="big-num">
-              {{finalMoney}}
+              {{getDisplayPrice(finalMoney)}}
             </text>
           </view>
-        </view>
-        <view
-            v-if="subtractMoney > 0"
-            class="total-msg"
-        >
-          总额:￥{{totalMoney}} 立减:￥{{subtractMoney}}
         </view>
       </view>
       <view

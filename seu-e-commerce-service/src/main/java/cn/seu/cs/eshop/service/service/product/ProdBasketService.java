@@ -15,5 +15,5 @@ public interface ProdBasketService {
     ListUserProdBasketResponse listUserProdBasket(Long userId);
     BaseResponse updateUserProdBasket(UpdateUserProdBasketRequest request);
     BaseResponse changeProdBasketCount(Long basketId, Integer count);
-    BaseResponse batchDeleteBaskets(List<Long> ids);
+    BaseResponse batchDeleteBaskets(List<Long> ids, Long userId);
 }

@@ -21,4 +21,5 @@ public class EshopBasketDO extends MysqlBaseDO {
     private Long price;
     private Long shopId;
     private Integer prodCount;
+    private String pic;
 }
