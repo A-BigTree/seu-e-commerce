@@ -25,6 +25,11 @@ public enum ServiceRedisConfEnum implements RedisConf {
     prodHashCache("prod:hash:cache:%s", 30L, TimeUnit.MINUTES),
     prodSkuHashCache("prod:sku:hash:cache:%s:%s", 30L, TimeUnit.MINUTES),
 
+    // 分布式锁配置
+    basketIdRedissonLock("basket:id:redisson:lock:%s", 30L, TimeUnit.SECONDS),
+    prodIdRedissonLock("prod:id:redisson:lock:%s", 30L, TimeUnit.SECONDS),
+    prodSkuIdRedissonLock("prod:sku:id:redisson:lock:%s:%s", 30L, TimeUnit.SECONDS),
+
     ;
     private final String prefix;
     private final long expirationTime;

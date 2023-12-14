@@ -19,4 +19,6 @@ public class FieldConstants {
     public static final String PROD_UPDATE_TIME = "updateTime";
     public static final String PROD_PROPERTIES = "properties";
     public static final String PROD_SKU_PROPERTIES = "skuProperties";
+    public static final String PROD_BASKET_COUNT = "prodCount";
+    public static final String PROD_SKU_STOCKS = "stocks";
 }

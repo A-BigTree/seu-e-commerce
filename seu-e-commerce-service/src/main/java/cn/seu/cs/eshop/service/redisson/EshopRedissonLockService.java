@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.service.redisson;
 
+import cn.seu.cs.eshop.common.redis.RedisConf;
 import jakarta.annotation.Resource;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -14,7 +15,7 @@ public class EshopRedissonLockService {
     @Resource
     private RedissonClient redisson;
 
-    public void init() {
-        RLock lock = redisson.getLock("test");
+    public RLock getLock(RedisConf conf, Object... keys) {
+        return redisson.getLock(conf.prefixKey().formatted(keys));
     }
 }

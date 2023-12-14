@@ -2,7 +2,10 @@ package cn.seu.cs.eshop.service.dao;
 
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
 import cn.seu.cs.eshop.service.pojo.db.EshopBasketDO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -10,4 +13,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EshopBasketDao extends MysqlBaseDao<EshopBasketDO> {
+    default List<EshopBasketDO> selectByUserId(Long userId) {
+        EshopBasketDO entity = new EshopBasketDO();
+        entity.setUserId(userId);
+        return selectList(new QueryWrapper<>(entity));
+    }
 }

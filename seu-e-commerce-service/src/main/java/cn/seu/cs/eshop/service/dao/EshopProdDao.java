@@ -49,4 +49,11 @@ public interface EshopProdDao extends MysqlBaseDao<EshopProdDO> {
     }
 
     List<EshopProdDO> selectByProdIds(@Param("prodIds") List<Long> prodIds);
+
+    default EshopProdDO getValidProdById(Long prodId) {
+        EshopProdDO entity = new EshopProdDO();
+        entity.setId(prodId);
+        entity.setStatus(ProdStatusEnum.PUBLISHED.getStatus());
+        return selectOne(new QueryWrapper<>(entity));
+    }
 }

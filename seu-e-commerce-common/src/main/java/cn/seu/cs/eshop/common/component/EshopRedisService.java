@@ -85,4 +85,17 @@ public class EshopRedisService implements RedisService {
         String key = conf.prefixKey().formatted(keys);
         redisTemplate.opsForHash().delete(key, field);
     }
+
+    public long incrementHashField(RedisConf conf, String field, long num, Object... keys) {
+        String key = conf.prefixKey().formatted(keys);
+        return redisTemplate.opsForHash().increment(key, field, num);
+    }
+
+    public Boolean existHashKey(RedisConf conf, Object...keys) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(conf.prefixKey().formatted(keys)));
+    }
+
+    public void removeHashValue(RedisConf conf, Object...keys) {
+        redisTemplate.delete(conf.prefixKey().formatted(keys));
+    }
 }
