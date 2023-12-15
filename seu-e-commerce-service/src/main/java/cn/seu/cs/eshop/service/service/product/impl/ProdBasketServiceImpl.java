@@ -9,7 +9,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopBasketDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.redisson.EshopRedissonLockService;
-import cn.seu.cs.eshop.service.sdk.product.basket.dto.EshopProdBasketDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
 import cn.seu.cs.eshop.service.sdk.product.basket.req.ListUserProdBasketResponse;
 import cn.seu.cs.eshop.service.sdk.product.basket.req.UpdateUserProdBasketRequest;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static cn.seu.cs.eshop.service.redis.ServiceRedisConfEnum.basketIdRedissonLock;
-import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildFailResponse;
 import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessResponse;
 
 /**
@@ -36,7 +35,7 @@ import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessR
  * Created on 2023/12/14
  */
 @Service
-public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDTO> implements ProdBasketService {
+public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdOrderDTO> implements ProdBasketService {
     @Resource
     private ProdBasketHashCache prodBasketHashCache;
     @Resource
@@ -47,7 +46,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
     private EshopRedissonLockService eshopRedissonLockService;
 
     @Override
-    public long insert(EshopProdBasketDTO data) {
+    public long insert(EshopProdOrderDTO data) {
         EshopBasketDO origin = eshopBasketDao.getBasketByUserIdAndProdId(data.getUserId(), data.getProdId());
         Long id = 0L;
         if (origin == null) { // 新增
@@ -72,12 +71,12 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
     }
 
     @Override
-    public long delete(EshopProdBasketDTO data) {
+    public long delete(EshopProdOrderDTO data) {
         throw new EshopException("请求参数不正确！");
     }
 
     @Override
-    public long update(EshopProdBasketDTO data) {
+    public long update(EshopProdOrderDTO data) {
         throw new EshopException("请求参数不正确！");
     }
 
@@ -94,11 +93,11 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdBasketDT
     @Override
     public ListUserProdBasketResponse listUserProdBasket(Long userId) {
         List<EshopBasketDO> baskets = prodBasketHashCache.getBasketListByUserId(userId);
-        List<EshopProdBasketDTO> data = new ArrayList<>();
+        List<EshopProdOrderDTO> data = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(baskets)) {
             data = baskets.stream()
                     .map(basket -> {
-                        EshopProdBasketDTO res = ProdBasketConvert.convertToEshopProdBasketDTO(basket);
+                        EshopProdOrderDTO res = ProdBasketConvert.convertToEshopProdBasketDTO(basket);
                         EshopProdDO prod = prodHashCache.getProdData(res.getProdId());
                         EshopProdSkuDO sku = prodHashCache.getProdSkuData(res.getProdId(), res.getSkuId());
                         EshopBasketDO bask = prodBasketHashCache.getBasketData(basket.getId());

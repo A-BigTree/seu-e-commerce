@@ -1,4 +1,4 @@
-package cn.seu.cs.eshop.service.sdk.product.basket.dto;
+package cn.seu.cs.eshop.service.sdk.order.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EshopProdBasketDTO implements Serializable {
+public class EshopProdOrderDTO implements Serializable {
     private Long id;
     private Long userId;
     private Long prodId;

@@ -27,9 +27,10 @@ public class EshopOrderDO extends MysqlBaseDO {
     private Integer closeType;
     private Long total;
     private Integer payType;
-    private Integer payTime;
+    private Integer userDeleted;
+    private Long payTime;
     private Long deliveryTime;
     private Long completeTime;
-    private Integer cancelTime;
-    private Integer updateTime;
+    private Long cancelTime;
+    private Long updateTime;
 }

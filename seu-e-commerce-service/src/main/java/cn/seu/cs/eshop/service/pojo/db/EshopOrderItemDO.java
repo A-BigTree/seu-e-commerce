@@ -19,7 +19,7 @@ public class EshopOrderItemDO extends MysqlBaseDO{
     private Long skuId;
     private Long shopId;
     private Integer prodCount;
-    private Integer price;
+    private Long price;
     private String prodName;
     private String skuName;
     private String pic;
