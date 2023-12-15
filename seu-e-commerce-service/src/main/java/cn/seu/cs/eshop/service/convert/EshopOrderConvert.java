@@ -67,6 +67,8 @@ public class EshopOrderConvert {
         return EshopOrderDTO.builder()
                 .id(item.getId())
                 .pic(item.getPic())
+                .basketId(item.getBasketId())
+                .shopId(item.getShopId())
                 .userId(item.getUserId())
                 .address(address)
                 .prodName(item.getProdName())
@@ -96,6 +98,8 @@ public class EshopOrderConvert {
         }
         EshopOrderDO result = new EshopOrderDO();
         result.setUserId(item.getUserId());
+        result.setShopId(item.getShopId());
+        result.setBasketId(item.getBasketId());
         result.setAddressId(item.getAddress().getId());
         result.setProdName(item.getProdName());
         result.setPic(item.getPic());

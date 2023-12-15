@@ -1,5 +1,6 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
+import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
@@ -23,6 +24,7 @@ public abstract class AbstractBinlogManager {
             case PROD_PROP_VALUE -> writeProdPropValue(PROD_PROP_VALUE.getData(data));
             case ESHOP_PROD -> writeEshopProd(ESHOP_PROD.getData(data));
             case ESHOP_PROD_SKU -> writeEshopProdSku(ESHOP_PROD_SKU.getData(data));
+            case ESHOP_ORDER -> writeEshopOrder(ESHOP_ORDER.getData(data));
             // Add here
 
             default -> log.info("No this table function: {}.{}", binlog.getDatabase(), binlog.getTable());
@@ -32,4 +34,5 @@ public abstract class AbstractBinlogManager {
     protected abstract void writeProdPropValue(ProductPropValueDO data);
     protected abstract void writeEshopProd(EshopProdDO data);
     protected abstract void writeEshopProdSku(EshopProdSkuDO data);
+    protected abstract void writeEshopOrder(EshopOrderDO data);
 }

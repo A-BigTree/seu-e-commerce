@@ -1,12 +1,13 @@
 package cn.seu.cs.eshop.task.manager.binlog;
 
-import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
 import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
+import cn.seu.cs.eshop.service.dao.EshopBasketDao;
 import cn.seu.cs.eshop.service.es.EsProductInfoService;
 import cn.seu.cs.eshop.service.es.EsProductSearchService;
+import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.seu.cs.eshop.service.enums.order.EshopOrderType.CART;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -37,6 +40,8 @@ public class InsertBinlogManager extends AbstractBinlogManager{
     EsProductSearchService esProductSearchService;
     @Resource
     ProdIndexToCCache prodIndexToCCache;
+    @Resource
+    EshopBasketDao eshopBasketDao;
 
     @Override
     public void writeProdPropValue(ProductPropValueDO data) {
@@ -67,5 +72,12 @@ public class InsertBinlogManager extends AbstractBinlogManager{
     @Override
     protected void writeEshopProdSku(EshopProdSkuDO data) {
         prodSkusToBCache.deleteProdSkus(data.getProdId());
+    }
+
+    @Override
+    protected void writeEshopOrder(EshopOrderDO data) {
+        if (data.getOrderType() == CART.getType()) {
+            eshopBasketDao.deleteById(data.getBasketId());
+        }
     }
 }

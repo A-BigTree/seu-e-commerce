@@ -7,6 +7,7 @@ import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
 import cn.seu.cs.eshop.service.es.EsProductInfoService;
 import cn.seu.cs.eshop.service.es.EsProductSearchService;
+import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.pojo.db.ProductPropValueDO;
@@ -71,5 +72,10 @@ public class UpdateBinlogManager extends AbstractBinlogManager{
     protected void writeEshopProdSku(EshopProdSkuDO data) {
         prodToBCache.deleteProd(data.getId());
         prodHashCache.deleteProdSkuData(data.getProdId(), data.getId());
+    }
+
+    @Override
+    protected void writeEshopOrder(EshopOrderDO data) {
+
     }
 }

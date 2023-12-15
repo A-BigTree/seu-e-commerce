@@ -164,8 +164,10 @@ const toFirmOrder = () => {
     })
     return;
   }
+
+  uni.setStorageSync("orderIds", JSON.stringify(ids));
   uni.navigateTo({
-    url: '/pages/submit-order/submit-order?orderEntry=0'
+    url: '/pages/submit-order/submit-order?orderEntry=2'
   })
 }
 

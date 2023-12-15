@@ -194,7 +194,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 
 
-let orderEntry = '0' // 订单入口 0购物车 1立即购买
+let orderEntry = '1' // 订单入口 1立即购买 2购物车
 /**
  * 生命周期函数--监听页面加载
  */
