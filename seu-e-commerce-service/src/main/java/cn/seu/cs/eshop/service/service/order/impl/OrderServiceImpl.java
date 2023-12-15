@@ -1,5 +1,7 @@
 package cn.seu.cs.eshop.service.service.order.impl;
 
+import cn.seu.cs.eshop.account.sdk.entity.req.GetAccountInfoResponse;
+import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.common.component.EshopConfService;
 import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
@@ -26,15 +28,14 @@ import cs.seu.cs.eshop.common.sdk.exception.EshopException;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.redisson.api.RLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static cn.seu.cs.eshop.service.enums.order.EshopOrderCloseTypeEnum.getByCloseType;
 import static cn.seu.cs.eshop.service.enums.order.EshopOrderPayTypeEnum.getByPayType;
@@ -71,12 +72,15 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
     private OrderNumberGenerateService orderNumberGenerateService;
     @Resource
     private EshopOrderProdManager eshopOrderProdManager;
+    @DubboReference(timeout = 4000, retries = 0)
+    private EshopAccountService eshopAccountService;
 
 
     @Override
     public InitOrderListResponse initOrderList(InitOrderListRequest request) {
         List<OrderInitIdsDTO> orderIds = request.getOrderIds();
         List<EshopOrderItemDTO> data = new ArrayList<>();
+        Map<Long, String> shopMap = new HashMap<>();
         if (CollectionUtils.isNotEmpty(orderIds)) {
             data = orderIds.stream()
                     .map(id -> {
@@ -84,7 +88,16 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
                         EshopProdSkuDO sku = prodHashCache.getProdSkuData(id.getProdId(), id.getSkuId());
                         EshopOrderItemDTO item = EshopOrderConvert.convertToEshopOrderItemDTO(prod, sku);
                         if (item != null) {
+                            String shopName = shopMap.getOrDefault(item.getShopId(), null);
+                            if (shopName == null) {
+                                GetAccountInfoResponse response =
+                                        eshopAccountService.getAccountInfo(item.getShopId());
+                                shopName = response.getData().getNickname();
+                                shopMap.put(item.getShopId(), shopName);
+                            }
                             item.setProdCount(id.getProdCount());
+                            item.setExt(shopName);
+                            item.setDeliveryCost(prod.getDeliveryPrice());
                         }
                         return item;
                     })

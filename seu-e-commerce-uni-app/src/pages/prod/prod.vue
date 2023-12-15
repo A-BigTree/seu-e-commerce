@@ -506,7 +506,9 @@ const getProdInfo = () => {
       imgs.value = [prodInfo.pic];
       if (prodInfo.images) {
         prodInfo.images.forEach(image => {
-          imgs.value.push(image);
+          if (image && image !== "") {
+            imgs.value.push(image);
+          }
         })
       }
       prodName.value = prodInfo.prodName

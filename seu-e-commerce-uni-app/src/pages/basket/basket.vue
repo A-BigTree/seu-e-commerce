@@ -33,6 +33,7 @@ const listData = () => {
           pic: data.pic,
           skuName: data.skuName,
           price: data.price,
+          skuId: data.skuId,
           prodCount: data.prodCount,
           status: data.status,
           checked: false

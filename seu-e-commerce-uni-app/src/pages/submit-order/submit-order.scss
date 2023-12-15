@@ -99,6 +99,12 @@
   background-color: #fff;
   margin-top: 15rpx;
   font-size: 28rpx;
+  .shopName {
+    padding: 20rpx 30rpx;
+    border-bottom: 2rpx solid #f1f1f1;
+    display: flex;
+    justify-content: space-between;
+  }
   .item-cont {
     .prod-pic {
       image {
