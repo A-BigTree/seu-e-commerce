@@ -23,6 +23,7 @@ public class EshopOrderDTO implements Serializable {
     private Long shopId;
     private EshopOrderAddressDTO address;
     private String prodName;
+    private String pic;
     private String orderNumber;
     private String remarks;
     private Integer prodCount;

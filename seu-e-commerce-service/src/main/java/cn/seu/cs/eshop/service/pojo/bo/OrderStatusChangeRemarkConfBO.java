@@ -12,4 +12,8 @@ import java.util.Map;
 @Data
 public class OrderStatusChangeRemarkConfBO implements Serializable {
     Map<Integer, String> remarks;
+
+    public String getRemarkByStatus(Integer status) {
+        return remarks.get(status);
+    }
 }

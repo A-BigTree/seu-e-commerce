@@ -11,8 +11,8 @@ import static cn.seu.cs.eshop.common.constants.RedisConstants.DEFAULT_EXPIRATION
  * Created on 2023/11/6
  */
 public enum ServiceRedisConfEnum implements RedisConf {
+    // 普通缓存配置
     prodCategory("prod:category:", 5L, TimeUnit.MINUTES),
-    prodSkuCodeGenerate("prod:sku:code:generate"),
     prodToBCache("prod:tob:cache:", 3L, TimeUnit.MINUTES),
     prodSkusToBCache("prod:tob:skus:cache:", 3L, TimeUnit.MINUTES),
     prodIndexToCCache("prod:toc:index:cache:", 5L, TimeUnit.MINUTES),
@@ -21,6 +21,8 @@ public enum ServiceRedisConfEnum implements RedisConf {
     orderUserAddressCache("order:user:address:cache:", 5L, TimeUnit.MINUTES),
     orderUserAddressIdCache("order:user:address:id:cache:", 30L, TimeUnit.SECONDS),
     basketListUserIdCache("basket:list:user:id:cache:", 30L, TimeUnit.MINUTES),
+
+    // 哈希缓存配置
     basketProdSkuHashCache("basket:prod:sku:hash:cache:%s", 30L, TimeUnit.MINUTES),
     prodHashCache("prod:hash:cache:%s", 30L, TimeUnit.MINUTES),
     prodSkuHashCache("prod:sku:hash:cache:%s:%s", 30L, TimeUnit.MINUTES),
@@ -29,6 +31,11 @@ public enum ServiceRedisConfEnum implements RedisConf {
     basketIdRedissonLock("basket:id:redisson:lock:%s", 5L, TimeUnit.SECONDS),
     prodIdRedissonLock("prod:id:redisson:lock:%s", 5L, TimeUnit.SECONDS),
     prodSkuIdRedissonLock("prod:sku:id:redisson:lock:%s:%s", 5L, TimeUnit.SECONDS),
+    orderIdRedissonLock("order:id:redisson:lock:%s", 5L, TimeUnit.SECONDS),
+
+    // 分布式全局ID配置
+    prodSkuCodeGenerate("prod:sku:code:generate"),
+    orderNumberGenerate("order:number:generate"),
 
     ;
     private final String prefix;
@@ -38,12 +45,6 @@ public enum ServiceRedisConfEnum implements RedisConf {
     ServiceRedisConfEnum(String prefix) {
         this.prefix = prefix;
         this.expirationTime = DEFAULT_EXPIRATION_TIME;
-        this.timeUnit = TimeUnit.SECONDS;
-    }
-
-    ServiceRedisConfEnum(String prefix, long expirationTime) {
-        this.prefix = prefix;
-        this.expirationTime = expirationTime;
         this.timeUnit = TimeUnit.SECONDS;
     }
 

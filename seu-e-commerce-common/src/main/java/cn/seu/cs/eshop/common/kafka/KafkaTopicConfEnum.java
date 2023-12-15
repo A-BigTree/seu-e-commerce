@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.common.util.JsonUtils;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EshopProdUserHistoryDTO;
 import cs.seu.cs.eshop.common.sdk.entity.dto.MaxwellMessageDTO;
+import cs.seu.cs.eshop.common.sdk.entity.dto.OrderItemMessageDTO;
 import lombok.Getter;
 
 import static cn.seu.cs.eshop.common.kafka.KafkaTopicConstants.*;
@@ -20,7 +21,8 @@ public enum KafkaTopicConfEnum {
     MAXWELL_BINLOG_TOPIC(maxwellBinlogTopic, MaxwellMessageDTO.class),
     // 商品用户浏览历史消息
     PROD_USER_HISTORY_TOPIC(prodUserHistoryTopic, EshopProdUserHistoryDTO.class),
-
+    // 订单商品消息
+    ORDER_PROD_ITEM_TOPIC(orderProdItemTopic, OrderItemMessageDTO.class),
 
     ;
     private final String topic;

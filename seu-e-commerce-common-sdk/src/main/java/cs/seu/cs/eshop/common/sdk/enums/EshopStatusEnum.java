@@ -8,6 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public enum EshopStatusEnum {
+    DELETED(-1),
     INVALID(0),
     VALID(1),
 

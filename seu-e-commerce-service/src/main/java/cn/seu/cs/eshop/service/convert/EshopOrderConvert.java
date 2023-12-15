@@ -8,6 +8,7 @@ import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderItemDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.OrderStatusChangeDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class EshopOrderConvert {
         }
         return EshopOrderDTO.builder()
                 .id(item.getId())
+                .pic(item.getPic())
                 .userId(item.getUserId())
                 .shopId(item.getShopId())
                 .address(address)
@@ -98,6 +100,7 @@ public class EshopOrderConvert {
         result.setShopId(item.getShopId());
         result.setAddressId(item.getAddress().getId());
         result.setProdName(item.getProdName());
+        result.setPic(item.getPic());
         result.setOrderNumber(item.getOrderNumber());
         result.setRemarks(item.getRemarks());
         result.setProdCount(item.getProdCount());
@@ -118,8 +121,8 @@ public class EshopOrderConvert {
         }
         return EshopOrderItemDTO.builder()
                 .id(item.getId())
-                .userId(item.getUserId())
                 .prodId(item.getProdId())
+                .orderNumber(item.getOrderNumber())
                 .prodName(item.getProdName())
                 .pic(item.getPic())
                 .skuId(item.getSkuId())
@@ -132,12 +135,11 @@ public class EshopOrderConvert {
                 .build();
     }
 
-    public static EshopOrderItemDO convertToEshopOrderItemDO(EshopOrderItemDTO item, Long orderId, String orderNumber) {
+    public static EshopOrderItemDO convertToEshopOrderItemDO(EshopOrderItemDTO item, String orderNumber) {
         if (item == null) {
             return null;
         }
         EshopOrderItemDO result = new EshopOrderItemDO();
-        result.setOrderId(orderId);
         result.setOrderNumber(orderNumber);
         result.setProdId(item.getProdId());
         result.setSkuId(item.getSkuId());
@@ -147,7 +149,6 @@ public class EshopOrderConvert {
         result.setProdName(item.getProdName());
         result.setSkuName(item.getSkuName());
         result.setPic(item.getPic());
-        result.setUserId(item.getUserId());
         result.setCommStatus(item.getStatus());
         result.setId(item.getId() > 0 ? item.getId() : null);
         return result;
@@ -165,6 +166,22 @@ public class EshopOrderConvert {
                 .status(item.getStatus())
                 .oldStatus(item.getOldStatus())
                 .createTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT))
+                .build();
+    }
+
+    public static EshopOrderItemDTO convertToEshopOrderItemDTO(EshopProdDO item, EshopProdSkuDO sku) {
+        if (item == null || sku == null) {
+            return null;
+        }
+        return EshopOrderItemDTO.builder()
+                .id(item.getId())
+                .prodId(item.getId())
+                .prodName(item.getProdName())
+                .pic(StringUtils.isEmpty(sku.getPic()) ? item.getPic() : sku.getPic())
+                .skuId(sku.getId())
+                .skuName(sku.getSkuName())
+                .price(sku.getPrice())
+                .shopId(item.getShopId())
                 .build();
     }
 }

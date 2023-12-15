@@ -17,20 +17,21 @@ public class EshopOrderDO extends MysqlBaseDO {
     private Long shopId;
     private Long addressId;
     private String prodName;
+    private String pic;
     private String orderNumber;
     private String remarks;
     private Integer prodCount;
     private Integer status;
-    private String deliveryId;
+    private String deliveryId;  // 发货
     private Long deliveryCost;
     private Integer orderType;
-    private Integer closeType;
+    private Integer closeType;  // 取消
     private Long total;
-    private Integer payType;
-    private Integer userDeleted;
-    private Long payTime;
-    private Long deliveryTime;
-    private Long completeTime;
-    private Long cancelTime;
-    private Long updateTime;
+    private Integer payType;  // 付款
+    private Integer userDeleted; // 用户删除
+    private Long payTime;     // 付款
+    private Long deliveryTime;  // 发货
+    private Long completeTime;  // 完成
+    private Long cancelTime;    // 取消
+    private Long updateTime;   // 更新
 }

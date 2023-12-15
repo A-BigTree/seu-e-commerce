@@ -25,6 +25,7 @@ public class EshopOrderItemDTO implements Serializable {
     private String skuName;
     private Long price;
     private Long shopId;
+    private String orderNumber;
     private Integer prodCount;
     private Integer status;
     private String createTime;

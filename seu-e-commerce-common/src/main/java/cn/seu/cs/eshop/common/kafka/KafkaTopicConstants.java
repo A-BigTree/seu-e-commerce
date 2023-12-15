@@ -8,4 +8,5 @@ public class KafkaTopicConstants {
     public static final String emailSendTopic = "eshop_email_send_topic";
     public static final String maxwellBinlogTopic = "eshop_maxwell_binlog";
     public static final String prodUserHistoryTopic = "eshop_prod_user_history_topic";
+    public static final String orderProdItemTopic = "eshop_order_prod_item_topic";
 }

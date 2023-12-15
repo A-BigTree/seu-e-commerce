@@ -11,7 +11,11 @@ import java.io.Serializable;
 @Data
 public class ChangeOrderStatusRequest implements Serializable {
     private Long userId;
+    private String modifier;
     private Long orderId;
+    private String orderNumber;
     private Integer status;
-    private String params;
+    private String param1;
+    private String param2;
+    private String param3;
 }
