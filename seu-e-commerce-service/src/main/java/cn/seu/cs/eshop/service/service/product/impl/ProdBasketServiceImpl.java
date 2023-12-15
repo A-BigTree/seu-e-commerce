@@ -9,7 +9,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopBasketDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopProdSkuDO;
 import cn.seu.cs.eshop.service.redisson.EshopRedissonLockService;
-import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderItemDTO;
 import cn.seu.cs.eshop.service.sdk.product.basket.req.ListUserProdBasketResponse;
 import cn.seu.cs.eshop.service.sdk.product.basket.req.UpdateUserProdBasketRequest;
 import cn.seu.cs.eshop.service.service.AbstractCrudService;
@@ -35,7 +35,7 @@ import static cs.seu.cs.eshop.common.sdk.util.ResponseBuilderUtils.buildSuccessR
  * Created on 2023/12/14
  */
 @Service
-public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdOrderDTO> implements ProdBasketService {
+public class ProdBasketServiceImpl extends AbstractCrudService<EshopOrderItemDTO> implements ProdBasketService {
     @Resource
     private ProdBasketHashCache prodBasketHashCache;
     @Resource
@@ -46,7 +46,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdOrderDTO
     private EshopRedissonLockService eshopRedissonLockService;
 
     @Override
-    public long insert(EshopProdOrderDTO data) {
+    public long insert(EshopOrderItemDTO data) {
         EshopBasketDO origin = eshopBasketDao.getBasketByUserIdAndProdId(data.getUserId(), data.getProdId());
         Long id = 0L;
         if (origin == null) { // 新增
@@ -71,12 +71,12 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdOrderDTO
     }
 
     @Override
-    public long delete(EshopProdOrderDTO data) {
+    public long delete(EshopOrderItemDTO data) {
         throw new EshopException("请求参数不正确！");
     }
 
     @Override
-    public long update(EshopProdOrderDTO data) {
+    public long update(EshopOrderItemDTO data) {
         throw new EshopException("请求参数不正确！");
     }
 
@@ -93,11 +93,11 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopProdOrderDTO
     @Override
     public ListUserProdBasketResponse listUserProdBasket(Long userId) {
         List<EshopBasketDO> baskets = prodBasketHashCache.getBasketListByUserId(userId);
-        List<EshopProdOrderDTO> data = new ArrayList<>();
+        List<EshopOrderItemDTO> data = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(baskets)) {
             data = baskets.stream()
                     .map(basket -> {
-                        EshopProdOrderDTO res = ProdBasketConvert.convertToEshopProdBasketDTO(basket);
+                        EshopOrderItemDTO res = ProdBasketConvert.convertToEshopProdBasketDTO(basket);
                         EshopProdDO prod = prodHashCache.getProdData(res.getProdId());
                         EshopProdSkuDO sku = prodHashCache.getProdSkuData(res.getProdId(), res.getSkuId());
                         EshopBasketDO bask = prodBasketHashCache.getBasketData(basket.getId());

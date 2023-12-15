@@ -1,7 +1,7 @@
 package cn.seu.cs.eshop.service.convert;
 
 import cn.seu.cs.eshop.service.pojo.db.EshopBasketDO;
-import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderItemDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 
 /**
@@ -9,11 +9,11 @@ import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
  * Created on 2023/12/14
  */
 public class ProdBasketConvert {
-    public static EshopProdOrderDTO convertToEshopProdBasketDTO(EshopBasketDO item) {
+    public static EshopOrderItemDTO convertToEshopProdBasketDTO(EshopBasketDO item) {
         if (item == null) {
             return null;
         }
-        return EshopProdOrderDTO.builder()
+        return EshopOrderItemDTO.builder()
                 .id(item.getId())
                 .userId(item.getUserId())
                 .prodId(item.getProdId())
@@ -28,7 +28,7 @@ public class ProdBasketConvert {
                 .build();
     }
 
-    public static EshopBasketDO convertToEshopBasketDO(EshopProdOrderDTO item) {
+    public static EshopBasketDO convertToEshopBasketDO(EshopOrderItemDTO item) {
         if (item == null) {
             return null;
         }

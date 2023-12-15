@@ -5,7 +5,7 @@ import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAddressDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderDTO;
-import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderItemDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.OrderStatusChangeDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 
@@ -59,7 +59,7 @@ public class EshopOrderConvert {
 
     public static EshopOrderDTO convertToEshopOrderDTO(EshopOrderDO item,
                                                        EshopOrderAddressDTO address,
-                                                       List<EshopProdOrderDTO> orderItems) {
+                                                       List<EshopOrderItemDTO> orderItems) {
         if (item == null) {
             return null;
         }
@@ -112,11 +112,11 @@ public class EshopOrderConvert {
         return result;
     }
 
-    public static EshopProdOrderDTO convertToEshopProdOrderDTO(EshopOrderItemDO item) {
+    public static EshopOrderItemDTO convertToEshopProdOrderDTO(EshopOrderItemDO item) {
         if (item == null) {
             return null;
         }
-        return EshopProdOrderDTO.builder()
+        return EshopOrderItemDTO.builder()
                 .id(item.getId())
                 .userId(item.getUserId())
                 .prodId(item.getProdId())
@@ -132,7 +132,7 @@ public class EshopOrderConvert {
                 .build();
     }
 
-    public static EshopOrderItemDO convertToEshopOrderItemDO(EshopProdOrderDTO item, Long orderId, String orderNumber) {
+    public static EshopOrderItemDO convertToEshopOrderItemDO(EshopOrderItemDTO item, Long orderId, String orderNumber) {
         if (item == null) {
             return null;
         }

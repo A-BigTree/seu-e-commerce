@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EshopProdOrderDTO implements Serializable {
+public class EshopOrderItemDTO implements Serializable {
     private Long id;
     private Long userId;
     private Long prodId;

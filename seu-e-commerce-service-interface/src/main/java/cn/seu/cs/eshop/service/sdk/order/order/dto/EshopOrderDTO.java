@@ -39,5 +39,5 @@ public class EshopOrderDTO implements Serializable {
     private String cancelTime;
     private String updateTime;
     private String createTime;
-    private List<EshopProdOrderDTO> orderItems;
+    private List<EshopOrderItemDTO> orderItems;
 }

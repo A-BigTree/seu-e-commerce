@@ -1,6 +1,6 @@
 package cn.seu.cs.eshop.service.sdk.product.basket.req;
 
-import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderItemDTO;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseCrudRequest;
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * Created on 2023/12/14
  */
 @Data
-public class UpdateUserProdBasketRequest implements BaseCrudRequest<EshopProdOrderDTO> {
+public class UpdateUserProdBasketRequest implements BaseCrudRequest<EshopOrderItemDTO> {
     private int action;
-    private EshopProdOrderDTO data;
+    private EshopOrderItemDTO data;
 }
