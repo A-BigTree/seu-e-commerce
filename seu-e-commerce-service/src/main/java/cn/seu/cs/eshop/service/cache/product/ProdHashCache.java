@@ -53,15 +53,31 @@ public class ProdHashCache {
         return true;
     }
 
-    public long changeProdSoldNum(Long prodId, Integer num) {
+    public long getProdSoldNum(Long prodId) {
         if (refreshProdData(prodId)) {
+            return eshopRedisService.getHashField(prodHashCache, PROD_SOLD_NUM, Long.class, prodId);
+        }
+        return -1L;
+    }
+
+    public long changeProdSoldNum(Long prodId, Integer num) {
+        long soldNum = getProdSoldNum(prodId);
+        if (soldNum > 0 && soldNum + num >= 0) {
             return eshopRedisService.incrementHashField(prodHashCache, PROD_SOLD_NUM, num, prodId);
         }
         return -1L;
     }
 
-    public long changeProdTotalStocks(Long prodId, Integer num) {
+    public long getProdTotalStocks(Long prodId) {
         if (refreshProdData(prodId)) {
+            return eshopRedisService.getHashField(prodHashCache, PROD_STOCK, Long.class, prodId);
+        }
+        return -1L;
+    }
+
+    public long changeProdTotalStocks(Long prodId, Integer num) {
+        long totalStocks = getProdTotalStocks(prodId);
+        if (totalStocks > 0 && totalStocks + num >= 0) {
             return eshopRedisService.incrementHashField(prodHashCache, PROD_STOCK, num, prodId);
         }
         return -1L;
@@ -96,9 +112,17 @@ public class ProdHashCache {
         return true;
     }
 
-    public long changeProSkuStocks(Long prodId, Long skuId, Integer num) {
+    public long getProdSkuStocks(Long prodId, Long skuId) {
         if (refreshProdSkuData(prodId, skuId)) {
-            return eshopRedisService.incrementHashField(prodSkuHashCache, PROD_SKU_STOCKS, num);
+            return eshopRedisService.getHashField(prodSkuHashCache, PROD_SKU_STOCKS, Long.class, prodId, skuId);
+        }
+        return -1L;
+    }
+
+    public long changeProSkuStocks(Long prodId, Long skuId, Integer num) {
+        long stocks = getProdSkuStocks(prodId, skuId);
+        if (stocks > 0 && stocks + num >= 0) {
+            return eshopRedisService.incrementHashField(prodSkuHashCache, PROD_SKU_STOCKS, num, prodId, skuId);
         }
         return -1L;
     }

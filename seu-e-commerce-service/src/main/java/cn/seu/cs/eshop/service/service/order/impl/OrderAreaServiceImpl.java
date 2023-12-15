@@ -8,6 +8,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopAreaDO;
 import cn.seu.cs.eshop.service.pojo.db.EshopUserAddressDO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAddressDTO;
+import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.req.GetOrderLevelAreaResponse;
 import cn.seu.cs.eshop.service.sdk.order.address.req.GetUserAddressInfoResponse;
 import cn.seu.cs.eshop.service.sdk.order.address.req.ListUserAddressResponse;
@@ -16,6 +17,7 @@ import cn.seu.cs.eshop.service.service.AbstractCrudService;
 import cn.seu.cs.eshop.service.service.order.OrderAreaService;
 import cs.seu.cs.eshop.common.sdk.entity.req.BaseResponse;
 import jakarta.annotation.Resource;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,5 +106,17 @@ public class OrderAreaServiceImpl extends AbstractCrudService<EshopOrderAddressD
         entity.setDefaultAddress(VALID.getStatus());
         eshopUserAddressDao.updateById(entity);
         return buildSuccessResponse(BaseResponse.class, entity.getId().toString());
+    }
+
+    @Override
+    public GetUserAddressInfoResponse getDefaultAddress(Long userId) {
+        List<EshopUserAddressDO> addresses = eshopUserAddressDao.selectByUserIdAndDefault(userId);
+        if (CollectionUtils.isEmpty(addresses)) {
+            return buildSuccessResponse(GetUserAddressInfoResponse.class, null);
+        }
+        EshopUserAddressDO address = addresses.get(0);
+        EshopOrderAreaDTO area = areaAddressCache.getOrderArea(address.getAreaId());
+        EshopOrderAddressDTO data = EshopOrderConvert.convertToEshopOrderAddressDTO(address, area);
+        return buildSuccessResponse(GetUserAddressInfoResponse.class, data);
     }
 }

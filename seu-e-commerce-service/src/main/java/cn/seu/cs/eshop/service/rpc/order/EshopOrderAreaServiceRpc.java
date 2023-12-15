@@ -45,7 +45,14 @@ public class EshopOrderAreaServiceRpc implements EshopOrderAreaService {
     }
 
     @Override
+    @RpcMonitor
     public BaseResponse changeDefaultAddress(Long addressId, Long userId) {
         return orderAreaService.changeDefaultAddress(addressId, userId);
+    }
+
+    @Override
+    @RpcMonitor
+    public GetUserAddressInfoResponse getDefaultAddress(Long userId) {
+        return orderAreaService.getDefaultAddress(userId);
     }
 }

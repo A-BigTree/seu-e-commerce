@@ -13,7 +13,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @TableName("eshop_order_item")
 public class EshopOrderItemDO extends MysqlBaseDO{
-    private Long orderNumber;
+    private Long orderId;
+    private String orderNumber;
     private Long prodId;
     private Long skuId;
     private Long shopId;

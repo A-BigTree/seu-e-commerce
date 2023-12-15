@@ -58,4 +58,11 @@ public class OrderAreaAddressController {
     public BaseResponse changeDefaultAddress(@RequestParam("addressId") Long addressId, @AuthorUserInfo Long userId) {
         return eshopOrderAreaService.changeDefaultAddress(addressId, userId);
     }
+
+    @ApiMonitor(roleType = CUSTOMER)
+    @CrossOrigin
+    @GetMapping("/address/default/get")
+    public GetUserAddressInfoResponse getDefaultAddress(@AuthorUserInfo Long userId) {
+        return eshopOrderAreaService.getDefaultAddress(userId);
+    }
 }

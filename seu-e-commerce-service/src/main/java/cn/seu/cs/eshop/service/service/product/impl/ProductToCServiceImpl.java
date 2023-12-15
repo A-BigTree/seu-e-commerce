@@ -3,6 +3,7 @@ package cn.seu.cs.eshop.service.service.product.impl;
 import cn.seu.cs.eshop.common.component.EshopConfService;
 import cn.seu.cs.eshop.common.kafka.service.EshopKafkaSendService;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
+import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
 import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
 import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
@@ -71,6 +72,8 @@ public class ProductToCServiceImpl implements ProductToCService {
     ProdToBCache prodToBCache;
     @Resource
     ProdSkusToBCache prodSkusToBCache;
+    @Resource
+    ProdHashCache prodHashCache;
 
     @Override
     public GetEshopIndexProdsResponse getEshopIndexProds() {
@@ -177,8 +180,8 @@ public class ProductToCServiceImpl implements ProductToCService {
 
     @Override
     public GetProductInfoResponse getProductInfo(Long prodId, Long userId) {
-        EshopProdDO prod = prodToBCache.getProd(prodId);
-        if (prod.getStatus() != PUBLISHED.getStatus()) {
+        EshopProdDO prod = prodHashCache.getProdData(prodId);
+        if (prod.getStatus() == null) {
             throw new EshopException("商品已下架");
         }
         List<EshopProdSkuDO> skus = prodSkusToBCache.getProdSkus(prodId);

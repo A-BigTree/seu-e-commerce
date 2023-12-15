@@ -16,4 +16,5 @@ public interface OrderAreaService {
     ListUserAddressResponse listUserAddress(Long userId);
     BaseResponse updateAddress(UpdateUserAddressRequest request);
     BaseResponse changeDefaultAddress(Long addressId, Long userId);
+    GetUserAddressInfoResponse getDefaultAddress(Long userId);
 }
