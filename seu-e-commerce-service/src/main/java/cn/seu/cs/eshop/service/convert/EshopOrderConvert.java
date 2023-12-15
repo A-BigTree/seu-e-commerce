@@ -68,7 +68,6 @@ public class EshopOrderConvert {
                 .id(item.getId())
                 .pic(item.getPic())
                 .userId(item.getUserId())
-                .shopId(item.getShopId())
                 .address(address)
                 .prodName(item.getProdName())
                 .orderNumber(item.getOrderNumber())
@@ -97,7 +96,6 @@ public class EshopOrderConvert {
         }
         EshopOrderDO result = new EshopOrderDO();
         result.setUserId(item.getUserId());
-        result.setShopId(item.getShopId());
         result.setAddressId(item.getAddress().getId());
         result.setProdName(item.getProdName());
         result.setPic(item.getPic());

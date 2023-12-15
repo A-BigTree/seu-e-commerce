@@ -12,7 +12,5 @@ import java.util.List;
  */
 @Data
 public class InitOrderListRequest implements Serializable {
-    private Integer orderType;
     private List<OrderInitIdsDTO> orderIds;
-
 }

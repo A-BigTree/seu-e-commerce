@@ -14,7 +14,6 @@ import lombok.EqualsAndHashCode;
 @TableName("eshop_order")
 public class EshopOrderDO extends MysqlBaseDO {
     private Long userId;
-    private Long shopId;
     private Long addressId;
     private String prodName;
     private String pic;

@@ -20,7 +20,6 @@ import java.util.List;
 public class EshopOrderDTO implements Serializable {
     private Long id;
     private Long userId;
-    private Long shopId;
     private EshopOrderAddressDTO address;
     private String prodName;
     private String pic;
