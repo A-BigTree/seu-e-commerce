@@ -3,6 +3,7 @@ package cn.seu.cs.eshop.service.nacos;
 import cn.seu.cs.eshop.common.constants.ConfigConstants;
 import cn.seu.cs.eshop.common.nacos.ConfDataId;
 import cn.seu.cs.eshop.service.pojo.bo.EshopIndexProdConfBO;
+import cn.seu.cs.eshop.service.pojo.bo.OrderStatusChangeRemarkConfBO;
 import cn.seu.cs.eshop.service.pojo.bo.ProdReviewEmailBO;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public enum ServiceNacosConfEnum implements ConfDataId<Object> {
     emailReviewContext(new ProdReviewEmailBO()),
     eshopIndexProdConf(new ArrayList<EshopIndexProdConfBO>()),
+    orderStatusChangeRemarkConf(new OrderStatusChangeRemarkConfBO()),
 
     ;
 

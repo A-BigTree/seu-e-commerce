@@ -37,7 +37,7 @@ public enum EshopOrderCloseTypeEnum {
             MAP.put(value.getCloseType(), value);
         }
     }
-    
+
     public static EshopOrderCloseTypeEnum getByCloseType(int closeType) {
         return MAP.get(closeType);
     }

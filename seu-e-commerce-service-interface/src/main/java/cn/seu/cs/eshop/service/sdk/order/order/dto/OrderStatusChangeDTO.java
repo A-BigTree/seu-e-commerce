@@ -1,4 +1,4 @@
-package cs.seu.cs.eshop.common.sdk.entity.dto;
+package cn.seu.cs.eshop.service.sdk.order.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +16,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class OrderStatusChangeDTO implements Serializable {
+    private Long id;
+    private Long orderId;
+    private String modifier;
+    private String remark;
+    private Integer status;
+    private Integer oldStatus;
+    private String createTime;
 }

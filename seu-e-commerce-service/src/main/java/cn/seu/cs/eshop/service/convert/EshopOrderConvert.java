@@ -1,14 +1,12 @@
 package cn.seu.cs.eshop.service.convert;
 
-import cn.seu.cs.eshop.service.pojo.db.EshopAreaDO;
-import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
-import cn.seu.cs.eshop.service.pojo.db.EshopOrderItemDO;
-import cn.seu.cs.eshop.service.pojo.db.EshopUserAddressDO;
+import cn.seu.cs.eshop.service.pojo.db.*;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAddressDTO;
 import cn.seu.cs.eshop.service.sdk.order.address.dto.EshopOrderAreaDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopOrderDTO;
 import cn.seu.cs.eshop.service.sdk.order.order.dto.EshopProdOrderDTO;
+import cn.seu.cs.eshop.service.sdk.order.order.dto.OrderStatusChangeDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 
 import java.util.List;
@@ -153,5 +151,20 @@ public class EshopOrderConvert {
         result.setCommStatus(item.getStatus());
         result.setId(item.getId() > 0 ? item.getId() : null);
         return result;
+    }
+
+    public static OrderStatusChangeDTO convertToOrderStatusChangeDTO(EshopOrderReviewDO item) {
+        if (item == null) {
+            return null;
+        }
+        return OrderStatusChangeDTO.builder()
+                .id(item.getId())
+                .orderId(item.getOrderId())
+                .modifier(item.getModifier())
+                .remark(item.getRemark())
+                .status(item.getStatus())
+                .oldStatus(item.getOldStatus())
+                .createTime(TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT))
+                .build();
     }
 }
