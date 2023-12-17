@@ -20,7 +20,8 @@
         <radio-group @change="payTypeCheck">
           <radio value = "1" :checked="payType === '1'" class="pay-type-item">微信支付</radio>
           <radio value = "2" :checked="payType === '2'" class="pay-type-item">支付宝</radio>
-          <radio value="3" :checked="payType === '3'" class="pay-type-item">余额支付</radio>
+          <radio value="3" :checked="payType === '3'" class="pay-type-item">银联支付</radio>
+          <radio value="4" :checked="payType === '4'" class="pay-type-item">余额支付</radio>
         </radio-group>
       </view>
       <view class="btns">

@@ -661,7 +661,8 @@ const addToCart = () => {
       uni.showToast({
         icon: "success",
         title: "加入购物车成功"
-      })
+      });
+      skuShow.value = false;
     }
   })
 }

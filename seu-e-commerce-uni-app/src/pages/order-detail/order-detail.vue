@@ -157,6 +157,25 @@
         </view>
       </view>
 
+      <!--历史信息-->
+      <view>
+        <block v-for="(item, index) in reviews"
+               :key="index">
+          <view>
+            <view>
+              {{item.remark}}
+            </view>
+            <view>
+              {{item.createTime}}
+            </view>
+          </view>
+        </block>
+      </view>
+
+      <view>
+
+      </view>
+
       <!-- 底部栏 -->
       <view
           v-if="status===5||status===6"
@@ -192,6 +211,8 @@ const userAddrDto = ref(null)
 const orderNumber = ref('')
 const createTime = ref('')
 const total = ref(0) // 商品总额
+
+const reviews = ref([]);
 
 
 onLoad((options) => {
@@ -229,6 +250,13 @@ const loadOrderDetail = () => {
       orderNumber.value = data.orderNumber
       createTime.value = data.createTime
       total.value = data.total - data.deliveryCost
+    }
+  });
+  request({
+    url: "/prod/order/review/list?id=" + orderId.value,
+    method: "GET",
+    callBack: (res) => {
+      reviews.value = res.data;
     }
   })
 }
