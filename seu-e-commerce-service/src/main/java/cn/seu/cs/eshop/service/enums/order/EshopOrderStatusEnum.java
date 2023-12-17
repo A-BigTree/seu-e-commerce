@@ -23,17 +23,13 @@ public enum EshopOrderStatusEnum {
      */
     UNRECEIVED(3),
     /**
-     * 待评价
-     */
-    UNCOMMENTED(4),
-    /**
      * 已完成
      */
-    FINISHED(5),
+    FINISHED(4),
     /**
      * 已取消
      */
-    CANCELED(6),
+    CANCELED(5),
     ;
     final int status;
 }

@@ -17,6 +17,7 @@ public enum ServiceNacosConfEnum implements ConfDataId<Object> {
     emailReviewContext(new ProdReviewEmailBO()),
     eshopIndexProdConf(new ArrayList<EshopIndexProdConfBO>()),
     orderStatusChangeRemarkConf(new OrderStatusChangeRemarkConfBO()),
+    unpaidOrderTimeout(600000L),
 
     ;
 

@@ -22,7 +22,6 @@ public class EshopOrderDTO implements Serializable {
     private Long userId;
     private Long shopId;
     private String shopName;
-    private Long basketId;
     private EshopOrderAddressDTO address;
     private String prodName;
     private String pic;
@@ -42,5 +41,6 @@ public class EshopOrderDTO implements Serializable {
     private String cancelTime;
     private String updateTime;
     private String createTime;
+    private Long submitTime;
     private List<EshopOrderItemDTO> orderItems;
 }

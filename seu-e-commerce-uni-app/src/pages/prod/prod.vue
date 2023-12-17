@@ -670,7 +670,15 @@ const addToCart = () => {
  * 立即购买
  */
 const buyNow = () => {
-
+  uni.setStorageSync("orderIds", JSON.stringify([{
+    id: 0,
+    prodId: prodId,
+    skuId: defaultSku.value.id,
+    prodCount: prodNum.value
+  }]));
+  uni.navigateTo({
+    url: '/pages/submit-order/submit-order?orderEntry=2'
+  })
 }
 
 /**

@@ -144,10 +144,10 @@ const updateProdStatus = (prodId, status, message) => {
         message: "操作成功",
         type: "success"
       })
+      listData();
     }
   };
   http(params);
-  listData();
 }
 const editProdStatus = (prod, status) => {
   ElMessageBox.prompt("请输入操作原因", "确认消息", {

@@ -22,6 +22,10 @@ const listData = () => {
     url: "/product/basket/user/list",
     method: "GET",
     callBack: (res) => {
+      if (res.data.length === 0) {
+        shopCartItemDiscounts.value = [];
+        return;
+      }
       shopCartItemDiscounts.value = [{
         shopCartItems: []
       }]
@@ -249,7 +253,7 @@ const toFirmOrder = () => {
     </view>
 
     <view
-        v-if="!shopCartItemDiscounts.length"
+        v-if="shopCartItemDiscounts.length === 0"
         class="empty"
     >
       <view class="img">

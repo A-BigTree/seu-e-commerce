@@ -67,7 +67,6 @@ public class EshopOrderConvert {
         return EshopOrderDTO.builder()
                 .id(item.getId())
                 .pic(item.getPic())
-                .basketId(item.getBasketId())
                 .shopId(item.getShopId())
                 .shopName(item.getShopName())
                 .userId(item.getUserId())
@@ -89,6 +88,7 @@ public class EshopOrderConvert {
                 .cancelTime(item.getCancelTime() != null ? TimeUtils.convertString(item.getCancelTime(), TimeUtils.DATE_TIME_FORMAT) : null)
                 .updateTime(item.getUpdateTime() != null ? TimeUtils.convertString(item.getUpdateTime(), TimeUtils.DATE_TIME_FORMAT) : null)
                 .createTime(item.getCreateTime() != null ? TimeUtils.convertString(item.getCreateTime(), TimeUtils.DATE_TIME_FORMAT) : null)
+                .submitTime(item.getCreateTime())
                 .orderItems(orderItems)
                 .build();
     }
@@ -101,7 +101,6 @@ public class EshopOrderConvert {
         result.setUserId(item.getUserId());
         result.setShopId(item.getShopId());
         result.setShopName(item.getShopName());
-        result.setBasketId(item.getBasketId());
         result.setAddressId(item.getAddress().getId());
         result.setProdName(item.getProdName());
         result.setPic(item.getPic());

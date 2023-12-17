@@ -1,8 +1,8 @@
 <template>
   <view class="container">
-    <view v-if="sts === 0">
-      <view class="pay-sts fail">
-        支付失败
+    <view v-if="sts === 1">
+      <view class="pay-sts wait">
+        等待支付
       </view>
       <view class="tips">
         请在
@@ -24,12 +24,12 @@
           class="button payagain"
           @tap="payAgain"
         >
-          重新支付
+          确定支付
         </text>
       </view>
     </view>
 
-    <view v-if="sts === 1">
+    <view v-if="sts === 2">
       <view class="pay-sts succ">
         支付成功
       </view>
@@ -51,21 +51,46 @@
         </text>
       </view>
     </view>
+
+    <view v-if="sts === 5">
+      <view class="pay-sts fail">
+        订单已取消
+      </view>
+      <view class="tips">
+        您可以重新下单
+      </view>
+      <view class="btns">
+        <text
+          class="button checkorder"
+          @tap="toOrderList"
+        >
+          查看订单
+        </text>
+        <text
+          class="button shopcontinue"
+          @tap="toIndex"
+        >
+          继续购物
+        </text>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 
 const sts = ref(0)
-const orderNumbers = ref('')
+const orderIds = ref([])
+const orders = ref([])
 /**
  * 生命周期函数--监听页面加载
  */
-onLoad((options) => {
-  sts.value = options.sts
-  orderNumbers.value = options.orderNumbers
+onShow(() => {
+  sts.value = 0;
+  orderIds.value = uni.getStorageSync("unpaidOrderIds");
+
 })
 
 const toOrderList = () => {

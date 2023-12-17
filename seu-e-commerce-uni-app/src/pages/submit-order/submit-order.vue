@@ -50,7 +50,7 @@
             :key="index"
             class="prod-item">
           <view class="shopName">
-            {{ orderItem.shopName}}
+            {{ orderItem.shopName }}
           </view>
           <block
               v-for="(item, index) in orderItem.items"
@@ -197,7 +197,7 @@
 <script setup>
 import {picDomain} from "../../utils/config";
 import {onLoad, onShow} from "@dcloudio/uni-app";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {request} from "../../utils/http";
 import {getDisplayPrice} from "../../utils/util";
 
@@ -304,8 +304,71 @@ const toPay = () => {
   submitOrder()
 }
 
-const submitOrder = () => {
+const orderComplete = ref([]);
 
+watch(() => orderComplete, () => {
+  if (orderComplete.value.length === orderItems.value.length) {
+    uni.showModal({
+      title: '',
+      content: '订单提交成功~现在去支付？',
+      confirmColor: '#eb2444',
+      success(res) {
+        if (res.confirm) {
+          console.log(orderComplete.value)
+          uni.setStorageSync("unPaidOrderIds", JSON.stringify(orderComplete.value));
+          uni.navigateTo({
+            url: '/pages/pay-result/pay-result'
+          })
+        }
+      }
+    })
+  }
+}, {deep: true});
+
+const submitOrder = () => {
+  orderComplete.value = [];
+  orderItems.value.forEach(order => {
+    request({
+      url: "/prod/order/user/update",
+      data: {
+        action: 1,
+        data: {
+          id: 0,
+          shopId: order.shopId,
+          shopName: order.shopName,
+          address: {
+            id: userAddr.value.id
+          },
+          prodName: order.items.map(item => {
+            return item.prodName;
+          }).join(','),
+          pic: order.items[0].pic,
+          remarks: order.remarks,
+          prodCount: order.totalCount,
+          deliveryCost: order.deliveryCost,
+          orderType: parseInt(orderEntry),
+          total: order.actualTotal,
+          orderItems: order.items.map(item => {
+            return {
+              id: 0,
+              prodId: item.prodId,
+              prodName: item.prodName,
+              skuId: item.skuId,
+              skuName: item.skuName,
+              price: item.price,
+              shopId: order.shopId,
+              prodCount: item.prodCount,
+              pic: item.pic,
+              status: 0,
+            }
+          })
+        }
+      },
+      callBack: (res) => {
+        orderComplete.value.push(parseInt(res.data));
+      }
+    })
+  })
 }
 
 

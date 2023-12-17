@@ -28,6 +28,7 @@ import cs.seu.cs.eshop.common.sdk.exception.EshopException;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.redisson.api.RLock;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+import static cn.seu.cs.eshop.service.enums.order.EshopOrderCloseTypeEnum.TIMEOUT_CANCEL;
 import static cn.seu.cs.eshop.service.enums.order.EshopOrderCloseTypeEnum.getByCloseType;
 import static cn.seu.cs.eshop.service.enums.order.EshopOrderPayTypeEnum.getByPayType;
 import static cn.seu.cs.eshop.service.enums.order.EshopOrderStatusEnum.*;
 import static cn.seu.cs.eshop.service.nacos.ServiceNacosConfEnum.orderStatusChangeRemarkConf;
+import static cn.seu.cs.eshop.service.nacos.ServiceNacosConfEnum.unpaidOrderTimeout;
 import static cn.seu.cs.eshop.service.redis.ServiceRedisConfEnum.orderIdRedissonLock;
 import static cs.seu.cs.eshop.common.sdk.enums.EshopStatusEnum.INVALID;
 import static cs.seu.cs.eshop.common.sdk.enums.EshopStatusEnum.VALID;
@@ -151,36 +154,12 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
                     throw new EshopException("订单未发货");
                 }
             } else if (originStatus == UNRECEIVED.getStatus()) {
-                if (newStatus != UNCOMMENTED.getStatus()) { // 收货
+                if (newStatus == FINISHED.getStatus()) { // 收货
+                    update.setCompleteTime(TimeUtils.getCurrentTime());
+                } else {
                     throw new EshopException("订单未收货");
                 }
-            } else if (originStatus == UNCOMMENTED.getStatus()) {
-                if (newStatus == FINISHED.getStatus()) { // 评论
-                    String json = request.getParam1();
-                    // 添加评论
-                    EshopProdCommDO comm = JsonUtils.jsonToObject(json, EshopProdCommDO.class);
-                    comm.setUserId(request.getUserId());
-                    MysqlUtils.buildEffectEntity(comm);
-                    eshopProdCommDao.insert(comm);
-                    // 更新评论标识
-                    EshopOrderItemDO item = new EshopOrderItemDO();
-                    item.setId(comm.getOrderItemId());
-                    item.setCommStatus(VALID.getStatus());
-                    eshopOrderItemDao.updateById(item);
-                    // 查找订单是否全部评论
-                    List<EshopOrderItemDO> items =
-                            eshopOrderItemDao.selectByOrderId(request.getOrderNumber(), INVALID.getStatus());
-                    if (CollectionUtils.isEmpty(items)) {
-                        // 更新完成时间
-                        update.setCompleteTime(TimeUtils.getCurrentTime());
-                    } else {
-                        // 未完全评论，回退状态
-                        newStatus = UNCOMMENTED.getStatus();
-                    }
-                } else {
-                    throw new EshopException("订单未评论");
-                }
-            } else {
+            }  else {
                 throw new EshopException("订单状态不正确");
             }
             // 更新订单状态
@@ -232,9 +211,22 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
     }
 
     @Override
+    @Transactional
     public GetOrderInfoResponse getOrderInfo(Long orderId) {
         EshopOrderDO order = eshopOrderDao.selectById(orderId);
         EshopOrderAddressDTO address = orderAreaAddressCache.getOrderAddress(order.getAddressId());
+        Long timeout = eshopConfService.getConfigObject(unpaidOrderTimeout, Long.class);
+        // 检查订单是否超时
+        if (order.getStatus() == UNPAID.getStatus() && timeout + order.getCreateTime() < TimeUtils.getCurrentTime()) {
+            ChangeOrderStatusRequest request = ChangeOrderStatusRequest.builder()
+                    .orderId(order.getId())
+                    .modifier(StringUtils.EMPTY)
+                    .status(CANCELED.getStatus())
+                    .param1(String.valueOf(TIMEOUT_CANCEL.getCloseType()))
+                    .build();
+            changeOrderStatus(request);
+            order = eshopOrderDao.selectById(orderId);
+        }
         List<EshopOrderItemDO> itemsDO = eshopOrderItemDao.selectByOrderId(order.getOrderNumber(), null);
         List<EshopOrderItemDTO> items = itemsDO.stream()
                 .map(EshopOrderConvert::convertToEshopProdOrderDTO)
@@ -264,6 +256,18 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
             order.setUpdateTime(TimeUtils.getCurrentTime());
             order.setStatus(UNPAID.getStatus());
             eshopOrderDao.insert(order);
+            OrderStatusChangeRemarkConfBO config =
+                    eshopConfService.getConfigObject(orderStatusChangeRemarkConf, OrderStatusChangeRemarkConfBO.class);
+            String remark = config.getRemarkByStatus(UNPAID.getStatus());
+            // 添加订单review表
+            EshopOrderReviewDO review = new EshopOrderReviewDO();
+            review.setOrderId(order.getId());
+            review.setModifier(StringUtils.EMPTY);
+            review.setOldStatus(INVALID.getStatus());
+            review.setStatus(UNPAID.getStatus());
+            review.setRemark(remark);
+            MysqlUtils.buildEffectEntity(review);
+            eshopOrderReviewDao.insert(review);
             return order.getId();
         }
         return 0;

@@ -47,7 +47,7 @@ public class ProdBasketHashCache {
         if (value == null) {
             EshopBasketDO basketDO = eshopBasketDao.selectById(basketId);
             if (basketDO != null) {
-                eshopRedisService.setObjectValue(basketId.toString(), basketDO, basketProdSkuHashCache);
+                eshopRedisService.setHashObject(basketProdSkuHashCache, basketDO, basketId);
             }
             return basketDO;
         }

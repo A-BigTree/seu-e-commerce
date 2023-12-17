@@ -154,6 +154,7 @@ public class ProdBasketServiceImpl extends AbstractCrudService<EshopOrderItemDTO
             throw new EshopException("删除ID不能为空");
         }
         ids.forEach(id -> prodBasketHashCache.deleteBasketData(id));
+        prodBasketHashCache.deleteBasketListByUserId(userId);
         eshopBasketDao.deleteBatchIds(ids);
         return buildSuccessResponse(BaseResponse.class, "OK");
     }
