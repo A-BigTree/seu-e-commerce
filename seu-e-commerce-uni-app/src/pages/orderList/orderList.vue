@@ -3,37 +3,37 @@
     <!-- 头部菜单 -->
     <view class="order-tit">
       <text
-        data-sts="0"
-        :class="sts===0?'on':''"
-        @tap="onStsTap"
+          data-sts="-1"
+          :class="sts===-1?'on':''"
+          @tap="onStsTap"
       >
         全部
       </text>
       <text
-        data-sts="1"
-        :class="sts===1?'on':''"
-        @tap="onStsTap"
+          data-sts="1"
+          :class="sts===1?'on':''"
+          @tap="onStsTap"
       >
         待支付
       </text>
       <text
-        data-sts="2"
-        :class="sts===2?'on':''"
-        @tap="onStsTap"
+          data-sts="2"
+          :class="sts===2?'on':''"
+          @tap="onStsTap"
       >
         待发货
       </text>
       <text
-        data-sts="3"
-        :class="sts===3?'on':''"
-        @tap="onStsTap"
+          data-sts="3"
+          :class="sts===3?'on':''"
+          @tap="onStsTap"
       >
         待收货
       </text>
       <text
-        data-sts="5"
-        :class="sts===5?'on':''"
-        @tap="onStsTap"
+          data-sts="4"
+          :class="sts===4?'on':''"
+          @tap="onStsTap"
       >
         已完成
       </text>
@@ -41,111 +41,67 @@
     <!-- end 头部菜单 -->
     <view class="main">
       <view
-        v-if="list.length===0"
-        class="empty"
+          v-if="list.length===0"
+          class="empty"
       >
         还没有任何相关订单
       </view>
       <!-- 订单列表 -->
       <block
-        v-for="(item, index) in list"
-        :key="index"
+          v-for="(item, index) in list"
+          :key="index"
       >
         <view class="prod-item">
+          <view class="shop-name">
+            {{ item.shopName }}
+          </view>
           <view class="order-num">
             <text>订单编号：{{ item.orderNumber }}</text>
             <view class="order-state">
               <text
-                :class="'order-sts  ' + (item.status===1?'red':'') + '  ' + ((item.status===5||item.status===6)?'gray':'')"
+                  :class="'order-sts  ' + (item.status===1?'red':'') + '  ' + ((item.status===4||item.status===5)?'gray':'')"
               >
                 {{
-                  item.status === 1 ? '待支付' : (item.status === 2 ? '待发货' : (item.status === 3 ? '待收货' : (item.status === 5 ? '已完成' : '已取消')))
+                  item.status === 1 ? '待支付' : (item.status === 2 ? '待发货' : (item.status === 3 ? '待收货' : (item.status === 4 ? '已完成' : '已取消')))
                 }}
               </text>
 
               <view
-                v-if="item.status===5 || item.status===6"
-                class="clear-btn"
+                  v-if="item.status===4 || item.status===5"
+                  class="clear-btn"
               >
                 <image
-                  src="@/static/images/icon/clear-his.png"
-                  class="clear-list-btn"
-                  :data-ordernum="item.orderNumber"
-                  @tap="delOrderList"
+                    src="@/static/images/icon/clear-his.png"
+                    class="clear-list-btn"
+                    :data-orderid="item.id"
+                    @tap="delOrderList"
                 />
               </view>
             </view>
           </view>
 
           <!-- 商品列表 -->
-          <!-- 一个订单单个商品的显示 -->
-          <block v-if="item.orderItemDtos.length===1">
-            <block
-              v-for="(prod, index2) in item.orderItemDtos"
-              :key="index2"
+          <view>
+            <view
+                class="item-cont"
+                :data-orderid="item.id"
+                @tap="toOrderDetailPage"
             >
-              <view>
-                <view
-                  class="item-cont"
-                  :data-ordernum="item.orderNumber"
-                  @tap="toOrderDetailPage"
-                >
-                  <view class="prod-pic">
-                    <image :src="picDomain + prod.pic" />
-                  </view>
-                  <view class="prod-info">
-                    <view class="prodname">
-                      {{ prod.prodName }}
-                    </view>
-                    <view class="prod-info-cont">
-                      {{ prod.skuName }}
-                    </view>
-                    <view class="price-nums">
-                      <text class="prodprice">
-                        <text class="symbol">
-                          ￥
-                        </text>
-                        <text class="big-num">
-                          {{prod.price}}
-                        </text>
-                      </text>
-                      <text class="prodcount">
-                        x{{ prod.prodCount }}
-                      </text>
-                    </view>
-                  </view>
+              <view class="prod-pic">
+                <image :src="picDomain + item.pic"/>
+              </view>
+              <view class="prod-info">
+                <view class="prodname">
+                  {{ item.prodName }}
                 </view>
               </view>
-            </block>
-          </block>
-          <!-- 一个订单多个商品时的显示 -->
-          <block v-else>
-            <view
-              class="item-cont"
-              :data-ordernum="item.orderNumber"
-              @tap="toOrderDetailPage"
-            >
-              <scroll-view
-                scroll-x="true"
-                scroll-left="0"
-                scroll-with-animation="false"
-                class="categories"
-              >
-                <block
-                  v-for="(prod, index2) in item.orderItemDtos"
-                  :key="index2"
-                >
-                  <view class="prod-pic">
-                    <image :src="picDomain + prod.pic" />
-                  </view>
-                </block>
-              </scroll-view>
+
             </view>
-          </block>
+          </view>
 
           <view class="total-num">
             <text class="prodcount">
-              共1件商品
+              共{{ item.prodCount }}件商品
             </text>
             <view class="prodprice">
               合计：
@@ -153,7 +109,7 @@
                 ￥
               </text>
               <text class="big-num">
-                {{item.actualTotal}}
+                {{ getDisplayPrice(item.total) }}
               </text>
             </view>
           </view>
@@ -161,29 +117,29 @@
           <view class="prod-foot">
             <view class="btn">
               <text
-                v-if="item.status===1"
-                class="button"
-                :data-ordernum="item.orderNumber"
-                hover-class="none"
-                @tap="onCancelOrder"
+                  v-if="item.status===1"
+                  class="button"
+                  :data-orderid="item.id"
+                  hover-class="none"
+                  @tap="onCancelOrder"
               >
                 取消订单
               </text>
               <text
-                v-if="item.status===1"
-                class="button warn"
-                :data-ordernum="item.orderNumber"
-                hover-class="none"
-                @tap="normalPay"
+                  v-if="item.status===1"
+                  class="button warn"
+                  :data-orderid="item.id"
+                  hover-class="none"
+                  @tap="normalPay"
               >
                 付款
               </text>
               <text
-                v-if="item.status===3"
-                class="button warn"
-                :data-ordernum="item.orderNumber"
-                hover-class="none"
-                @tap="onConfirmReceive"
+                  v-if="item.status===3"
+                  class="button warn"
+                  :data-orderid="item.id"
+                  hover-class="none"
+                  @tap="onConfirmReceive"
               >
                 确认收货
               </text>
@@ -198,54 +154,94 @@
 
 <script setup>
 import {picDomain} from "../../utils/config";
-import {onLoad, onReachBottom} from "@dcloudio/uni-app";
+import {onLoad, onReachBottom, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import {request} from "../../utils/http";
+import {getDisplayPrice} from "../../utils/util";
 
-const sts = ref(0)
+const sts = ref(-1)
+
+const list = ref([])
+
+const page = ref({
+  pageNum: 1,
+  pageSize: 10
+});
+
+const isOver = ref(false);
+
+
 /**
  * 生命周期函数--监听页面加载
  */
 onLoad((options) => {
+  page.value = {
+    pageNum: 1,
+    pageSize: 10
+  }
+  isOver.value = false;
+  list.value = [];
   if (options.sts) {
-    sts.value = options.sts
-    loadOrderData(options.sts, 1)
+    sts.value = parseInt(options.sts)
   } else {
-    loadOrderData(0, 1)
+    sts.value = -1;
   }
 })
 
-const current = ref(1)
-const pages = ref(0)
+onShow(() => {
+  loadOrderData();
+})
+
 /**
  * 页面上拉触底事件的处理函数
  */
 onReachBottom(() => {
-  if (current.value < pages.value) {
-    loadOrderData(sts.value, current.value + 1)
+  if (!isOver.value) {
+    loadOrderData();
   }
 })
 
-const list = ref([])
+
 /**
  * 加载订单数据
  */
-const loadOrderData = (sts, currentParam) => {
-
+const loadOrderData = () => {
+  request({
+    url: "/prod/order/page/list",
+    data: {
+      page: page.value,
+      status: sts.value
+    },
+    callBack: (res) => {
+      if (res.data.records.length === 0) {
+        isOver.value = true;
+        return;
+      }
+      list.value = list.value.concat(res.data.records);
+      page.value.pageNum++;
+    }
+  })
 }
 
 /**
  * 状态点击事件
  */
 const onStsTap = (e) => {
-  sts.value = e.currentTarget.dataset.sts
-  loadOrderData(sts.value, 1)
+  sts.value = parseInt(e.currentTarget.dataset.sts);
+  page.value = {
+    pageNum: 1,
+    pageSize: 10
+  }
+  isOver.value = false;
+  list.value = [];
+  loadOrderData()
 }
 
 /**
  * 取消订单
  */
 const onCancelOrder = (e) => {
-  const ordernum = e.currentTarget.dataset.ordernum
+  const orderId = e.currentTarget.dataset.orderid
   uni.showModal({
     title: '',
     content: '要取消此订单？',
@@ -254,9 +250,25 @@ const onCancelOrder = (e) => {
     cancelText: '否',
     confirmText: '是',
 
-    success (res) {
+    success(res) {
       if (res.confirm) {
-
+        request({
+          url : "/prod/order/status/change",
+          data: {
+            orderId: orderId,
+            status: 5,
+            param1: 1
+          },
+          callBack: (res) => {
+            page.value = {
+              pageNum: 1,
+              pageSize: 10
+            }
+            isOver.value = false;
+            list.value = [];
+            loadOrderData();
+          }
+        })
       }
     }
   })
@@ -267,7 +279,12 @@ const onCancelOrder = (e) => {
  * @param e
  */
 const normalPay = (e) => {
-
+  console.log("付款")
+  const orderId = e.currentTarget.dataset.orderid;
+  uni.setStorageSync("unPaidOrderIds", JSON.stringify([orderId]));
+  uni.navigateTo({
+    url: '/pages/pay-result/pay-result'
+  })
 }
 
 /**
@@ -275,7 +292,7 @@ const normalPay = (e) => {
  */
 const toOrderDetailPage = (e) => {
   uni.navigateTo({
-    url: '/pages/order-detail/order-detail?orderNum=' + e.currentTarget.dataset.ordernum
+    url: '/pages/order-detail/order-detail?orderId=' + e.currentTarget.dataset.orderid
   })
 }
 
@@ -283,14 +300,29 @@ const toOrderDetailPage = (e) => {
  * 确认收货
  */
 const onConfirmReceive = (e) => {
+  const orderId = e.currentTarget.dataset.orderid;
   uni.showModal({
     title: '',
     content: '我已收到货？',
     confirmColor: '#eb2444',
-
-    success (res) {
+    success(res) {
       if (res.confirm) {
-
+        request({
+          url : "/prod/order/status/change",
+          data: {
+            orderId: orderId,
+            status: 4
+          },
+          callBack: (res) => {
+            page.value = {
+              pageNum: 1,
+              pageSize: 10
+            }
+            isOver.value = false;
+            list.value = [];
+            loadOrderData();
+          }
+        })
       }
     }
   })
@@ -305,11 +337,31 @@ const delOrderList = (e) => {
     title: '',
     content: '确定要删除此订单吗？',
     confirmColor: '#eb2444',
-
-    success (res) {
+    success(res) {
       if (res.confirm) {
-        const ordernum = e.currentTarget.dataset.ordernum;
-
+        const orderId = e.currentTarget.dataset.orderid;
+        request({
+          url: "/prod/order/user/update",
+          data: {
+            action: 2,
+            data: {
+              id: orderId
+            }
+          },
+          callBack: (res) => {
+            uni.showToast({
+              title: "删除成功",
+              icon: "success"
+            });
+            page.value = {
+              pageNum: 1,
+              pageSize: 10
+            }
+            isOver.value = false;
+            list.value = [];
+            loadOrderData();
+          }
+        })
       }
     }
   })

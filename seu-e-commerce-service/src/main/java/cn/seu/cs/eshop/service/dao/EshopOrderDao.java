@@ -1,12 +1,17 @@
 package cn.seu.cs.eshop.service.dao;
 
 import cn.seu.cs.eshop.common.entity.db.MysqlBaseDao;
+import cn.seu.cs.eshop.service.enums.order.EshopOrderStatusEnum;
 import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static cs.seu.cs.eshop.common.sdk.enums.EshopStatusEnum.INVALID;
 import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.*;
@@ -44,11 +49,11 @@ public interface EshopOrderDao extends MysqlBaseDao<EshopOrderDO> {
             }
         }
         // 订单状态
-        if (status!= null && status != DEFAULT.getValue()) {
+        if (status != null && status != DEFAULT.getValue()) {
             entity.setStatus(status);
         }
         // 订单关闭类型
-        if (closeType!=null && closeType != DEFAULT.getValue()) {
+        if (closeType != null && closeType != DEFAULT.getValue()) {
             entity.setCloseType(closeType);
         }
         // 订单支付类型
@@ -59,6 +64,25 @@ public interface EshopOrderDao extends MysqlBaseDao<EshopOrderDO> {
         if (!StringUtils.isEmpty(orderNumber)) {
             entity.setOrderNumber(orderNumber);
         }
-        return selectPage(page, new QueryWrapper<>(entity));
+        QueryWrapper<EshopOrderDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.orderByDesc("create_time");
+        return selectPage(page, wrapper);
+    }
+
+    default Map<Integer, Long> selectCountByStatus(Long userId) {
+        EshopOrderDO entity = new EshopOrderDO();
+        entity.setUserId(userId);
+        QueryWrapper<EshopOrderDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.select("status as 'status', IFNULL(count(*), 0) as 'count'")
+                .groupBy("status");
+        List<Map<String, Object>> status = selectMaps(wrapper);
+        Map<Integer, Long> result = new HashMap<>();
+        for (EshopOrderStatusEnum value : EshopOrderStatusEnum.values()) {
+            result.put(value.getStatus(), 0L);
+        }
+        for (Map<String, Object> map : status) {
+            result.put((Integer) map.get("status"), ((Long) map.get("count")));
+        }
+        return result;
     }
 }

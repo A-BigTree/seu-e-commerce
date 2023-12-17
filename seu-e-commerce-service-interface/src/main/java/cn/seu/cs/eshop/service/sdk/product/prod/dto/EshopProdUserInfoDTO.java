@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -18,6 +19,6 @@ import java.io.Serializable;
 public class EshopProdUserInfoDTO implements Serializable {
     private Long favoriteCount;
     private Long historyCount;
-    private Long orderCount;
-    // TODO: 分类订单数量
+    private Map<Integer, Long> orderCount;
+    // TODO:未读消息数量
 }

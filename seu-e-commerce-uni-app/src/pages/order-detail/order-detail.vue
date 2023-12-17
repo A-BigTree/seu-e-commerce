@@ -2,8 +2,8 @@
   <view class="container">
     <view class="order-detail">
       <view
-        v-if="userAddrDto"
-        class="delivery-addr"
+          v-if="userAddrDto"
+          class="delivery-addr"
       >
         <view class="user-info">
           <text class="item">
@@ -14,28 +14,27 @@
           </text>
         </view>
         <view class="addr">
-          {{ userAddrDto.province }}{{ userAddrDto.city }}{{ userAddrDto.area }}{{
-            userAddrDto.area
-          }}{{ userAddrDto.addr }}
+          {{ userAddrDto.area.province.areaName }} {{ userAddrDto.area.city.areaName }}
+          {{ userAddrDto.area.area.areaName }} {{ userAddrDto.address }}
         </view>
       </view>
 
       <!-- 商品信息 -->
       <view
-        v-if="orderItemDtos"
-        class="prod-item"
+          v-if="orderItemDtos"
+          class="prod-item"
       >
         <block
-          v-for="(item, index) in orderItemDtos"
-          :key="index"
+            v-for="(item, index) in orderItemDtos"
+            :key="index"
         >
           <view
-            class="item-cont"
-            :data-prodid="item.prodId"
-            @tap="toProdPage"
+              class="item-cont"
+              :data-prodid="item.prodId"
+              @tap="toProdPage"
           >
             <view class="prod-pic">
-              <image :src="item.pic" />
+              <image :src="picDomain + item.pic"/>
             </view>
             <view class="prod-info">
               <view class="prodname">
@@ -55,13 +54,10 @@
                     ￥
                   </text>
                   <text class="big-num">
-                    {{ wxs.parsePrice(item.price)[0] }}
-                  </text>
-                  <text class="small-num">
-                    .{{ wxs.parsePrice(item.price)[1] }}
+                    {{ getDisplayPrice(item.price) }}
                   </text>
                 </text>
-                <view class="btn-box" />
+                <view class="btn-box"/>
               </view>
             </view>
           </view>
@@ -107,8 +103,8 @@
           </view>
           <view class="item">
             <text
-              v-if="!!remarks"
-              class="item-tit"
+                v-if="!!remarks"
+                class="item-tit"
             >
               订单备注：
             </text>
@@ -130,7 +126,7 @@
                 ￥
               </text>
               <text class="big-num">
-                {{total}}
+                {{ getDisplayPrice(total) }}
               </text>
             </view>
           </view>
@@ -143,7 +139,7 @@
                 ￥
               </text>
               <text class="big-num">
-                {{transfee}}
+                {{ getDisplayPrice(transfee) }}
               </text>
             </view>
           </view>
@@ -154,7 +150,7 @@
                 ￥
               </text>
               <text class="big-num">
-                {{actualTotal}}
+                {{ getDisplayPrice(actualTotal) }}
               </text>
             </view>
           </view>
@@ -163,13 +159,13 @@
 
       <!-- 底部栏 -->
       <view
-        v-if="status===5||status===6"
-        class="order-detail-footer"
+          v-if="status===5||status===6"
+          class="order-detail-footer"
       >
         <text
-          v-if="status===5||status===6"
-          class="dele-order"
-          @tap="delOrderList"
+            v-if="status===5||status===6"
+            class="dele-order"
+            @tap="delOrderList"
         >
           删除订单
         </text>
@@ -181,9 +177,26 @@
 <script setup>
 import {onLoad} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import {request} from "../../utils/http";
+import {picDomain} from "../../utils/config";
+import {getDisplayPrice} from "../../utils/util";
+
+const orderId = ref(0);
+
+const remarks = ref('')
+const orderItemDtos = ref([])
+const transfee = ref('')
+const status = ref(0)
+const actualTotal = ref(0)
+const userAddrDto = ref(null)
+const orderNumber = ref('')
+const createTime = ref('')
+const total = ref(0) // 商品总额
+
 
 onLoad((options) => {
-  loadOrderDetail(options.orderNum)
+  orderId.value = parseInt(options.orderId);
+  loadOrderDetail();
 })
 
 /**
@@ -197,21 +210,27 @@ const toProdPage = (e) => {
   })
 }
 
-const remarks = ref('')
-const orderItemDtos = ref([])
-const reduceAmount = ref('')
-const transfee = ref('')
-const status = ref(0)
-const actualTotal = ref(0)
-const userAddrDto = ref(null)
-const orderNumber = ref('')
-const createTime = ref('')
-const total = ref(0) // 商品总额
+
 /**
  * 加载订单数据
  */
-const loadOrderDetail = (orderNum) => {
-
+const loadOrderDetail = () => {
+  request({
+    url: "/prod/order/info/get?id=" + orderId.value,
+    method: "GET",
+    callBack: (res) => {
+      const data = res.data;
+      remarks.value = data.remarks
+      orderItemDtos.value = data.orderItems
+      transfee.value = data.deliveryCost
+      status.value = data.status
+      actualTotal.value = data.total
+      userAddrDto.value = data.address
+      orderNumber.value = data.orderNumber
+      createTime.value = data.createTime
+      total.value = data.total - data.deliveryCost
+    }
+  })
 }
 
 /**
@@ -222,9 +241,26 @@ const delOrderList = () => {
     title: '',
     content: '确定要删除此订单吗？',
     confirmColor: '#eb2444',
-    success (res) {
+    success(res) {
       if (res.confirm) {
-
+        request({
+          url: "/prod/order/user/update",
+          data: {
+            action: 2,
+            data: {
+              id: orderId.value
+            }
+          },
+          callBack: (res) => {
+            uni.showToast({
+              title: "删除成功",
+              icon: "success"
+            });
+            uni.navigateBack({
+              delta: 1
+            })
+          }
+        })
       }
     }
   })

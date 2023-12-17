@@ -28,12 +28,12 @@
       <view class="total-order">
         <view class="order-tit">
           <text style="font-weight:bold">我的订单</text>
-          <view class="checkmore" @tap="toOrderListPage" data-sts="0">
+          <view class="checkmore" @tap="toOrderListPage" data-sts="-1">
             <text>查看全部</text>
             <text class="arrowhead"></text>
           </view>
         </view>
-        <!--
+
 				<view class="procedure">
 					<view class="items" @tap="toOrderListPage" data-sts="1">
 						<image src="/static/images/icon/toPay.png"></image>
@@ -50,13 +50,13 @@
 						<text>待收货</text>
 						<text class="num-badge" v-if="orderAmount.consignment>0">{{orderAmount.consignment}}</text>
 					</view>
-					<view class="items" @tap="toOrderListPage" data-sts="5">
+					<view class="items" @tap="toOrderListPage" data-sts="4">
 						<image src="/static/images/icon/toComment.png"></image>
 						<text>已完成</text>
+            <text class="num-badge" v-if="orderAmount.consignment>0">{{orderAmount.complete}}</text>
 					</view>
-				</view>-->
+				</view>
       </view>
-      <!--end 订单状态 -->
 
       <view class="prod-col">
         <view class="col-item" @tap="myCollectionHandle">
@@ -106,9 +106,8 @@ import {request} from "@/utils/http"
 import {domain, picDomain} from "@/utils/config"
 import {onShow} from "@dcloudio/uni-app";
 
-const orderAmount = ref("");
+const orderAmount = ref({});
 const sts = ref("");
-const collectionCount = ref(0);
 const isAuthInfo = ref(false);
 const loginResult = ref("");
 const picDomain1 = ref("");
@@ -141,6 +140,12 @@ const init = () => {
         const data = res.data;
         favoriteNum.value = data.favoriteCount;
         historyNum.value = data.historyCount;
+        orderAmount.value = {
+          unPay: data.orderCount["1"],
+          payed: data.orderCount["2"],
+          consignment: data.orderCount["3"],
+          complete: data.orderCount["4"]
+        }
       }
     })
     // TODO 个人订单信息
@@ -211,6 +216,10 @@ const toAddressList = function () {
 }
 
 const toOrderListPage = function (e) {
+  const sts = e.currentTarget.dataset.sts;
+  uni.navigateTo({
+    url: '/pages/orderList/orderList?sts=' + sts
+  });
 
 }
 

@@ -3,7 +3,6 @@ package cn.seu.cs.eshop.service.service.order.impl;
 import cn.seu.cs.eshop.account.sdk.entity.req.GetAccountInfoResponse;
 import cn.seu.cs.eshop.account.sdk.rpc.EshopAccountService;
 import cn.seu.cs.eshop.common.component.EshopConfService;
-import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.common.util.MysqlUtils;
 import cn.seu.cs.eshop.service.cache.order.OrderAreaAddressCache;
 import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
@@ -11,7 +10,6 @@ import cn.seu.cs.eshop.service.convert.EshopOrderConvert;
 import cn.seu.cs.eshop.service.dao.EshopOrderDao;
 import cn.seu.cs.eshop.service.dao.EshopOrderItemDao;
 import cn.seu.cs.eshop.service.dao.EshopOrderReviewDao;
-import cn.seu.cs.eshop.service.dao.EshopProdCommDao;
 import cn.seu.cs.eshop.service.manager.order.EshopOrderProdManager;
 import cn.seu.cs.eshop.service.pojo.bo.OrderStatusChangeRemarkConfBO;
 import cn.seu.cs.eshop.service.pojo.db.*;
@@ -67,8 +65,6 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
     private EshopRedissonLockService eshopRedissonLockService;
     @Resource
     private EshopConfService eshopConfService;
-    @Resource
-    private EshopProdCommDao eshopProdCommDao;
     @Resource
     private OrderAreaAddressCache orderAreaAddressCache;
     @Resource
@@ -141,6 +137,13 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
                     remark = remark.formatted(getByCloseType(closeType).getCloseTypeDesc());
                     update.setCloseType(closeType);
                     update.setCancelTime(TimeUtils.getCurrentTime());
+                    // 退还库存
+                    List<EshopOrderItemDO> items =
+                            eshopOrderItemDao.selectByOrderId(origin.getOrderNumber(), null);
+                    for (EshopOrderItemDO item : items) {
+                        eshopOrderProdManager.updateProdSkuStocks(item.getProdId(),
+                                item.getSkuId(), -item.getProdCount());
+                    }
                 } else {
                     throw new EshopException("订单未付款");
                 }
@@ -195,7 +198,9 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
                 request.getStatus(), request.getCloseType(), request.getPayType(), request.getPage());
         EshopOrderPageDTO data = MysqlUtils.buildPageData(EshopOrderPageDTO.class, pages,
                 res -> {
-                    EshopOrderAddressDTO address = orderAreaAddressCache.getOrderAddress(res.getAddressId());
+                    EshopOrderAddressDTO address = EshopOrderAddressDTO.builder()
+                            .id(res.getAddressId())
+                            .build();
                     return EshopOrderConvert.convertToEshopOrderDTO(res, address, null);
                 });
         return buildSuccessResponse(ListPageOrderResponse.class, data);

@@ -6,8 +6,8 @@ import cn.seu.cs.eshop.common.util.MysqlUtils;
 import cn.seu.cs.eshop.service.cache.product.ProdHashCache;
 import cn.seu.cs.eshop.service.cache.product.ProdIndexToCCache;
 import cn.seu.cs.eshop.service.cache.product.ProdSkusToBCache;
-import cn.seu.cs.eshop.service.cache.product.ProdToBCache;
 import cn.seu.cs.eshop.service.convert.EshopProductConvert;
+import cn.seu.cs.eshop.service.dao.EshopOrderDao;
 import cn.seu.cs.eshop.service.dao.EshopProdDao;
 import cn.seu.cs.eshop.service.dao.EshopProdFavoriteDao;
 import cn.seu.cs.eshop.service.dao.EshopProdUserHistoryDao;
@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
 import static cn.seu.cs.eshop.common.kafka.KafkaTopicConfEnum.PROD_USER_HISTORY_TOPIC;
@@ -69,7 +70,7 @@ public class ProductToCServiceImpl implements ProductToCService {
     @Resource
     EshopKafkaSendService eshopKafkaSendService;
     @Resource
-    ProdToBCache prodToBCache;
+    EshopOrderDao eshopOrderDao;
     @Resource
     ProdSkusToBCache prodSkusToBCache;
     @Resource
@@ -169,11 +170,11 @@ public class ProductToCServiceImpl implements ProductToCService {
     public GetProdUserInfoResponse getProdUserInfo(Long userId) {
         long favoriteCount = eshopProdFavoriteDao.countByUserId(userId);
         long historyCount = eshopProdUserHistoryDao.countByUserId(userId);
+        Map<Integer, Long> orderCount = eshopOrderDao.selectCountByStatus(userId);
         EshopProdUserInfoDTO data = EshopProdUserInfoDTO.builder()
                 .favoriteCount(favoriteCount)
                 .historyCount(historyCount)
-                // TODO: 分类订单数量
-                .orderCount(0L)
+                .orderCount(orderCount)
                 .build();
         return buildSuccessResponse(GetProdUserInfoResponse.class, data);
     }

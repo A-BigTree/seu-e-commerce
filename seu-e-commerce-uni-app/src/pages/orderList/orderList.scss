@@ -26,7 +26,7 @@
   }
 }
 .main {
-  margin-top: 100rpx;
+  margin-top: 50rpx;
 }
 .prod-item {
   background-color: #fff;
@@ -71,6 +71,7 @@
       -webkit-box-flex: 1;
       -moz-box-flex: 1;
       flex: 1;
+      display: flex;
       .prodname {
         font-size: 28rpx;
         line-height: 36rpx;
@@ -81,7 +82,9 @@
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         word-break: break-all;
+        align-self: center;
       }
+
       .prod-info-cont {
         color: #999;
         line-height: 40rpx;
@@ -124,6 +127,14 @@
         vertical-align: middle;
       }
     }
+  }
+  .shop-name {
+    // 加粗
+    font-weight: bold;
+    padding: 20rpx 30rpx;
+    font-size: 28rpx;
+    border-bottom: 2rpx solid #e6e6e6;
+    border-top: 2rpx solid #e6e6e6;
   }
   .total-num {
     text-align: right;

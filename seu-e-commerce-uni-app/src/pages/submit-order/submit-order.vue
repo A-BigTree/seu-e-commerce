@@ -314,7 +314,6 @@ watch(() => orderComplete, () => {
       confirmColor: '#eb2444',
       success(res) {
         if (res.confirm) {
-          console.log(orderComplete.value)
           uni.setStorageSync("unPaidOrderIds", JSON.stringify(orderComplete.value));
           uni.navigateTo({
             url: '/pages/pay-result/pay-result'

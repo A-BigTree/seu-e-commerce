@@ -4,18 +4,23 @@
   padding: 30rpx 0;
   text-align: center;
 }
+
 .pay-sts.fail {
   color: #f43530;
 }
+
 .pay-sts.wait {
   color: #f90;
 }
+
 .pay-sts.succ {
   color: #19be6b;
 }
+
 .btns {
   margin-top: 50rpx;
   text-align: center;
+
   .button {
     border-radius: 10rpx;
     font-size: 28rpx;
@@ -26,28 +31,49 @@
     margin: 0 20rpx;
     text-align: center;
   }
+
   .button.checkorder {
     background: #19be6b;
     color: #fff;
     margin-bottom: 20rpx;
     border: 2rpx solid #19be6b;
   }
+
   .button.payagain {
     background: #fff;
     border: 2rpx solid #f90;
     color: #f90;
   }
+
   .button.shopcontinue {
     background: #fff;
     border: 2rpx solid #19be6b;
     color: #19be6b;
   }
 }
+
 .tips {
   font-size: 28rpx;
   color: #999;
   text-align: center;
+
   .warn {
     color: #f43530;
   }
+}
+
+.pay-type {
+  margin-top: 50rpx;
+  text-align: center;
+
+  .pay-type-item {
+    margin: 0 20rpx;
+    text-align: center;
+  }
+}
+
+.pay-number {
+  margin-top: 50rpx;
+  text-align: center;
+  font-size: 40rpx;
 }
