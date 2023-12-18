@@ -17,4 +17,10 @@ public class EshopRedisSessionService {
     public Long generateUniqueId(RedisConf redisConf) {
         return sessionTemplate.opsForValue().increment(redisConf.prefixKey());
     }
+
+    public <T> Long generateUniqueId(RedisConf redisConf, T key) {
+        Long res = sessionTemplate.opsForValue().increment(redisConf.buildKey(key.toString()));
+        sessionTemplate.expire(redisConf.buildKey(redisConf.buildKey(key.toString())), redisConf.expirationTime(), redisConf.timeUnit());
+        return res;
+    }
 }

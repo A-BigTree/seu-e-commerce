@@ -18,6 +18,27 @@
             <artifactId>seu-e-commerce-im-interface</artifactId>
             <version>${eshop.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.common</groupId>
+            <artifactId>seu-e-commerce-common</artifactId>
+            <version>${eshop.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

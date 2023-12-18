@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: seu-e-commerce-im
+  # Nacos配置
+  cloud:
+    nacos:
+      server-addr: ${nacos-addr}
+      username: ${username}
+      password: ${password}
+      config:
+        # 添加相关运行参数
+        group: ESHOP
+        file-extension: yml

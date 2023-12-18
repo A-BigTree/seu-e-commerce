@@ -53,7 +53,7 @@
 					<view class="items" @tap="toOrderListPage" data-sts="4">
 						<image src="/static/images/icon/toComment.png"></image>
 						<text>已完成</text>
-            <text class="num-badge" v-if="orderAmount.consignment>0">{{orderAmount.complete}}</text>
+            <text class="num-badge" v-if="orderAmount.complete>0">{{orderAmount.complete}}</text>
 					</view>
 				</view>
       </view>

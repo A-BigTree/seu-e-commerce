@@ -15,11 +15,11 @@ const duration = ref(2000)
 const indexImages = ref([
   {
     imgUrl: '/index/index1.jpg',
-    relation: 1
+    relation: 2
   },
   {
     imgUrl: '/index/index2.jpg',
-    relation: 2
+    relation: 4
   }
 ])
 const tagList = ref([
