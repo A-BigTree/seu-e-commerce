@@ -6,6 +6,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopOrderDO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import cs.seu.cs.eshop.common.sdk.entity.dto.PageDTO;
+import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -84,5 +85,13 @@ public interface EshopOrderDao extends MysqlBaseDao<EshopOrderDO> {
             result.put((Integer) map.get("status"), ((Long) map.get("count")));
         }
         return result;
+    }
+
+    default List<EshopOrderDO> selectUnpaidTimeoutOrder(long timeout) {
+        EshopOrderDO entity = new EshopOrderDO();
+        entity.setStatus(EshopOrderStatusEnum.UNPAID.getStatus());
+        QueryWrapper<EshopOrderDO> wrapper = new QueryWrapper<>(entity);
+        wrapper.le("create_time", TimeUtils.getCurrentTime() - timeout);
+        return selectList(wrapper);
     }
 }

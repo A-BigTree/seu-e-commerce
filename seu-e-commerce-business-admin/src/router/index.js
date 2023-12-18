@@ -32,6 +32,11 @@ const router = createRouter({
                     name: 'product-edit',
                     component: () => import('@/components/ProductManage/ProductEdit.vue'),
                     props: true
+                },
+                {
+                    path: 'order/manage',
+                    name: 'order-manage',
+                    component: () => import('@/components/OrderManage/OrderManage.vue')
                 }
             ]
         },

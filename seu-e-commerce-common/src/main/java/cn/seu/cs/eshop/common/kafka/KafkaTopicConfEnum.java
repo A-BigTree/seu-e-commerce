@@ -23,6 +23,8 @@ public enum KafkaTopicConfEnum {
     PROD_USER_HISTORY_TOPIC(prodUserHistoryTopic, EshopProdUserHistoryDTO.class),
     // 订单商品消息
     ORDER_PROD_ITEM_TOPIC(orderProdItemTopic, OrderItemMessageDTO.class),
+    // 订单超时未支付消息
+    ORDER_UNPAID_TIMEOUT_TOPIC(orderUnpaidTimeoutTopic, Long.class),
 
     ;
     private final String topic;

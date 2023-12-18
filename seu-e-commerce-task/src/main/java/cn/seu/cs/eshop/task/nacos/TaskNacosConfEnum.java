@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum TaskNacosConfEnum implements ConfDataId<Object> {
     emailSendClientConf(new EmailSendClientBO()),
+    unpaidOrderTimeout(900000L),
 
     ;
 

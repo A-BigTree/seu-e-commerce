@@ -663,6 +663,13 @@ const addToCart = () => {
         title: "加入购物车成功"
       });
       skuShow.value = false;
+      request({
+        url: "/product/basket/user/count/get",
+        method: "GET",
+        callBack: (res2) => {
+          totalCartNum.value = parseInt(res2.data);
+        }
+      })
     }
   })
 }

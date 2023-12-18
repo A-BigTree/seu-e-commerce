@@ -124,6 +124,53 @@ const getProdStatusTag = (status) => {
     }
 }
 
+const getOrderStatusTag = (status, closeType) => {
+    switch (status) {
+        case 1:
+            return {
+                name: "待付款",
+                type: "warning"
+            };
+        case 2:
+            return {
+                name: "待发货",
+                type: ""
+            };
+        case 3:
+            return {
+                name: "待收货",
+                type: "info"
+            };
+        case 4:
+            return {
+                name: "已完成",
+                type: "success"
+            };
+        case 5:
+            if (closeType === 1) {
+                return {
+                    name: "买家已取消",
+                    type: "danger"
+                };
+            } else if (closeType === 2) {
+                return {
+                    name: "超时未支付",
+                    type: "danger"
+                };
+            } else {
+                return {
+                    name: "卖家已取消",
+                    type: "danger"
+                };
+            }
+        default:
+            return {
+                name:"",
+                type:""
+            }
+    }
+}
+
 export {
     loadingConfig,
     countDown,
@@ -135,4 +182,5 @@ export {
     getDisplayPrice,
     getStandPrice,
     getProdStatusTag,
+    getOrderStatusTag,
 }

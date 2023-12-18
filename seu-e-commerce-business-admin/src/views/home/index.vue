@@ -62,6 +62,10 @@ watch(index, (newIndex) => {
         name: 'prod-prop-manage'
       });
       return;
+    case '3-1':
+          router.push({
+            name: 'order-manage'
+          })
   }
 })
 
@@ -140,6 +144,14 @@ const logout = () => {
             </el-menu-item>
             <el-menu-item index="2-4">
               类别属性
+            </el-menu-item>
+          </el-sub-menu>
+          <el-sub-menu index="3" v-if="roleType===2">
+            <template #title>
+              订单管理
+            </template>
+            <el-menu-item index="3-1">
+              订单列表
             </el-menu-item>
           </el-sub-menu>
         </el-menu>

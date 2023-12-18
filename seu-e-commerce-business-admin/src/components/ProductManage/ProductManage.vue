@@ -4,7 +4,7 @@ import {inject, ref} from "vue";
 import {ElMessage, ElMessageBox, ElTable} from "element-plus";
 import type {FormInstance} from "element-plus";
 import {http} from '@/utils/http';
-import {getDisplayPrice, getStandPrice, getProdStatusTag} from '@/utils';
+import {getDisplayPrice, getProdStatusTag} from '@/utils';
 import {IMAGE_URL} from '@/utils/config';
 import router from "@/router";
 import {Edit, Document} from "@element-plus/icons-vue";
