@@ -90,7 +90,7 @@
               支付方式：
             </text>
             <text class="item-txt">
-              微信支付
+              {{payType}}
             </text>
           </view>
           <view class="item">
@@ -158,22 +158,10 @@
       </view>
 
       <!--历史信息-->
-      <view>
-        <block v-for="(item, index) in reviews"
-               :key="index">
-          <view>
-            <view>
-              {{item.remark}}
-            </view>
-            <view>
-              {{item.createTime}}
-            </view>
-          </view>
-        </block>
-      </view>
-
-      <view>
-
+      <view class="order-history">
+        <uni-section title="订单追踪" type="line" padding>
+          <uni-steps :options="reviewOptions" :active="active" direction="column"/>
+        </uni-section>
       </view>
 
       <!-- 底部栏 -->
@@ -212,8 +200,13 @@ const orderNumber = ref('')
 const createTime = ref('')
 const total = ref(0) // 商品总额
 
+const payType = ref("微信支付");
+
 const reviews = ref([]);
 
+const reviewOptions = ref([]);
+
+const active = ref(0);
 
 onLoad((options) => {
   orderId.value = parseInt(options.orderId);
@@ -250,6 +243,21 @@ const loadOrderDetail = () => {
       orderNumber.value = data.orderNumber
       createTime.value = data.createTime
       total.value = data.total - data.deliveryCost
+      if (data.status !== 1 && data.status !== 5) {
+        if (data.payType === 1) {
+          payType.value = "微信支付"
+        } else if (data.payType === 2) {
+          payType.value = "支付宝"
+        } else if (data.payType === 3) {
+          payType.value = "货到付款"
+        } else if (data.payType === 4) {
+          payType.value = "银联支付"
+        } else if (data.payType === 5) {
+          payType.value = "余额支付"
+        }
+      } else {
+        payType.value = "未支付"
+      }
     }
   });
   request({
@@ -257,6 +265,12 @@ const loadOrderDetail = () => {
     method: "GET",
     callBack: (res) => {
       reviews.value = res.data;
+      reviewOptions.value = res.data.map(item => {
+        return {
+          title: item.remark,
+          desc: item.createTime
+        }
+      });
     }
   })
 }

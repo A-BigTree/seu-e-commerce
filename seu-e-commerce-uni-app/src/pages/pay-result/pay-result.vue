@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref, watch} from "vue";
 import {countDown, getDisplayPrice} from "../../utils/util";
 import {request} from "../../utils/http";
@@ -143,20 +143,15 @@ watch(paidComplete, () => {
       title: "支付成功",
       icon: "success"
     });
-    uni.removeStorage("unPaidOrderIds");
 
-    setTimeout(() => {
-      uni.navigateTo({
-        url: '/pages/order-detail/order-detail?orderId=' + paidComplete.value[0]
-      })
-    }, 1000)
+    sts.value = 2;
   }
 }, {deep: true});
 
 /**
  * 生命周期函数--监听页面加载
  */
-onLoad((option) => {
+onShow(() => {
   sts.value = 0;
   orderIds.value = JSON.parse(uni.getStorageSync("unPaidOrderIds"));
   payType.value = "1";
@@ -187,6 +182,8 @@ onLoad((option) => {
     })
   })
 })
+
+
 
 const toOrderList = () => {
   uni.navigateTo({

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public enum AccountRedisConfEnum implements RedisConf {
     accountRedisTest("acc:test:", 30L),
     accountEmailVerify("acc:email:verify:", 3L, TimeUnit.MINUTES), //邮箱验证缓存
-    accountUserSession("acc:user:session:", 30L, TimeUnit.MINUTES), // 用户Session缓存
+    accountUserSession("acc:user:session:", 2L, TimeUnit.HOURS), // 用户Session缓存
 
 
     ;
