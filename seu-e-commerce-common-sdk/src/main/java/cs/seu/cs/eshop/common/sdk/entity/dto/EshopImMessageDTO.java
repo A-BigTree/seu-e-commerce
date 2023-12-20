@@ -18,7 +18,9 @@ import java.io.Serializable;
 public class EshopImMessageDTO implements Serializable {
     private Long id;
     private Integer msgType;
-    private Long createTime;
+    private Long fromUserId;
+    private Long toUserId;
+    private Integer status;
     /**
      * 1 文本消息
      * {
@@ -35,4 +37,5 @@ public class EshopImMessageDTO implements Serializable {
      * }
      */
     private String content;
+    private Long createTime;
 }

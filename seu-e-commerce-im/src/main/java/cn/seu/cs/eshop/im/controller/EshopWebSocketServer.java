@@ -1,6 +1,8 @@
 package cn.seu.cs.eshop.im.controller;
 
 import cn.seu.cs.eshop.im.store.ImMessageStoreService;
+import cs.seu.cs.eshop.common.sdk.entity.dto.EshopImMessageDTO;
+import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
@@ -16,20 +18,34 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @ServerEndpoint("/server/{userId}")
 public class EshopWebSocketServer {
-    private static final ConcurrentHashMap<Long, EshopWebSocketServer> webSocketMap = new ConcurrentHashMap<>();
     private Session session;
     private Long userId;
-    private Long sessionId;
+
+    private static final ConcurrentHashMap<Long, EshopWebSocketServer> webSocketMap = new ConcurrentHashMap<>();
     private static ImMessageStoreService imMessageStoreService;
 
     public static void setImMessageStoreService(ImMessageStoreService imMessageStoreService) {
         EshopWebSocketServer.imMessageStoreService = imMessageStoreService;
     }
 
+    private void sendMessage(EshopImMessageDTO message) {
+        this.session.getAsyncRemote().sendObject(message);
+    }
+
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") Long userId) {
         this.session = session;
         this.userId = userId;
-        webSocketMap.put(userId, this);
+        if (webSocketMap.containsKey(userId)) {
+            webSocketMap.remove(userId);
+            webSocketMap.put(userId, this);
+        } else {
+            webSocketMap.put(userId, this);
+        }
+    }
+
+    @OnClose
+    public void onClose() {
+        webSocketMap.remove(this.userId);
     }
 }

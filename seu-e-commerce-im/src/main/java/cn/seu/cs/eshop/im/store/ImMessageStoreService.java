@@ -5,6 +5,7 @@ import cn.seu.cs.eshop.common.component.EshopRedisSessionService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import static cn.seu.cs.eshop.im.redis.ImRedisConfigEnum.imMessageIdGenerateKey;
 import static cn.seu.cs.eshop.im.redis.ImRedisConfigEnum.imSessionIdGenerateKey;
 
 /**
@@ -20,5 +21,9 @@ public class ImMessageStoreService {
 
     public Long generateSessionId() {
         return eshopRedisSessionService.generateUniqueId(imSessionIdGenerateKey);
+    }
+
+    public Long generateMessageId(Long sessionId) {
+        return eshopRedisSessionService.generateUniqueId(imMessageIdGenerateKey, sessionId);
     }
 }
