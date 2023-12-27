@@ -1,6 +1,9 @@
 package cn.seu.cs.eshop.service.sdk.order.comm.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,9 +13,13 @@ import java.util.List;
  * Created on 2023/12/16
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class EshopProdCommDTO implements Serializable {
     private Long id;
     private Long userId;
+    private String userName;
     private Long prodId;
     private Long orderItemId;
     private String content;

@@ -1,6 +1,7 @@
 spring:
   application:
     name: seu-e-commerce-account
+
   # Nacos配置
   cloud:
     nacos:
@@ -11,3 +12,7 @@ spring:
         # 添加相关运行参数
         group: ESHOP
         file-extension: yml
+
+dubbo:
+  provider:
+    host: ${dubbo-host:127.0.0.1}
