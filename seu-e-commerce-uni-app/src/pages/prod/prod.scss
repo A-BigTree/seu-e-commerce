@@ -219,6 +219,18 @@ swiper {
     max-width: 8.2em;
     height: 25px;
     line-height: 27px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+  }
+  .score {
+    margin-left: 10px;
+    display: inline-block;
+    color: #333;
+    max-width: 8.2em;
+    height: 25px;
+    line-height: 27px;
   }
   .date {
     float: right;

@@ -4,6 +4,7 @@ import cn.seu.cs.eshop.service.pojo.db.EshopProdCommDO;
 import cn.seu.cs.eshop.service.sdk.order.comm.dto.EshopProdCommDTO;
 import cs.seu.cs.eshop.common.sdk.util.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.common.utils.CollectionUtils;
 
 import java.util.List;
 
@@ -20,8 +21,9 @@ public class EshopProdCommConvert {
         }
         return EshopProdCommDTO.builder()
                 .id(item.getId())
-                .userId(item.getEvaluate() == VALID.getStatus() ? 0 : item.getUserId())
-                .userName(item.getEvaluate() == VALID.getStatus() ? "匿名用户" : item.getUserName())
+                .userId(item.getCommType() == VALID.getStatus() ? 0 : item.getUserId())
+                .userName(item.getCommType() == VALID.getStatus() ? "匿名用户" : item.getUserName())
+                .headPic(item.getCommType() == VALID.getStatus() ? null : item.getHeadPic())
                 .prodId(item.getProdId())
                 .orderItemId(item.getOrderItemId())
                 .content(item.getContent())
@@ -41,12 +43,13 @@ public class EshopProdCommConvert {
         EshopProdCommDO result = new EshopProdCommDO();
         result.setUserId(item.getUserId());
         result.setUserName(item.getUserName());
+        result.setHeadPic(item.getHeadPic());
         result.setProdId(item.getProdId());
         result.setOrderItemId(item.getOrderItemId());
         result.setContent(item.getContent());
         result.setScore(item.getScore());
         result.setStatus(item.getStatus());
-        result.setImages(String.join(";", item.getImages()));
+        result.setImages(CollectionUtils.isNotEmpty(item.getImages()) ? String.join(";", item.getImages()) : null);
         result.setCommType(item.getCommType());
         result.setEvaluate(item.getEvaluate());
         result.setId(item.getId() > 0 ? item.getId() : null);

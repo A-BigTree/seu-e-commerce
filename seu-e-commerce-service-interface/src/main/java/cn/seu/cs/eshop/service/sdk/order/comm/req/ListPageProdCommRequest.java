@@ -13,4 +13,5 @@ import java.io.Serializable;
 public class ListPageProdCommRequest implements Serializable {
     private PageDTO page;
     private Long prodId;
+    private Integer evaluate;
 }

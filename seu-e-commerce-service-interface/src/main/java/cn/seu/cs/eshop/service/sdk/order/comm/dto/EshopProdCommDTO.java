@@ -20,6 +20,7 @@ public class EshopProdCommDTO implements Serializable {
     private Long id;
     private Long userId;
     private String userName;
+    private String headPic;
     private Long prodId;
     private Long orderItemId;
     private String content;

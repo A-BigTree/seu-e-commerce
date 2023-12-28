@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 public class EshopProdCommDO extends MysqlBaseDO {
     private Long userId;
     private String userName;
+    private String headPic;
     private Long prodId;
     private Long orderItemId;
     private String content;

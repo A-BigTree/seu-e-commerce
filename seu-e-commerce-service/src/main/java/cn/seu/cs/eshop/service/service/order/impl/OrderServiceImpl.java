@@ -139,7 +139,7 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
                     update.setCancelTime(TimeUtils.getCurrentTime());
                     // 退还库存
                     List<EshopOrderItemDO> items =
-                            eshopOrderItemDao.selectByOrderId(origin.getOrderNumber(), null);
+                            eshopOrderItemDao.selectByOrderId(origin.getOrderNumber());
                     for (EshopOrderItemDO item : items) {
                         eshopOrderProdManager.updateProdSkuStocks(item.getProdId(),
                                 item.getSkuId(), -item.getProdCount());
@@ -232,7 +232,7 @@ public class OrderServiceImpl extends AbstractCrudService<EshopOrderDTO> impleme
             changeOrderStatus(request);
             order = eshopOrderDao.selectById(orderId);
         }
-        List<EshopOrderItemDO> itemsDO = eshopOrderItemDao.selectByOrderId(order.getOrderNumber(), null);
+        List<EshopOrderItemDO> itemsDO = eshopOrderItemDao.selectByOrderId(order.getOrderNumber());
         List<EshopOrderItemDTO> items = itemsDO.stream()
                 .map(EshopOrderConvert::convertToEshopProdOrderDTO)
                 .toList();

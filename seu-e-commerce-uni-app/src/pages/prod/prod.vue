@@ -82,7 +82,6 @@
     <view class="cmt-wrap">
       <view
           class="cmt-tit"
-          @tap="showComment"
       >
         <view class="cmt-t">
           评价
@@ -90,16 +89,13 @@
             好评{{ prodCommData.positiveRating }}%
           </text>
         </view>
-        <view class="cmt-count">
+        <view class="cmt-count" @tap="showComment">
           共{{ prodCommData.number }}条
           <text class="cmt-more"/>
         </view>
       </view>
       <view class="cmt-cont">
-        <view
-            class="cmt-tag"
-            @tap="showComment"
-        >
+        <view class="cmt-tag">
           <text>全部({{ prodCommData.number }})</text>
           <text>好评({{ prodCommData.praiseNumber }})</text>
           <text>中评({{ prodCommData.secondaryNumber }})</text>
@@ -113,36 +109,28 @@
           >
             <view class="cmt-user">
               <text class="date">
-                {{ item.recTime }}
+                {{ item.createTime }}
               </text>
               <view class="cmt-user-info">
                 <image
                     class="user-img"
-                    :src="item.pic"
+                    :src="item.headPic ? picDomain + item.headPic : '/static/images/icon/head04.png'"
                 />
                 <view class="nickname">
-                  {{ item.nickName }}
+                  {{ item.userName }}
+                </view>
+                <view class="score">
+                  <text v-for="i in item.score">⭐</text>
                 </view>
               </view>
             </view>
             <view class="cmt-cnt">
               {{ item.content }}
             </view>
-            <scroll-view
-                v-if="item.pics.length"
-                class="cmt-attr"
-                scroll-x="true"
-            >
-              <image
-                  v-for="(commPic, index2) in item.pics"
-                  :key="index2"
-                  :src="commPic"
-              />
-            </scroll-view>
           </view>
         </view>
         <view
-            v-if="prodCommPage.records.length > 2"
+            v-if="littleCommPage.length > 5"
             class="cmt-more-v"
         >
           <text @tap="showComment">
@@ -327,21 +315,21 @@
             全部({{ prodCommData.number }})
           </text>
           <text
-              data-evaluate="0"
+              data-evaluate="1"
               :class="evaluate === 1?'selected':''"
               @tap="getProdCommPage"
           >
             好评({{ prodCommData.praiseNumber }})
           </text>
           <text
-              data-evaluate="1"
+              data-evaluate="2"
               :class="evaluate === 2?'selected':''"
               @tap="getProdCommPage"
           >
             中评({{ prodCommData.secondaryNumber }})
           </text>
           <text
-              data-evaluate="2"
+              data-evaluate="3"
               :class="evaluate===3?'selected':''"
               @tap="getProdCommPage"
           >
@@ -349,60 +337,43 @@
           </text>
         </view>
         <view class="cmt-items">
-          <block v-if="prodCommPage.records.length">
+          <block v-if="prodCommPage.length">
             <view
-                v-for="(item, index) in prodCommPage.records"
+                v-for="(item, index) in prodCommPage"
                 :key="index"
                 class="cmt-item"
             >
               <view class="cmt-user">
                 <text class="date">
-                  {{ item.recTime }}
+                  {{ item.createTime }}
                 </text>
                 <view class="cmt-user-info">
                   <image
                       class="user-img"
-                      :src="item.pic"
+                      :src="item.headPic ? picDomain + item.headPic : '/static/images/icon/head04.png'"
                   />
                   <view class="nickname">
-                    {{ item.nickName }}
+                    {{ item.userName }}
+                  </view>
+                  <view class="score">
+                    <text v-for="i in item.score">⭐</text>
                   </view>
                 </view>
               </view>
               <view class="cmt-cnt">
                 {{ item.content }}
               </view>
-              <scroll-view
-                  v-if="item.pics.length"
-                  class="cmt-attr"
-                  scroll-x="true"
-              >
-                <image
-                    v-for="(commPic, index2) in item.pics"
-                    :key="index2"
-                    :src="commPic"
-                />
-              </scroll-view>
-              <view
-                  v-if="item.replyContent"
-                  class="cmt-reply"
-              >
-                <text class="reply-tit">
-                  店铺回复：
-                </text>
-                {{ item.replyContent }}
-              </view>
             </view>
           </block>
           <view
-              v-if="!prodCommPage.records.length"
+              v-if="!prodCommPage.length"
               class="empty"
           >
             暂无评价
           </view>
         </view>
         <view
-            v-if="prodCommPage.pages > prodCommPage.current"
+            v-if="!isOver"
             class="load-more"
         >
           <text @tap="getMoreCommPage">
@@ -417,7 +388,7 @@
 <script setup>
 import {picDomain} from "../../utils/config";
 import {ref} from "vue";
-import {onLoad, onShareAppMessage, onShow} from "@dcloudio/uni-app";
+import {onLoad, onShareAppMessage} from "@dcloudio/uni-app";
 import {request} from "../../utils/http";
 import {getDisplayPrice} from "../../utils/util";
 
@@ -436,7 +407,6 @@ onLoad((options) => {
   prodId = options.prodId// 加载商品信息
   getProdInfo() // 加载商品数据
   getProdCommData() // 加载评论项
-  getLittleProdComm() // 查看用户是否关注
 })
 
 const app = getApp()
@@ -525,8 +495,8 @@ const getProdInfo = () => {
         selectedProp.value.push(prodInfo.skus[0].properties[i].value);
         selectedPropList.value.push(prodInfo.skus[0].properties[i].prop + ':' + prodInfo.skus[0].properties[i].value);
         let values = [];
-        for(let j = 0; j < prodInfo.skus.length; j++) {
-          if (values.indexOf(prodInfo.skus[j].properties[i].value) < 0){
+        for (let j = 0; j < prodInfo.skus.length; j++) {
+          if (values.indexOf(prodInfo.skus[j].properties[i].value) < 0) {
             values.push(prodInfo.skus[j].properties[i].value);
           }
 
@@ -555,25 +525,48 @@ const prodCommData = ref({
   secondaryNumber: 0,
   negativeNumber: 0
 })
-const getProdCommData = () => {
 
+const getProdCommData = () => {
+  request({
+    url: "/prod/comm/count/get?id=" + prodId,
+    method: "GET",
+    callBack: (res) => {
+      const data = res.data;
+      prodCommData.value.praiseNumber = data.goodCount;
+      prodCommData.value.secondaryNumber = data.mediumCount;
+      prodCommData.value.negativeNumber = data.badCount;
+      prodCommData.value.number = data.goodCount + data.mediumCount + data.badCount;
+      if (prodCommData.value.number > 0) {
+        prodCommData.value.positiveRating = parseInt(data.goodCount / prodCommData.value.number * 100);
+        request({
+          url: "/prod/comm/page/list",
+          data: {
+            page: {
+              pageNum: 1,
+              pageSize: 2
+            },
+            prodId: prodId,
+            evaluate: -1,
+          },
+          callBack: (res2) => {
+            littleCommPage.value = res2.data.records;
+          }
+        })
+      } else {
+        prodCommData.value.positiveRating = 0;
+      }
+    }
+  })
 }
 
-const prodCommPage = ref({
-  current: 0,
-  pages: 0,
-  records: []
+const prodCommPage = ref([]);
+
+const page = ref({
+  pageNum: 1,
+  pageSize: 10
 });
 
-/**
- * 获取部分评论
- */
-const getLittleProdComm = () => {
-  if (prodCommPage.value.records.length) {
-    return
-  }
-  getProdCommPage()
-}
+const isOver = ref(false);
 
 const getMoreCommPage = () => {
   getProdCommPage()
@@ -586,16 +579,35 @@ const evaluate = ref(-1)
  */
 const getProdCommPage = (e) => {
   if (e) {
-    if (e.currentTarget.dataset.evaluate === evaluate.value) {
-      return
+    if (e.currentTarget.dataset.evaluate !== evaluate.value) {
+      prodCommPage.value = [];
+      page.value = {
+        pageNum: 1,
+        pageSize: 10
+      }
+      evaluate.value = parseInt(e.currentTarget.dataset.evaluate)
+      isOver.value = false;
     }
-    prodCommPage.value = {
-      current: 0,
-      pages: 0,
-      records: []
-    }
-    evaluate.value = e.currentTarget.dataset.evaluate
   }
+  request({
+    url: "/prod/comm/page/list",
+    data: {
+      page: page.value,
+      prodId: prodId,
+      evaluate: evaluate.value,
+    },
+    callBack: (res) => {
+      if (res.data.records.length === 0) {
+        isOver.value = true;
+        return;
+      }
+      prodCommPage.value = prodCommPage.value.concat(res.data.records);
+      page.value.pageNum++;
+      if (res.data.records.length < page.value.pageSize) {
+        isOver.value = true;
+      }
+    }
+  })
 }
 
 
@@ -708,6 +720,7 @@ const onCountPlus = () => {
 }
 
 const skuShow = ref(false)
+
 const showSku = () => {
   skuShow.value = true
 }
@@ -715,6 +728,7 @@ const showSku = () => {
 const commentShow = ref(false)
 const showComment = () => {
   commentShow.value = true
+  getProdCommPage();
 }
 
 const closePopup = () => {

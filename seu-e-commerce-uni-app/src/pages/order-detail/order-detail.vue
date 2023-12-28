@@ -30,10 +30,10 @@
         >
           <view
               class="item-cont"
-              :data-prodid="item.prodId"
-              @tap="toProdPage"
           >
-            <view class="prod-pic">
+            <view class="prod-pic"
+                  :data-prodid="item.prodId"
+                  @tap="toProdPage">
               <image :src="picDomain + item.pic"/>
             </view>
             <view class="prod-info">
@@ -57,10 +57,20 @@
                     {{ getDisplayPrice(item.price) }}
                   </text>
                 </text>
-                <view class="btn-box"/>
+                <view class="btn-box">
+                  <view class="btn" v-if="status === 4 && item.status === 0">
+                    <text
+                        hover-class="none"
+                        @tap="toCommProdPage(item)"
+                    >
+                      去评论
+                    </text>
+                  </view>
+                </view>
               </view>
             </view>
           </view>
+
         </block>
       </view>
 
@@ -179,6 +189,28 @@
       </view>
     </view>
   </view>
+
+  <uni-popup ref="popup" type="dialog">
+    <uni-popup-dialog title="评论商品" style="width: 650rpx" :before-close="true" @close="popup.close()" @confirm="confirm">
+      <template #default>
+        <view style="width: 600rpx">
+          <uni-forms :modelValue="formData">
+            <uni-forms-item label="评分">
+              <uni-rate v-model="formData.rateValue"/>
+            </uni-forms-item>
+            <uni-forms-item label="评语">
+              <uni-easyinput type="textarea" v-model="formData.content"/>
+            </uni-forms-item>
+            <uni-forms-item label="匿名">
+              <switch v-model="formData.commType" style="transform:scale(0.7)" @change="testChange"/>
+            </uni-forms-item>
+          </uni-forms>
+        </view>
+
+      </template>
+
+    </uni-popup-dialog>
+  </uni-popup>
 </template>
 
 <script setup>
@@ -304,6 +336,67 @@ const delOrderList = () => {
           }
         })
       }
+    }
+  })
+}
+
+const popup = ref(null);
+const formData = ref({
+  rateValue: 5,
+  content: "",
+  commType: 0,
+})
+const currentProd = ref(null);
+/**
+ * 评论商品
+ */
+const toCommProdPage = (item) => {
+  formData.value = {
+    rateValue: 5,
+    content: "",
+    commType: 0,
+  }
+  currentProd.value = item;
+  popup.value.open();
+}
+
+const testChange =(e) => {
+  if(e.detail.value) {
+    formData.value.commType = 1;
+  } else {
+    formData.value.commType = 0;
+  }
+}
+
+const confirm =() => {
+  if (formData.value.content === "") {
+    uni.showToast({
+      title: "请输入评论内容",
+      icon: "none"
+    })
+    return;
+  }
+  const score = formData.value.rateValue;
+  request({
+    url: "/prod/comm/user/add",
+    data: {
+      data: {
+        id: 0,
+        prodId: currentProd.value.prodId,
+        orderItemId: currentProd.value.id,
+        content: formData.value.content,
+        score: score,
+        commType: formData.value.commType,
+        evaluate: score >= 4 ? 1 : (score >= 2 ? 2 : 3)
+      }
+    },
+    callBack: (res) => {
+      popup.value.close();
+      loadOrderDetail();
+      uni.showToast({
+        title: "评论成功",
+        icon: "success"
+      })
     }
   })
 }

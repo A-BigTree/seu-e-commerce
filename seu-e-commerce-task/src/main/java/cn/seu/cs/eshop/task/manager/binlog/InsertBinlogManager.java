@@ -84,7 +84,7 @@ public class InsertBinlogManager extends AbstractBinlogManager{
         if (data.getOrderType() == CART.getType()) {
             Long userId = data.getUserId();
             String orderNumber = data.getOrderNumber();
-            List<EshopOrderItemDO> items = eshopOrderItemDao.selectByOrderId(orderNumber, null);
+            List<EshopOrderItemDO> items = eshopOrderItemDao.selectByOrderId(orderNumber);
             if (CollectionUtils.isNotEmpty(items)) {
                 List<Long> prodIds = items.stream()
                         .map(EshopOrderItemDO::getProdId)

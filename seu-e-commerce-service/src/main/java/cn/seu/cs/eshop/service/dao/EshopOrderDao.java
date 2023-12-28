@@ -94,4 +94,17 @@ public interface EshopOrderDao extends MysqlBaseDao<EshopOrderDO> {
         wrapper.le("create_time", TimeUtils.getCurrentTime() - timeout);
         return selectList(wrapper);
     }
+
+    default List<EshopOrderDO> selectFinishedOrderByUserId(Long userId) {
+        EshopOrderDO entity = new EshopOrderDO();
+        entity.setUserId(userId);
+        entity.setStatus(EshopOrderStatusEnum.FINISHED.getStatus());
+        return selectList(new QueryWrapper<>(entity));
+    }
+
+    default EshopOrderDO selectByOrderNumber(String orderNumber) {
+        EshopOrderDO entity = new EshopOrderDO();
+        entity.setOrderNumber(orderNumber);
+        return selectOne(new QueryWrapper<>(entity));
+    }
 }

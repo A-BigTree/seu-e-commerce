@@ -75,6 +75,7 @@ public class AccountLoginController {
                             .id(session.getId())
                             .account(session.getUser().getAccount())
                             .nickname(session.getUser().getNickname())
+                            .headPic(session.getUser().getImage())
                             .roleType(session.getUser().getRoleType())
                             .build());
         }
