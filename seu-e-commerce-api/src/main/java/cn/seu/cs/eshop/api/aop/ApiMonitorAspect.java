@@ -78,8 +78,6 @@ public class ApiMonitorAspect {
                 return ResponseBuilderUtils.buildResponse(clazz,
                         ResponseStateEnum.PRIVILEGES_ERROR, null);
             }
-            // 刷新状态
-            userTokenCache.refreshToken(token);
         }
         // TODO 请求统计
         try {
