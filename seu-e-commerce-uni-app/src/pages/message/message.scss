@@ -1,0 +1,136 @@
+.container {
+  background: #f4f4f4;
+  height: 100%;
+}
+.message-popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 998;
+  background-color: #fff;
+  padding-bottom: 98rpx;
+}
+.cmt-tit {
+  font-size: 32rpx;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  padding: 20rpx;
+}
+.cmt-t {
+  width: 300rpx;
+}
+.close {
+  color: #aaa;
+  border-radius: 12px;
+  line-height: 20px;
+  text-align: center;
+  height: 20px;
+  width: 20px;
+  font-size: 18px;
+  padding: 1px;
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  &::before {
+    content: "\2716";
+  }
+}
+.message-input {
+  position: fixed;
+  bottom: 10rpx;
+  left: 5rpx;
+  right: 5rpx;
+  background-color: #fff;
+}
+
+.cart-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  height: 98rpx;
+  z-index: 999;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.message {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  clear: both;
+  overflow: hidden;
+}
+
+.message.sent {
+  background-color: #3498db;
+  color: #fff;
+  float: right;
+}
+
+.message.received {
+  background-color: #ecf0f1;
+  color: #333;
+  float: left;
+}
+.message-input {
+  display: inline-block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  float: left;
+  box-sizing: border-box;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.message-button {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #3498db;
+  color: #fff;
+  cursor: pointer;
+  float: right;
+  box-sizing: border-box;
+}
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 60px;
+  height: 40px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  box-sizing: border-box;
+}

@@ -1,15 +1,24 @@
 package cn.seu.cs.eshop.im.controller;
 
+import cn.seu.cs.eshop.common.util.JsonUtils;
+import cn.seu.cs.eshop.im.dto.EshopImMessageListItemDTO;
 import cn.seu.cs.eshop.im.store.ImMessageStoreService;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EshopImMessageDTO;
 import jakarta.websocket.OnClose;
+import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static cn.seu.cs.eshop.common.constants.CommonConstants.OFFICIAL_ID;
+import static cn.seu.cs.eshop.im.enums.EshopImMessageTypeEnum.*;
 
 /**
  * @author Shuxin Wang <shuxinwang662@gmail.com>
@@ -17,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 @ServerEndpoint("/server/{userId}")
+@Slf4j
 public class EshopWebSocketServer {
     private Session session;
     private Long userId;
@@ -29,7 +39,11 @@ public class EshopWebSocketServer {
     }
 
     private void sendMessage(EshopImMessageDTO message) {
-        this.session.getAsyncRemote().sendObject(message);
+        try {
+            this.session.getBasicRemote().sendText(JsonUtils.objectToJson(message));
+        } catch (IOException e) {
+            log.error("send message error: {}", message);
+        }
     }
 
     @OnOpen
@@ -42,10 +56,77 @@ public class EshopWebSocketServer {
         } else {
             webSocketMap.put(userId, this);
         }
+        handleLoginMessage(userId);
     }
 
     @OnClose
     public void onClose() {
         webSocketMap.remove(this.userId);
+    }
+
+    @OnMessage
+    public void onMessage(String message) {
+        handleOnMessage(JsonUtils.jsonToObject(message, EshopImMessageDTO.class));
+    }
+
+    private void handleOnMessage(EshopImMessageDTO message) {
+        if (message == null) {
+            return;
+        }
+        int msgType = message.getMsgType();
+        if (msgType == HEARTBEAT.getType()) {
+            handleHeartbeatMessage(message.getFromUserId());
+        }
+        imMessageStoreService.sendKafkaMessage(message);
+    }
+
+    /**
+     * 处理心跳消息
+     */
+    private static void handleHeartbeatMessage(Long toUserId) {
+        return;
+    }
+
+    /**
+     * 处理登录消息
+     */
+    public static void handleLoginMessage(Long toUserId) {
+        if (!webSocketMap.containsKey(toUserId)) {
+            return;
+        }
+        List<EshopImMessageListItemDTO> messageList = imMessageStoreService.getMessageList(toUserId);
+        EshopImMessageDTO message = EshopImMessageDTO.builder()
+                .msgType(LOGIN.getType())
+                .fromUserId(OFFICIAL_ID)
+                .toUserId(toUserId)
+                .content(JsonUtils.objectToJson(messageList))
+                .build();
+        webSocketMap.get(toUserId).sendMessage(message);
+    }
+
+    /**
+     * 处理已读未读消息
+     */
+    public static void handleSessionMessage(Long toUserId, Long fromUserId, String message) {
+        if (!webSocketMap.containsKey(toUserId)) {
+            return;
+        }
+        EshopImMessageDTO session = EshopImMessageDTO.builder()
+                .msgType(SESSION.getType())
+                .fromUserId(fromUserId)
+                .toUserId(toUserId)
+                .content(message)
+                .build();
+        webSocketMap.get(toUserId).sendMessage(session);
+    }
+
+    /**
+     * 处理业务消息
+     */
+    public static void handleBusinessMessage(Long toUserId, EshopImMessageDTO message) {
+        if (!webSocketMap.containsKey(toUserId)) {
+            return;
+        }
+        webSocketMap.get(toUserId).sendMessage(message);
     }
 }

@@ -10,4 +10,5 @@ public class KafkaTopicConstants {
     public static final String prodUserHistoryTopic = "eshop_prod_user_history_topic";
     public static final String orderProdItemTopic = "eshop_order_prod_item_topic";
     public static final String orderUnpaidTimeoutTopic = "eshop_order_unpaid_timeout_topic";
+    public static final String imMessageTopic = "eshop_im_message_topic";
 }

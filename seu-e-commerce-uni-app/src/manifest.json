@@ -48,7 +48,7 @@
     },
     /* 快应用特有相关 */
     "h5" : {
-        "title" : "H5商城",
+        "title" : "SEU Eshop",
         "domain" : "",
         "router" : {
             "mode" : "history",

@@ -7,9 +7,13 @@ const salt = "eshop-app"
 
 const picDomain = "https://www.abigtree.top/eshop/static/admin/image"
 
+// WebSocket
+const wsDomain = "ws://localhost:8087/eshop/socket"
+
 
 export  {
     domain,
     salt,
     picDomain,
+    wsDomain,
 }

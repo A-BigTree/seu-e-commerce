@@ -1,10 +1,7 @@
 package cn.seu.cs.eshop.common.kafka;
 
 import cn.seu.cs.eshop.common.util.JsonUtils;
-import cs.seu.cs.eshop.common.sdk.entity.dto.EmailSendDTO;
-import cs.seu.cs.eshop.common.sdk.entity.dto.EshopProdUserHistoryDTO;
-import cs.seu.cs.eshop.common.sdk.entity.dto.MaxwellMessageDTO;
-import cs.seu.cs.eshop.common.sdk.entity.dto.OrderItemMessageDTO;
+import cs.seu.cs.eshop.common.sdk.entity.dto.*;
 import lombok.Getter;
 
 import static cn.seu.cs.eshop.common.kafka.KafkaTopicConstants.*;
@@ -25,6 +22,8 @@ public enum KafkaTopicConfEnum {
     ORDER_PROD_ITEM_TOPIC(orderProdItemTopic, OrderItemMessageDTO.class),
     // 订单超时未支付消息
     ORDER_UNPAID_TIMEOUT_TOPIC(orderUnpaidTimeoutTopic, Long.class),
+    // IM消息
+    IM_MESSAGE_TOPIC(imMessageTopic, EshopImMessageDTO.class),
 
     ;
     private final String topic;

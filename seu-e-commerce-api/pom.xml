@@ -42,6 +42,11 @@
             <artifactId>seu-e-commerce-service-interface</artifactId>
             <version>${eshop.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.seu.cs.eshop.im.sdk</groupId>
+            <artifactId>seu-e-commerce-im-interface</artifactId>
+            <version>${eshop.version}</version>
+        </dependency>
         <!-- dubbo -->
         <dependency>
             <groupId>org.apache.dubbo</groupId>

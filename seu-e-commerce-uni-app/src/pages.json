@@ -41,10 +41,16 @@
 			}
 		},
 		{
-			"path": "pages/login/login"
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		},
 		{
-			"path": "pages/register/register"
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
 		},
 		{
 			"path": "pages/delivery-address/delivery-address",
@@ -129,6 +135,12 @@
 			"path": "pages/prod-classify/prod-classify",
 			"style": {
 				"onReachBottomDistance": 0
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationBarTitleText": "我的消息"
 			}
 		}
 	],

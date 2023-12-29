@@ -72,7 +72,7 @@
         </view>
 
         <view class="col-item" @tap="handleTips">
-          <view v-if="loginResult" class="num">--</view>
+          <view v-if="loginResult" class="num">{{unreadCount}}</view>
           <view v-else class="num">--</view>
           <view class="tit">我的消息</view>
         </view>
@@ -104,26 +104,17 @@
 import {ref} from "vue";
 import {request} from "@/utils/http"
 import {domain, picDomain} from "@/utils/config"
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 
 const orderAmount = ref({});
-const sts = ref("");
 const isAuthInfo = ref(false);
 const loginResult = ref("");
 const picDomain1 = ref("");
 const favoriteNum = ref(0);
 const historyNum = ref(0);
+const unreadCount = ref(0);
 
 const init = () => {
-  const params = {
-    url: "/account/user/info/get",
-    method: "GET",
-    callBack: (response) => {
-      const user = response.data;
-      uni.setStorageSync("userInfo", user);
-    }
-  };
-  request(params);
   loginResult.value = uni.getStorageSync("userInfo")
   if (loginResult.value) {
     isAuthInfo.value = true;
@@ -148,12 +139,30 @@ const init = () => {
         }
       }
     })
-    // TODO 个人订单信息
+    request({
+      url: "/im/message/unread/count",
+      method: "GET",
+      callBack: (res) => {
+        unreadCount.value = parseInt(res.data);
+      }
+    })
   }
 }
 
 onShow(() => {
   init();
+});
+
+onLoad((option) => {
+  const params = {
+    url: "/account/user/info/get",
+    method: "GET",
+    callBack: (response) => {
+      const user = response.data;
+      uni.setStorageSync("userInfo", user);
+    }
+  };
+  request(params);
 })
 
 const selectImage = () => {
@@ -206,7 +215,9 @@ const toUpdatePage = function () {
 }
 
 const handleTips = function () {
-
+  uni.navigateTo({
+    url: "/pages/message/message"
+  })
 }
 
 const toAddressList = function () {
