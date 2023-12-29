@@ -11,8 +11,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 const app = createApp(App);
 
 const roleType = ref(0);
+const userInfo = ref({});
 
 app.provide("roleType", roleType);
+app.provide("userInfo", userInfo);
 
 app.config.globalProperties.$roleType = roleType;
 

@@ -17,7 +17,7 @@ import static cs.seu.cs.eshop.common.sdk.enums.UserRoleEnum.CUSTOMER;
 @RestController
 @RequestMapping("/product/toc")
 public class ProductToCController {
-    @DubboReference(timeout = 4000, retries = 0)
+    @DubboReference(timeout = 5000, retries = 0)
     EshopProdToCService eshopProdToCService;
 
     @ApiMonitor(isAuthor = false)

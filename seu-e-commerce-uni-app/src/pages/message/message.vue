@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {ref, watch, nextTick} from 'vue'
 import {picDomain, wsDomain} from '../../utils/config'
 import {onLoad} from "@dcloudio/uni-app";
 import {request} from "../../utils/http";
@@ -40,14 +40,17 @@ const currMessages = ref([{
   createTime: 0
 }]);
 
-const showMessage = ref([])
+const showMessage = ref([{
+  id: 0,
+  fromUserId: 0,
+  toUserId: 0,
+  content: '',
+  createTime: 0,
+  status: 0
+}]);
+
 
 onLoad((options) => {
-  if (options) {
-    if (options.shopId) {
-      toUserId.value = options.shopId;
-    }
-  }
   fromUserInfo.value = uni.getStorageSync("userInfo");
   if (!fromUserInfo.value) {
     uni.showModal({
@@ -89,21 +92,93 @@ onLoad((options) => {
   socket.value.onclose = function () {
     console.log("WebSocket关闭")
   }
+  // 商品页面进入
+  if (options) {
+    if (options.shopId) {
+      toUserId.value = parseInt(options.shopId);
+      currMessages.value = [];
+      showMessage.value = [];
+      messageList.value.forEach(msg => {
+        if (msg.toUserId === toUserId.value) {
+          currSession.value = msg;
+        }
+      });
+      getPageMessage();
+      openMessage.value = true;
+    }
+  }
+
 });
 
 const onMessage = (message) => {
   if (message.msgType == 2) {
     messageList.value = JSON.parse(message.content);
+    if (toUserId.value !== 0 && currSession.value === null) {
+      messageList.value.forEach(msg => {
+        if (msg.toUserId === toUserId.value) {
+          currSession.value = msg;
+          return;
+        }
+      });
+    }
+  } else if (message.msgType == 3) {
+    const ids = JSON.parse(message.content);
+    if (message.fromUserId !== toUserId.value) {
+      return;
+    }
+    showMessage.value.forEach(msg => {
+      if (ids.includes(msg.id)) {
+        msg.status = 1;
+      }
+    });
+  } else if (message.msgType == 4) {
+    const id = message.fromUserId === fromUserId.value ? message.toUserId : message.fromUserId;
+    if (message.fromUserId === toUserId.value || toUserId.value === message.toUserId) {
+      showMessage.value.push(message);
+      currMessages.value = [message].concat(currMessages.value);
+      let flag = false;
+      messageList.value.forEach(msg => {
+        if (msg.toUserId === id) {
+          msg.lastMessage = message;
+          flag = true;
+          return;
+        }
+      });
+      if (!flag) {
+        socket.value.send(JSON.stringify({
+          msgType: 2,
+          fromUserId: fromUserId.value,
+          toUserId: 0
+        }));
+      }
+    } else {
+      let flag = false;
+      messageList.value.forEach(msg => {
+        if (msg.toUserId === id) {
+          msg.unreadCount = msg.unreadCount + 1;
+          msg.lastMessage = message;
+          flag = true;
+          return;
+        }
+      });
+      if (!flag) {
+        socket.value.send(JSON.stringify({
+          msgType: 2,
+          fromUserId: fromUserId.value,
+          toUserId: 0
+        }));
+      }
+    }
   }
 }
 
 const selectMessage = (item) => {
   currSession.value = item;
   toUserId.value = item.toUserId;
-  getPageMessage();
-  openMessage.value = true;
   currMessages.value = [];
   showMessage.value = [];
+  getPageMessage();
+  openMessage.value = true;
 }
 
 const closePopup = () => {
@@ -112,6 +187,15 @@ const closePopup = () => {
   toUserId.value = 0;
   currMessages.value = [];
   showMessage.value = [];
+  page.value = {
+    pageNum: 1,
+    pageSize: 10
+  }
+  socket.value.send(JSON.stringify({
+    msgType: 2,
+    fromUserId: fromUserId.value,
+    toUserId: 0
+  }));
 }
 
 const page = ref({
@@ -150,12 +234,55 @@ const timestampToTime = (timestamp) => {
   return Y + M + D + h + m;
 }
 
+watch(showMessage, (newMessage) => {
+  if (newMessage.length > 0) {
+    nextTick(() => {
+      window.scrollTo(0, document.getElementById("chatMain").scrollHeight)
+    })
+    const ids = [];
+    newMessage.forEach(msg => {
+      if (msg.status === 0 && msg.fromUserId !== fromUserId.value) {
+        ids.push(msg.id);
+      }
+    });
+    if (ids.length > 0) {
+      socket.value.send(JSON.stringify({
+        msgType: 3,
+        fromUserId: fromUserId.value,
+        toUserId: toUserId.value,
+        content: JSON.stringify(ids)
+      }));
+    }
+  }
+}, {deep: true});
+
+const message = ref("");
+
+const sendMessage = () => {
+  if (message.value) {
+    const data = {
+      msgType: 4,
+      fromUserId: fromUserId.value,
+      toUserId: toUserId.value,
+      content: message.value,
+      status: 0
+    }
+    socket.value.send(JSON.stringify(data));
+    message.value = "";
+  } else {
+    uni.showToast({
+      title: "消息不能为空",
+      icon: "none"
+    })
+  }
+}
+
 </script>
 
 <template>
-  <view class="container">
-    <view>
-      <view>
+  <view>
+    <view v-if="!openMessage">
+      <view v-if="messageList">
         <uni-list :border="true" v-for="(item) in messageList">
           <uni-list-chat v-if="item.unreadCount > 0"
                          :title="item.nickname"
@@ -174,29 +301,58 @@ const timestampToTime = (timestamp) => {
           />
         </uni-list>
       </view>
+      <view v-else class="empty">
+        <text>暂时没有消息~</text>
+      </view>
     </view>
 
-    <view class="message-popup" v-if="openMessage">
-      <view class="cmt-tit">
-        <view class="cmt-t">
-          {{ currSession.nickname }}
-        </view>
-        <text class="close"
-              @tap="closePopup"
-        />
-      </view>
-      <view v-if="currMessages">
+    <view v-if="openMessage">
+      <view v-if="currMessages" class="chat-main" id="chatMain">
         <block v-for="(item, index) in showMessage" :key="index">
-          <view>
-            {{ timestampToTime(item.createTime) }}:{{ currSession.nickname }}:{{ item.content }}
+          <view class="chat-container">
+            <view v-if="item.toUserId === fromUserId" class="message received">
+              <img class="user-avatar-received"
+                   :src="currSession.headImg ? picDomain + currSession.headImg : '/static/images/icon/head04.png'"/>
+              <view class="message-content">
+                <view class="timestamp">{{ timestampToTime(item.createTime) }}</view>
+                <view class="message-text">{{ item.content }}</view>
+                <view :class="item.status === 0 ? 'status unread' : 'status'">
+                  {{ item.status === 0 ? '未读' : '已读' }}
+                </view>
+              </view>
+            </view>
+
+            <view v-else class="message sent">
+              <view class="message-content">
+                <view class="timestamp">{{ timestampToTime(item.createTime) }}</view>
+                <view class="message-text">{{ item.content }}</view>
+                <view :class="item.status === 0 ? 'status unread' : 'status'">
+                  {{ item.status === 0 ? '未读' : '已读' }}
+                </view>
+              </view>
+              <img class="user-avatar-sent"
+                   :src="fromUserInfo.image ? picDomain + fromUserInfo.image : '/static/images/icon/head04.png'"/>
+            </view>
           </view>
         </block>
       </view>
-      <div class="chat-input-container">
-        <input type="text" placeholder="输入消息...">
-        <button>发送</button>
-      </div>
+      <view v-else class="empty">
+        <text>暂时没有消息~</text>
+      </view>
+      <view class="chat-input-container">
+        <input type="text" placeholder="输入消息..." style="width: 70%" v-model="message">
+        <button @click="sendMessage">发送</button>
+      </view>
     </view>
+
+    <uni-fab
+        v-if="openMessage"
+        :pattern="{icon: 'closeempty'}"
+        horizontal="right"
+        vertical="top"
+        :popMenu="false"
+        @fabClick="closePopup"
+    />
   </view>
 
 

@@ -149,6 +149,10 @@
 
     <!-- 底部按钮 -->
     <view class="cart-footer">
+      <view class="btn icon" @tap="toCsPage">
+        <image src="@/static/images/icon/cs.png"/>
+        客服
+      </view>
       <view
           class="btn icon"
           @tap="toHomePage"
@@ -734,6 +738,12 @@ const showComment = () => {
 const closePopup = () => {
   skuShow.value = false
   commentShow.value = false
+}
+
+const toCsPage = () => {
+  uni.navigateTo({
+    url: '/pages/message/message?shopId=' + shopId.value
+  })
 }
 </script>
 

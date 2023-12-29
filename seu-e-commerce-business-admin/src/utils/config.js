@@ -14,6 +14,8 @@ const MD5_SALT = "eshop-admin";
 
 const IMAGE_UPLOAD_URL = API_URL + "/file/manage/image/upload";
 
+const WS_URL = "ws://localhost:8087/eshop/socket";
+
 const IMAGE_UPLOAD_HEADER = {
     "Access-Control-Allow-Origin": "*",
     "Authorization": getToken(),
@@ -29,4 +31,5 @@ export {
     DEFAULT_HEAD_IMAGE,
     IMAGE_UPLOAD_URL,
     IMAGE_UPLOAD_HEADER,
+    WS_URL,
 }

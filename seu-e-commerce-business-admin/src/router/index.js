@@ -37,6 +37,11 @@ const router = createRouter({
                     path: 'order/manage',
                     name: 'order-manage',
                     component: () => import('@/components/OrderManage/OrderManage.vue')
+                },
+                {
+                    path: 'message/worksheet',
+                    name: 'message-worksheet',
+                    component: () => import('@/components/ImMessage/ImMessage.vue')
                 }
             ]
         },

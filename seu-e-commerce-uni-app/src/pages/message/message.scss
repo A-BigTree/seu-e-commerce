@@ -2,59 +2,16 @@
   background: #f4f4f4;
   height: 100%;
 }
-.message-popup {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 998;
-  background-color: #fff;
-  padding-bottom: 98rpx;
-}
-.cmt-tit {
-  font-size: 32rpx;
-  position: relative;
-  border-bottom: 1px solid #ddd;
-  padding: 20rpx;
-}
-.cmt-t {
-  width: 300rpx;
-}
-.close {
-  color: #aaa;
-  border-radius: 12px;
-  line-height: 20px;
-  text-align: center;
-  height: 20px;
-  width: 20px;
-  font-size: 18px;
-  padding: 1px;
-  top: 10px;
-  right: 10px;
-  position: absolute;
-  &::before {
-    content: "\2716";
-  }
-}
-.message-input {
-  position: fixed;
-  bottom: 10rpx;
-  left: 5rpx;
-  right: 5rpx;
-  background-color: #fff;
+
+.chat-main {
+  overflow-y: scroll;
+  box-sizing: border-box;
+  padding-bottom: 80px;
 }
 
-.cart-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  height: 98rpx;
-  z-index: 999;
-  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+.chat-container {
+  max-width: 600px;
+  margin: 20px auto;
 }
 
 .message {
@@ -62,7 +19,8 @@
   padding: 10px;
   border-radius: 10px;
   clear: both;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .message.sent {
@@ -76,15 +34,38 @@
   color: #333;
   float: left;
 }
-.message-input {
-  display: inline-block;
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 10px;
-  border: none;
-  border-radius: 5px;
-  float: left;
-  box-sizing: border-box;
+
+.message .user-avatar-received {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.message .user-avatar-sent {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.message .message-content {
+  flex: 1;
+  text-align: center;
+
+}
+
+.message .message-text {
+  margin-bottom: 5px;
+}
+
+.message .status, .message .timestamp {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+.status.unread {
+  color: #e74c3c;
 }
 
 .chat-input-container {
@@ -99,20 +80,6 @@
   box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.message-button {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin: 10px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background-color: #3498db;
-  color: #fff;
-  cursor: pointer;
-  float: right;
-  box-sizing: border-box;
-}
 input[type="text"] {
   flex: 1;
   padding: 10px;
@@ -133,4 +100,17 @@ button {
   cursor: pointer;
   font-size: 14px;
   box-sizing: border-box;
+}
+
+.empty {
+  font-size: 24rpx;
+  margin-top: 100rpx;
+  text-align: center;
+  color: #999;
+  height: 300rpx;
+  line-height: 300rpx;
+}
+
+.message-fab {
+  margin-top: -20px;
 }

@@ -11,12 +11,14 @@ const nickname = ref("");
 const index = ref("0");
 
 const roleTypeRef = inject("roleType");
+const userInfo1 = inject("userInfo");
 
 const params = {
   url: "/account/user/info/get",
   method: "get",
   callBack: (res) => {
     const userInfo = res.data;
+    userInfo1.value = res.data;
     roleType.value = userInfo.roleType;
     roleTypeRef.value = roleType.value;
     headUrl.value = userInfo.image ? IMAGE_URL + userInfo.image : IMAGE_URL + '/head/0.png';
@@ -65,7 +67,13 @@ watch(index, (newIndex) => {
     case '3-1':
           router.push({
             name: 'order-manage'
-          })
+          });
+          return;
+    case '4-1':
+      router.push({
+        name: 'message-worksheet'
+      });
+      return;
   }
 })
 
@@ -152,6 +160,14 @@ const logout = () => {
             </template>
             <el-menu-item index="3-1">
               订单列表
+            </el-menu-item>
+          </el-sub-menu>
+          <el-sub-menu index="4" v-if="roleType===2">
+            <template #title>
+              客服
+            </template>
+            <el-menu-item index="4-1">
+              客服工作台
             </el-menu-item>
           </el-sub-menu>
         </el-menu>

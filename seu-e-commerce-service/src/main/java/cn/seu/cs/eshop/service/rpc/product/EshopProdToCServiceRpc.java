@@ -12,7 +12,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @author Shuxin Wang <shuxinwang662@gmail.com>
  * Created on 2023/12/11
  */
-@DubboService
+@DubboService(timeout = 5000)
 public class EshopProdToCServiceRpc implements EshopProdToCService {
     @Resource
     private ProductToCService productToCService;
