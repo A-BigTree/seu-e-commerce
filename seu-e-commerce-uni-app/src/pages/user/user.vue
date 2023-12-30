@@ -274,9 +274,7 @@ const logout = function () {
     callBack: (res) => {
       uni.removeStorageSync("userInfo");
       uni.removeStorageSync("token");
-      this.setData({
-        isAuthInfo: false
-      });
+      isAuthInfo.value = false
     }
   };
   request(params)

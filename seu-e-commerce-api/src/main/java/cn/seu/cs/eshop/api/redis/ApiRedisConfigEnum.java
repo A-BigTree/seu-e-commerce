@@ -11,7 +11,7 @@ import static cn.seu.cs.eshop.common.constants.RedisConstants.*;
  * Created on 2023/10/22
  */
 public enum ApiRedisConfigEnum implements RedisConf {
-    apiTokenCache("api:user:token:", 6L, TimeUnit.HOURS),
+    apiTokenCache("api:user:token:", 36000L, TimeUnit.SECONDS),
     imageUniqueIdGenerateKey("unique:id:api:image"),
 
     ;

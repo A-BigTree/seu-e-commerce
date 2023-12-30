@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {ref, watch, nextTick} from 'vue'
-import {picDomain, wsDomain} from '../../utils/config'
+import {ref, watch, nextTick, onBeforeMount, onMounted, onUnmounted} from 'vue'
+import {picDomain, wssDomain} from '../../utils/config'
 import {onLoad} from "@dcloudio/uni-app";
 import {request} from "../../utils/http";
 
-const socket = ref<WebSocket>()
+const socket = ref(null)
 const fromUserId = ref(0);
 const toUserId = ref(0)
+
+const interval = ref(null);
 
 const fromUserInfo = ref(null);
 
@@ -49,8 +51,26 @@ const showMessage = ref([{
   status: 0
 }]);
 
+onUnmounted(() => {
+  clearInterval(interval.value);
+  socket.value.close();
+})
 
 onLoad((options) => {
+  // 商品页面进入
+  if (options) {
+    if (options.shopId) {
+      toUserId.value = parseInt(options.shopId);
+      currMessages.value = [];
+      showMessage.value = [];
+      getPageMessage();
+      openMessage.value = true;
+    }
+  } else {
+    openMessage.value = false;
+  }
+
+  messageList.value = [];
   fromUserInfo.value = uni.getStorageSync("userInfo");
   if (!fromUserInfo.value) {
     uni.showModal({
@@ -73,47 +93,66 @@ onLoad((options) => {
       }
     });
   }
-  openMessage.value = false;
   fromUserId.value = parseInt(fromUserInfo.value.id);
-  socket.value = new WebSocket(wsDomain + '/server/' + fromUserId.value);
+  uni.showLoading({
+    title: "正在连接...",
+    mask: true
+  });
+  socket.value = new WebSocket(wssDomain + '/server/' + fromUserId.value);
   // 连接
   socket.value.onopen = function () {
+    uni.hideLoading();
+    uni.showToast({
+      title: "连接成功",
+      icon: "success"
+    })
     console.log("websocket已连接")
   }
   // 监听消息
   socket.value.onmessage = function (res) {
+    if (res.data === "pong") return;
     onMessage(JSON.parse(res.data));
   }
   // 监听错误
   socket.value.onerror = function (res) {
+    uni.hideLoading();
     console.log("收到错误", res)
+    if (interval.value !== null) {
+      clearInterval(interval.value);
+    }
+    uni.showModal({
+      title: "提示",
+      content: "连接失败！请重新连接",
+      cancelText: "取消",
+      confirmText: "确定",
+      success: res => {
+        if (res.confirm) {
+          location.reload();
+        }
+      }
+    });
   }
   // 监听关闭
   socket.value.onclose = function () {
     console.log("WebSocket关闭")
   }
-  // 商品页面进入
-  if (options) {
-    if (options.shopId) {
-      toUserId.value = parseInt(options.shopId);
-      currMessages.value = [];
-      showMessage.value = [];
-      messageList.value.forEach(msg => {
-        if (msg.toUserId === toUserId.value) {
-          currSession.value = msg;
-        }
-      });
-      getPageMessage();
-      openMessage.value = true;
-    }
-  }
+
+  // 发送心跳
+  interval.value = setInterval(() => {
+    socket.value.send(JSON.stringify({
+      msgType: 1,
+      fromUserId: fromUserId.value,
+      content: "ping"
+    }));
+  }, 30000);
 
 });
+
 
 const onMessage = (message) => {
   if (message.msgType == 2) {
     messageList.value = JSON.parse(message.content);
-    if (toUserId.value !== 0 && currSession.value === null) {
+    if (toUserId.value !== 0) {
       messageList.value.forEach(msg => {
         if (msg.toUserId === toUserId.value) {
           currSession.value = msg;

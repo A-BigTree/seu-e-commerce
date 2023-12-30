@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {inject, nextTick, ref, watch} from 'vue'
-import {WS_URL, IMAGE_URL, DEFAULT_HEAD_IMAGE} from '@/utils/config';
+import {inject, nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
+import {WSS_URL, IMAGE_URL, DEFAULT_HEAD_IMAGE} from '@/utils/config';
 import {http} from '@/utils/http';
-import {ElMessage} from "element-plus";
+import {ElLoading, ElMessage, ElMessageBox} from "element-plus";
 
 const socket = ref<WebSocket>()
 const fromUserId = ref(0);
 const toUserId = ref(0)
+
+const interval = ref(null);
 
 const messageList = ref([
   {
@@ -30,18 +32,43 @@ const init = () => {
     return;
   }
   fromUserId.value = userInfo.value.id;
-  socket.value = new WebSocket(WS_URL + '/server/' + fromUserId.value);
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在连接...',
+    background: 'rgba(0, 0, 0, 0.7)'
+  });
+  socket.value = new WebSocket(WSS_URL + '/server/' + fromUserId.value);
   // 连接
   socket.value.onopen = function () {
+    loading.close();
     console.log("websocket已连接")
+    ElMessage({
+      message: '连接成功',
+      type: 'success'
+    })
   }
   // 监听消息
   socket.value.onmessage = function (res) {
+    if (res.data === "pong") return;
     onMessage(JSON.parse(res.data));
   }
   // 监听错误
   socket.value.onerror = function (res) {
     console.log("收到错误", res)
+    loading.close();
+    if (interval.value !== null) {
+      clearInterval(interval.value);
+    }
+    ElMessageBox.confirm("连接失败，请重新连接",
+        'danger',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+    ).then(() => {
+      location.reload();
+    });
   }
   // 监听关闭
   socket.value.onclose = function () {
@@ -139,6 +166,10 @@ const selectMessage = (item) => {
   currMessages.value = [];
   showMessage.value = [];
   isOver.value = false;
+  page.value = {
+    pageNum: 1,
+    pageSize: 10
+  }
   getPageMessage();
   item.unreadCount = 0;
 }
@@ -208,12 +239,25 @@ watch(showMessage, (newMessage) => {
         content: JSON.stringify(ids)
       }));
     }
-  };
+  }
 
 }, {deep: true})
 
+onMounted(() => {
+  init();
+  interval.value = setInterval(() => {
+        socket.value.send(JSON.stringify({
+          msgType: 1,
+          fromUserId: fromUserId.value,
+          content: "ping"
+        }));
+      }, 30000);
+})
 
-init();
+onUnmounted(() => {
+  clearInterval(interval.value);
+  socket.value.close();
+})
 
 const chatMain = ref(null);
 

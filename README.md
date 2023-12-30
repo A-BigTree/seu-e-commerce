@@ -44,3 +44,11 @@ IDEA➕JDK`17`➕Maven`3.9.1`➕Github Desktop➕MySQL图形化工具
 
 
 
+## 1.3 线上部署
+
+### 1.3.1 服务运行
+
+```shell
+java -jar -Dnacos-addr=Nacos主机IP -Dusername=账号 -Dpassword=密码 -Dport=SpringBoot运行端口 -Ddubbo-port=Dubbo服务端端口 -Dqos-port=Dubbo客户端端口 -DDUBBO_IP_TO_REGISTRY=Dubbo服务注册IP
+```
+

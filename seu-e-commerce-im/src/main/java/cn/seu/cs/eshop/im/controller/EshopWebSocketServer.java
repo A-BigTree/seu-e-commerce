@@ -4,10 +4,7 @@ import cn.seu.cs.eshop.common.util.JsonUtils;
 import cn.seu.cs.eshop.im.dto.EshopImMessageListItemDTO;
 import cn.seu.cs.eshop.im.store.ImMessageStoreService;
 import cs.seu.cs.eshop.common.sdk.entity.dto.EshopImMessageDTO;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +36,12 @@ public class EshopWebSocketServer {
     }
 
     private void sendMessage(EshopImMessageDTO message) {
+        sendMessage(JsonUtils.objectToJson(message));
+    }
+
+    private void sendMessage(String message) {
         try {
-            this.session.getBasicRemote().sendText(JsonUtils.objectToJson(message));
+            this.session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             log.error("send message error: {}", message);
         }
@@ -48,6 +49,7 @@ public class EshopWebSocketServer {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") Long userId) {
+        log.info("User: {} websocket open", userId);
         this.session = session;
         this.userId = userId;
         if (webSocketMap.containsKey(userId)) {
@@ -69,6 +71,11 @@ public class EshopWebSocketServer {
         handleOnMessage(JsonUtils.jsonToObject(message, EshopImMessageDTO.class));
     }
 
+    @OnError
+    public void onError(@PathParam("userId") Long userId, Session session, Throwable error) {
+        log.error("User: {} websocket error: {}", userId, error.getMessage());
+    }
+
     private void handleOnMessage(EshopImMessageDTO message) {
         if (message == null) {
             return;
@@ -76,6 +83,7 @@ public class EshopWebSocketServer {
         int msgType = message.getMsgType();
         if (msgType == HEARTBEAT.getType()) {
             handleHeartbeatMessage(message.getFromUserId());
+            return;
         }
         imMessageStoreService.sendKafkaMessage(message);
     }
@@ -84,7 +92,10 @@ public class EshopWebSocketServer {
      * 处理心跳消息
      */
     private static void handleHeartbeatMessage(Long toUserId) {
-        return;
+        if (!webSocketMap.containsKey(toUserId)) {
+            return;
+        }
+        webSocketMap.get(toUserId).sendMessage("pong");
     }
 
     /**

@@ -7,7 +7,6 @@ import {loadingConfig} from "@/utils/index";
 
 const http = function (params) {
     let loading = params.closeLoading ? null : ElLoading.service(loadingConfig(params.loadingText ? params.loadingText : 'loading'));
-
     axios.request({
         baseURL: params.domain ? params.domain : API_URL,
         url: params.url,
