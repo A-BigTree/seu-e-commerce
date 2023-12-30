@@ -138,11 +138,16 @@ const selectMessage = (item) => {
   toUserId.value = item.toUserId;
   currMessages.value = [];
   showMessage.value = [];
+  isOver.value = false;
   getPageMessage();
   item.unreadCount = 0;
 }
 
+const isOver = ref(false);
 const getPageMessage = () => {
+  if (isOver.value) {
+    return;
+  }
   http({
     url: "/im/message/page/list",
     data: {
@@ -151,6 +156,10 @@ const getPageMessage = () => {
       page: page.value,
     },
     callBack: (res) => {
+      if (res.data.records.length == 0) {
+        isOver.value = true;
+        return;
+      }
       currMessages.value = currMessages.value.concat(res.data.records);
       showMessage.value = [...currMessages.value].reverse();
       page.value.pageNum++;
@@ -229,29 +238,35 @@ const chatMain = ref(null);
       </el-aside>
       <el-container>
         <el-main style="height: 600px" class="main-message" id="chatMain">
-          <div v-if="showMessage.length > 0" v-for="item in showMessage" class="chat-history">
-            <div v-if="item.toUserId === fromUserId" class="message received">
-              <img class="avatar" :src="currSession.headImg ? IMAGE_URL + currSession.headImg : DEFAULT_HEAD_IMAGE"/>
-              <div class="message-bubble">
-                <div class="timestamp">{{ timestampToTime(item.createTime) }}</div>
-                <p>{{ item.content }}</p>
-                <div :class="item.status === 0 ? 'unread-status' : 'read-status'">
-                  {{ item.status === 0 ? '未读' : '已读' }}
-                </div>
-              </div>
+          <div  v-if="showMessage.length > 0">
+            <div style="margin: 10px auto;text-align:center;" v-if="!isOver">
+              <el-button plain size="small" @click="getPageMessage">加载更多</el-button>
             </div>
-
-            <div v-else class="message sent">
-              <div class="message-bubble">
-                <div class="timestamp">{{ timestampToTime(item.createTime) }}</div>
-                <p>{{ item.content }}</p>
-                <div :class="item.status === 0 ? 'unread-status' : 'read-status'">
-                  {{ item.status === 0 ? '未读' : '已读' }}
+            <div v-for="item in showMessage" class="chat-history">
+              <div v-if="item.toUserId === fromUserId" class="message received">
+                <img class="avatar" :src="currSession.headImg ? IMAGE_URL + currSession.headImg : DEFAULT_HEAD_IMAGE"/>
+                <div class="message-bubble">
+                  <div class="timestamp">{{ timestampToTime(item.createTime) }}</div>
+                  <p>{{ item.content }}</p>
+                  <div :class="item.status === 0 ? 'unread-status' : 'read-status'">
+                    {{ item.status === 0 ? '未读' : '已读' }}
+                  </div>
                 </div>
               </div>
-              <img class="avatar-sent" :src="userInfo.image ? IMAGE_URL + userInfo.image : DEFAULT_HEAD_IMAGE"/>
+
+              <div v-else class="message sent">
+                <div class="message-bubble">
+                  <div class="timestamp">{{ timestampToTime(item.createTime) }}</div>
+                  <p>{{ item.content }}</p>
+                  <div :class="item.status === 0 ? 'unread-status' : 'read-status'">
+                    {{ item.status === 0 ? '未读' : '已读' }}
+                  </div>
+                </div>
+                <img class="avatar-sent" :src="userInfo.image ? IMAGE_URL + userInfo.image : DEFAULT_HEAD_IMAGE"/>
+              </div>
             </div>
           </div>
+
           <el-empty v-else description="暂无消息"></el-empty>
         </el-main>
         <el-footer v-if="showMessage.length > 0" height="120px" class="input-area">

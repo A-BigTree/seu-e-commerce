@@ -191,6 +191,8 @@ const closePopup = () => {
     pageNum: 1,
     pageSize: 10
   }
+  isOver.value = false;
+  loading.value = "more";
   socket.value.send(JSON.stringify({
     msgType: 2,
     fromUserId: fromUserId.value,
@@ -202,8 +204,14 @@ const page = ref({
   pageNum: 1,
   pageSize: 10
 })
+const isOver = ref(false);
+const loading = ref("more");
 
 const getPageMessage = () => {
+  if (isOver.value) {
+    return;
+  }
+  loading.value = "loading";
   request({
     url: "/im/message/page/list",
     data: {
@@ -213,9 +221,16 @@ const getPageMessage = () => {
     },
     callBack: (res) => {
       const data = res.data;
+      if (data.records.length === 0) {
+        isOver.value = true;
+        loading.value = "noMore";
+        return;
+      }
       let tmp = currMessages.value;
       currMessages.value = tmp.concat(data.records);
       showMessage.value = [...currMessages.value].reverse();
+      page.value.pageNum++;
+      loading.value = "more";
     }
   })
 
@@ -308,6 +323,11 @@ const sendMessage = () => {
 
     <view v-if="openMessage">
       <view v-if="currMessages" class="chat-main" id="chatMain">
+        <uni-load-more
+            :status="loading"
+            :contentText="{contentdown:'点击加载更多'}"
+            @clickLoadMore="getPageMessage"
+        />
         <block v-for="(item, index) in showMessage" :key="index">
           <view class="chat-container">
             <view v-if="item.toUserId === fromUserId" class="message received">

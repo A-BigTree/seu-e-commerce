@@ -28,6 +28,23 @@ const params = {
 }
 http(params);
 
+const unreadCount = ref(0);
+
+http({
+  url: "/im/message/unread/count",
+  method: "get",
+  callBack: (res) => {
+    unreadCount.value = parseInt(res.data);
+    if (unreadCount.value === 0) {
+      return;
+    }
+    ElMessage({
+      message: "您有" + unreadCount.value + "条未读消息",
+      type: "success"
+    });
+  }
+})
+
 const select = (in_) => {
   index.value = in_;
 }
@@ -65,17 +82,17 @@ watch(index, (newIndex) => {
       });
       return;
     case '3-1':
-          router.push({
-            name: 'order-manage'
-          });
-          return;
+      router.push({
+        name: 'order-manage'
+      });
+      return;
     case '4-1':
       router.push({
         name: 'message-worksheet'
       });
       return;
   }
-})
+}, {deep: true});
 
 const logout = () => {
   const request = {
@@ -93,6 +110,10 @@ const logout = () => {
     }
   }
   http(request);
+}
+
+const toMessage = () => {
+  index.value = '4-1';
 }
 
 </script>
@@ -115,8 +136,10 @@ const logout = () => {
           <template #title>
             {{ nickname }}
           </template>
-          <el-menu-item index="message">
-            消息
+          <el-menu-item index="message" @click="toMessage">
+            <el-badge :value="unreadCount">
+                消息
+            </el-badge>
           </el-menu-item>
           <el-menu-item index="logout" @click="logout">
             退出登录
