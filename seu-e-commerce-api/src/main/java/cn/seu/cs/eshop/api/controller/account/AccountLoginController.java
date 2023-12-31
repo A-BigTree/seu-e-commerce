@@ -123,30 +123,7 @@ public class AccountLoginController {
     @ApiMonitor(isAuthor = false)
     @CrossOrigin
     @PostMapping("/user/shop/register")
-    public BaseResponse registerAdminUser(@RequestParam("photo") MultipartFile photo,
-                                          @RequestParam("userInfo") String shopInfo) {
-        try {
-            InputStream image = photo.getInputStream();
-            String fileName = photo.getOriginalFilename();
-            String suffix = DEFAULT_SUFFIX;
-            if (fileName != null && !StringUtils.isEmpty(fileName.substring(fileName.lastIndexOf(".")))) {
-                suffix = fileName.substring(fileName.lastIndexOf("."));
-            }
-            String file = TimeUtils.getCurrentTime() + suffix;
-            RegisterUserRequest request = JsonUtils.jsonToObject(shopInfo, RegisterUserRequest.class);
-            request.setImage(file);
-            BaseResponse response = eshopAccountService.registerUser(request);
-            if (!Objects.equals(response.getCode(), OK.getCode())) {
-                return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
-            }
-            long id = Long.parseLong(response.getData());
-            String prefix = buildString(IMAGE_SHOP_HEADER_PREFIX, String.valueOf(id % 10));
-            file = id + file;
-            sftp.upload(prefix, file, image);
-            return response;
-        } catch (Exception e) {
-            log.error("Image update error. e: ", e);
-            return ResponseBuilderUtils.buildErrorResponse(BaseResponse.class, "Error");
-        }
+    public BaseResponse registerAdminUser(@RequestBody RegisterUserRequest request) {
+        return eshopAccountService.registerUser(request);
     }
 }

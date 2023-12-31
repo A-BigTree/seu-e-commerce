@@ -42,7 +42,7 @@ const http = function (params) {
                 ).then(() => {
                     router.push({
                         name: 'login'
-                    }).then();
+                    });
                 });
                 return;
             }

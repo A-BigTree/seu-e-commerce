@@ -49,13 +49,19 @@
           </el-form-item>
           <el-form-item label="店铺商标" prop="shopImage">
             <el-upload
-                v-model="registerForm.shopImage"
-                ref="uploadRef"
-                :on-change="changeImage"
-                action="#"
-                :limit="1"
+                v-model:file-list="registerForm.shopImage"
                 list-type="picture-card"
-                :auto-upload="false">
+                name="image"
+                :action="IMAGE_UPLOAD_URL"
+                :data="{
+                    'prefix': 'head'
+                }"
+                :headers="{
+                  'Access-Control-Allow-Origin': '*',
+                  'Authorization': getToken()
+                }"
+                :limit="1"
+            >
               <el-icon>
                 <Plus/>
               </el-icon>
@@ -82,7 +88,9 @@ import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {http} from '@/utils/http';
 import {countDown} from '@/utils';
-import router from '@/router/index'
+import {IMAGE_UPLOAD_URL} from '@/utils/config';
+import {getToken} from '@/utils/cookies';
+import router from '@/router';
 
 export default {
   data() {
@@ -92,7 +100,7 @@ export default {
         verifyCode: '',
         shopName: '',
         desc: '',
-        shopImage: '',
+        shopImage: [],
         phoneNumber: '',
       },
       formRules: {
@@ -120,6 +128,8 @@ export default {
       },
       sendButtonText: '发送验证码',
       isSend: false,
+      IMAGE_UPLOAD_URL,
+      getToken,
     }
   },
   setup() {
@@ -130,7 +140,7 @@ export default {
   },
   methods: {
     sendEmail: function (formR) {
-      if(!formR)return;
+      if (!formR) return;
       formR.validateField(['email'], (valid) => {
         if (valid) {
           this.isSend = true;
@@ -163,26 +173,22 @@ export default {
     changeImage: function (uploadFile) {
       this.registerForm.shopImage = uploadFile.raw;
     },
-    submit : function (formR){
+    submit: function (formR) {
       if (!formR) return;
       formR.validate((valid) => {
         if (valid) {
-          const formData = new FormData();
-          formData.append('photo', this.registerForm.shopImage);
-          formData.append('userInfo', JSON.stringify({
-            account: this.registerForm.email,
-            nickname: this.registerForm.shopName,
-            verifyCode: this.registerForm.verifyCode,
-            phoneNumber: this.registerForm.phoneNumber,
-            password: "",
-            image: "",
-            roleType: 2,
-            ext: this.registerForm.desc
-          }));
           const params = {
             url: "/account/user/shop/register",
-            isFile: true,
-            data: formData,
+            data: {
+              account: this.registerForm.email,
+              nickname: this.registerForm.shopName,
+              verifyCode: this.registerForm.verifyCode,
+              phoneNumber: this.registerForm.phoneNumber,
+              password: "",
+              image: this.registerForm.shopImage[0].response.data,
+              roleType: 2,
+              ext: this.registerForm.desc
+            },
             callBack: (res) => {
               ElMessage({
                 message: '注册成功，审核结果将在两个工作日内以邮件形式通知',
