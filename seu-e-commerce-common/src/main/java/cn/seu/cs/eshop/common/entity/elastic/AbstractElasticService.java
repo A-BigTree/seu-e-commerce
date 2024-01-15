@@ -22,14 +22,14 @@ public abstract class AbstractElasticService<INDEX extends EsBaseIndex> {
     @Resource
     private ElasticsearchTemplate elasticsearchTemplate;
 
-    public String save(INDEX index) {
+    public void save(INDEX index) {
         IndexQuery indexQuery = new IndexQueryBuilder()
                 .withIndex(getIndex())
                 .withId(index.getDocId())
                 .withOpType(IndexQuery.OpType.INDEX)
                 .withObject(index)
                 .build();
-        return elasticsearchTemplate.index(indexQuery, IndexCoordinates.of(getIndex()));
+        elasticsearchTemplate.index(indexQuery, IndexCoordinates.of(getIndex()));
     }
 
     @SuppressWarnings("unchecked")

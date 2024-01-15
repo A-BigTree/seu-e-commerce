@@ -50,8 +50,10 @@ public class AccountInfoController {
     @ApiMonitor(roleType = UserRoleEnum.PLATFORM)
     @CrossOrigin
     @PostMapping("/register/state/update")
-    public BaseResponse updateRegisterState(@RequestBody UpdateRegisterStateRequest request,
-                                            @AuthorUserInfo UserBaseDTO user) {
+    public BaseResponse updateRegisterState(
+            @RequestBody UpdateRegisterStateRequest request,
+            @AuthorUserInfo UserBaseDTO user
+    ) {
         request.setModifier(user.getNickname());
         return eshopAccountService.updateRegisterState(request);
     }
