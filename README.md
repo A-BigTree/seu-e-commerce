@@ -52,3 +52,26 @@ IDEA➕JDK`17`➕Maven`3.9.1`➕Github Desktop➕MySQL图形化工具
 java -jar -Dnacos-addr=Nacos主机IP -Dusername=账号 -Dpassword=密码 -Dport=SpringBoot运行端口 -Ddubbo-port=Dubbo服务端端口 -Dqos-port=Dubbo客户端端口 -DDUBBO_IP_TO_REGISTRY=Dubbo服务注册IP
 ```
 
+
+
+# 2 系统设计
+
+## 2.1 结构设计
+
+![2](./README.assets/2.png)
+
+
+
+## 2.3 项目模块
+
+![image-20240717201818303](./README.assets/image-20240717201818303.png)
+
+# 3 数据库设计
+
+## 3.1 账号模块
+
+![3](./README.assets/3.png)
+
+## 3.2 服务模块
+
+![4](./README.assets/4.png)
